@@ -1,0 +1,9 @@
+{
+    "icon": "mdi.devices",
+    "group": "devices",
+    "parameters": {
+        "id": "",
+        "value": "string"
+    },
+    "sync_only": true
+}

@@ -1,0 +1,13 @@
+{
+    "icon": "far.sunset",
+    "group": "time",
+    "predictable": true,
+    "parameters": {
+        "offset": "integer:0,60",
+        "period": "mh",
+        "moment": {
+            "before": "moment.before",
+            "after": "moment.after"
+        }
+    }
+}

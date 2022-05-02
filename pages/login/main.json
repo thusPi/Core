@@ -1,0 +1,5 @@
+{
+	"name": "login/main",
+	"animation_duration": 250,
+	"require_auth": false
+}

@@ -1,0 +1,14 @@
+:root {
+	--primary: hsl(0, 0%, 75%);
+	--tertiary: hsl(0, 0%, 83%);
+	--secondary: hsl(0, 0%, 90%);
+	--info: #1f8efa;
+	--danger: #ee423d;
+	--warning: #ffab4f;
+	--success: #05c985;
+	--debug: #9649b7;
+	--caution: #f58b34;
+	--text: #212529;
+	--text-muted: #373737ee;
+	--selection: #21252914;
+}

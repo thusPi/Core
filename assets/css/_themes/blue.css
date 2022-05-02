@@ -1,0 +1,15 @@
+:root {
+	--primary: #1b2231;
+	--tertiary: #242e42;
+	--secondary: #2b3750;
+	--info: #1e8cfa;
+	--danger: #ee443f;
+	--warning: #ffa94d;
+	--success: #05c783;
+	--debug: #8340a0;
+	--caution: #f58b34;
+	--text: #ffffff;
+	--text-muted: #ffffff80;
+	--selection: #ffffff19;
+}
+}

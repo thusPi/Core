@@ -1,0 +1,10 @@
+{
+    "icon": "far.clock",
+    "group": "time",
+    "parameters": {
+        "hours": "integer:0,23",
+        "minutes": "integer:0,59"
+    },
+    "sync_only": true,
+    "end_stream_on_false": true
+}

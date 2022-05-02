@@ -1,0 +1,16 @@
+{
+    "icon": "far.calendar-week",
+    "group": "time",
+    "parameters": {
+        "day_of_week": {
+            "_type": "multiple",
+            "1": "_day.monday",
+            "2": "_day.tuesday",
+            "3": "_day.wednesday",
+            "4": "_day.thursday",
+            "5": "_day.friday",
+            "6": "_day.saturday",
+            "7": "_day.sunday"
+        }
+    }
+}

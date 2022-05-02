@@ -1,0 +1,9 @@
+{
+	"name": "Headphone jack volume",
+	"description": "Change volume of the headphone jack.",
+	"run_type": "cli",
+	"control_type": "range",
+	"category": "music",
+	"analytics_support": false,
+	"control_support": true
+}

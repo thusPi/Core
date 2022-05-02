@@ -1,0 +1,12 @@
+{
+    "icon": "far.clock",
+    "group": "time",
+    "parameters": {
+        "compare": {
+            "earlier": "compare.earlier",
+            "later": "compare.later"
+        },
+        "hours": "integer:0,23",
+        "minutes": "integer:0,59"
+    }
+}

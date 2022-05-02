@@ -1,0 +1,4 @@
+{
+    "extensions_catalogue": "https://tjalling.net/thuspi/api/extensions/catalogue/",
+    "extensions_update_check": "https://tjalling.net/thuspi/api/extensions/check-for-update/"
+}

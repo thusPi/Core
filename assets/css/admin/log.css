@@ -1,0 +1,112 @@
+.log-items {
+    display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+	overflow-x: hidden;
+    height: 100%;
+    max-height: 100%;
+    background: var(--primary);
+    position: relative;
+}
+
+.log-item {
+    display: flex !important;
+    flex-direction: row;
+    margin: var(--u1) 0;
+    position: relative;
+    border-radius: var(--u3);
+    padding-left: var(--u3);
+}
+
+.log-item.log-item-new {
+    animation: var(--animation-duration-medium) logItemNew linear;
+}
+
+@keyframes logItemNew {
+    0% {
+        background: var(--secondary);
+    }
+
+    100% {
+        background: transparent;
+    }
+}
+
+.log-item-title {
+    font-weight: bold;
+}
+
+.log-item-time {
+    color: var(--text-muted);
+    min-width: 12rem;
+    max-width: 12rem;
+}
+
+.log-item-content-wrapper {
+    display: block;
+    max-width: 100%;
+    position: relative;
+}
+
+.log-item-content {
+    max-width: 100%;
+}
+
+.log-item-border {
+    float: left;
+    width: var(--u1);
+    height: 100%;
+    border-radius: var(--u3);
+    margin-left: calc(-1 * var(--u3));
+    position: absolute;
+}
+
+@media(max-width: 991.98px) {
+    .log-item {
+        flex-direction: column;
+    }
+}
+
+.log-item[data-category="success"] .log-item-border { background: var(--success); }
+.log-item[data-category="success"] .log-item-title { color: var(--success); }
+
+.log-item[data-category="info"] .log-item-border { background: var(--info); }
+.log-item[data-category="info"] .log-item-title { color: var(--info); }
+
+.log-item[data-category="warning"] .log-item-border { background: var(--warning); }
+.log-item[data-category="warning"] .log-item-title { color: var(--warning); }
+
+.log-item[data-category="error"] .log-item-border { background: var(--danger); }
+.log-item[data-category="error"] .log-item-title { color: var(--danger); }
+
+.log-item[data-category="debug"] .log-item-border { background: var(--debug); }
+.log-item[data-category="debug"] .log-item-title { color: var(--debug); }
+
+
+
+.log-items[data-hide-categories*="success"] .log-item[data-category="success"] {
+    display: none !important;
+}
+
+.log-items[data-hide-categories*="info"] .log-item[data-category="info"] {
+    display: none !important;
+}
+
+.log-items[data-hide-categories*="warning"] .log-item[data-category="warning"] {
+    display: none !important;
+}
+
+.log-items[data-hide-categories*="error"] .log-item[data-category="error"] {
+    display: none !important;
+}
+
+.log-items[data-hide-categories*="debug"] .log-item[data-category="debug"] {
+    display: none !important;
+}
+
+
+
+.log-item#log-item-template {
+    display: none;
+};
+}

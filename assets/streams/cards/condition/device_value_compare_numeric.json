@@ -1,0 +1,15 @@
+{
+    "icon": "mi.linear_scale",
+    "group": "devices",
+    "parameters": {
+        "device_id": "control_type=range",
+        "compare": {
+            "higher": "compare.higher",
+            "higher_or_equal": "compare.higher_or_equal",
+            "equal": "compare.equal",
+            "lower_or_equal": "compare.lower_or_equal",
+            "lower": "compare.lower"
+        },
+        "value": "float"
+    }
+}

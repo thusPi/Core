@@ -1,0 +1,12 @@
+{
+    "icon": "mdi.devices",
+    "group": "devices",
+    "parameters": {
+        "id": "",
+        "value": {
+            "on": "state.on",
+            "off": "state.off"
+        }
+    },
+    "sync_only": true
+}

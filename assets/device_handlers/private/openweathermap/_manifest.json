@@ -1,0 +1,17 @@
+{
+	"name": "OpenWeatherMap / Weather API",
+	"description": "Get weather data for any location on the globe.",
+	"run_type": "cli",
+	"control_type": "none",
+	"group": "climate",
+	"analytics_support": true,
+	"control_support": false,
+	"options": {
+		"api_key": {"type": "alphanumeric", "default": "abcdef1234567890abcdef1234567890", "length": 32, "note": "Can be registered for free at <a target='_blank' rel='noreferrer noopener' href='https://home.openweathermap.org/users/sign_up/'>openweathermap.org</a>."},
+		"latitude": {"type": "float", "default": 51.507351, "min": -90, "max": 90, "note": "Can be calculated at <a target='_blank' rel='noreferrer noopener' href='https://www.latlong.net/'>latlong.net</a>."},
+		"longitude": {"type": "float", "default": -0.127758, "min": -180, "max": 180, "note": "Can be calculated at <a target='_blank' rel='noreferrer noopener' href='https://www.latlong.net/'>latlong.net</a>"},
+		"filter": {"type": "alphanumeric", "default": "main.temp&main.feels_like", "note": "See <a target='_blank' rel='noreferrer noopener' href='https://openweathermap.org/current#current_JSON'>API documentation</a> for possible values."},
+		"units": {"type": "alphanumeric", "default": "metric", "note": "Either <code>metric</code>, <code>imperial</code> or <code>standard</code>."}
+	}
+}
+}

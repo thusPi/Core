@@ -1,0 +1,53 @@
+{
+    "items": {
+        "top": {
+            "dashboard": {
+                "color": "warning",
+                "icon": "mi.dashboard",
+                "target": "dashboard/main"
+            },
+            "devices": {
+                "color": "caution",
+                "icon": "mdi.devices",
+                "target": "devices/main"
+            },
+            "analytics": {
+                "color": "danger",
+                "icon": "far.chart-area",
+                "target": "analytics/main"
+            },
+            "streams": {
+                "color": "success",
+                "icon": "far.stream",
+                "target": "streams/main"
+            },
+            "rooms": {
+                "color": "debug",
+                "icon": "mi.door_front",
+                "target": "rooms/main"
+            }
+        },
+        "bottom": {
+            "logout": {
+                "color": "info",
+                "icon": "mi.logout",
+                "target": "logout/main"
+            },
+            "account": {
+                "color": "info",
+                "icon": "mi.person",
+                "target": "account/main"
+            },
+            "admin": {
+                "color": "info",
+                "icon": "mi.shield",
+                "target": "admin/main"
+            },
+            "settings": {
+                "color": "info",
+                "icon": "mi.settings",
+                "target": "settings/main"
+            }
+        }
+    }
+}

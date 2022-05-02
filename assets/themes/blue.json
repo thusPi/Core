@@ -1,0 +1,44 @@
+{
+	"config": {
+		"enabled": true
+	}, 
+	"theme": {
+		"generic": {
+			"main": "#2b3750",
+			"accent": "242e42",
+			"dark": "#1b2231",
+			"color0": "#1e8cfa",
+			"color1": "#ee443f",
+			"color2": "#ffa94d",
+			"color3": "#05c783",
+			"color4": "#8340a0",
+			"color5": "#f58b34",
+			"text": "#ffffff",
+			"text_muted": "#ffffff80",
+			"selection": "#ffffff19",
+			"margin_tiles": "0.25rem",
+			"padding_tiles": "0.5rem",
+			"border_radius": "0.5rem"
+		},
+		"specific": {
+			"sidenav_button": {
+				"background": "hsl(50, 100, 56)"
+			},
+			"sidenav_button action=hover": {
+				"background": "__text"
+			},
+			"sidenav_button button_dashboard": {
+				"color": "__color2"
+			},
+			"sidenav_button button_devices": {
+				"color": "__color5"
+			},
+			"sidenav_button button_analytics": {
+				"color": "__color1"
+			},
+			"sidenav_button button_streams": {
+				"color": "__color3"
+			}
+		}
+	}
+}

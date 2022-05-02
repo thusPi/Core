@@ -1,0 +1,3 @@
+{
+    "options": ["port", "baud", "msg_on", "msg_off"]
+}

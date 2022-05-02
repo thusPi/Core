@@ -1,0 +1,11 @@
+{
+    "icon": "far.clock",
+    "group": "time",
+    "parameters": {
+        "duration_min": "float:0,60",
+        "duration_max": "float:0,60",
+        "period": "smh"
+    },
+    "sync_only": true,
+    "end_stream_on_false": true
+}

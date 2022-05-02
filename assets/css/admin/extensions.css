@@ -1,0 +1,21 @@
+.extension[data-installed="true"] [data-extension-action="install"] {
+    display: none;
+}
+
+.extension[data-enabled="true"] [data-extension-action="enable"] {
+    display: none;
+}
+
+.extension[data-enabled="false"] [data-extension-action="disable"] {
+    display: none;
+}
+
+.extension[data-installed="false"] [data-extension-action="uninstall"],
+.extension[data-installed="false"] [data-extension-action="enable"],
+.extension[data-installed="false"] [data-extension-action="disable"] {
+    display: none;
+}
+
+.extension:not([data-verified="true"]) .extension-verified {
+    display: none;
+}

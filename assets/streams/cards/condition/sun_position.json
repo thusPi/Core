@@ -1,0 +1,10 @@
+{
+    "icon": "far.sun",
+    "group": "time",
+    "parameters": {
+        "position": {
+            "up": "position.up",
+            "down": "position.down"
+        }
+    }
+}

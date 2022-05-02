@@ -1,0 +1,7 @@
+{
+    "icon": "far.stream",
+    "group": "streams",
+    "parameters": {
+        "stream_id": ""
+    }
+}

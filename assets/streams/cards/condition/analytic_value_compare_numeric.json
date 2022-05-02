@@ -1,0 +1,16 @@
+{
+    "icon": "far.chart-area",
+    "group": "analytics",
+    "parameters": {
+        "analytic_id": "",
+        "compare": {
+            "higher": "compare.higher",
+            "higher_or_equal": "compare.higher_or_equal",
+            "equal": "compare.equal",
+            "lower_or_equal": "compare.lower_or_equal",
+            "lower": "compare.lower"
+        },
+        "value": "float",
+        "on_axis": ""
+    }
+}

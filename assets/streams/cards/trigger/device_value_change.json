@@ -1,0 +1,6 @@
+{
+    "icon": "mdi.devices",
+    "group": "devices",
+    "predictable": false,
+    "parameters": {}
+}

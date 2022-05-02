@@ -1,0 +1,89 @@
+.device[data-visibility="hide"] {
+	opacity: 0 !important;
+	position: absolute;
+	left: -1000px;
+}
+
+.device-header .device-group-wrapper,
+.device-header .loading-icon {
+	display: inline-block;
+}
+
+.device-header .loading-icon {
+	vertical-align: middle;
+	line-height: 2rem;
+	min-height: 2rem;
+	display: inline-block;
+}
+
+.categories-list-row {
+	position: relative;
+	overflow-x: scroll !important;
+	overflow-y: hidden !important;
+}
+
+.categories-list-row::after {
+	content: '';
+	position: sticky;
+	pointer-events: none;
+	top: -1px;
+	right: -1px;
+	height: calc(100% + 2px);
+	width: 20px;
+	min-width: 20px;
+	background: linear-gradient(90deg, transparent, var(--primary));
+	z-index: 5;
+}
+
+.device {
+	transition: var(--animation-duration-medium) opacity;
+}
+
+.device-inner {
+	padding: 0 var(--u3) var(--u3) var(--u3);
+	border-radius: 0 0 var(--u3) var(--u3);
+	margin-top: var(--u3);
+	position: relative;
+	height: calc(100% - var(--u3));
+	overflow: visible;
+}
+
+.device-inner::before {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: var(--u3);
+	top: calc((-1*var(--u3)) + 1px);
+	left: 0;
+	border-radius: var(--u3) var(--u3) 0 0;
+	background: linear-gradient(0deg, var(--secondary) 60%, var(--info) 40%);
+}
+
+.device .device-favorite-icon-wrapper .icon-loaded {
+	display: none;
+}
+
+.device[data-favorite="true"] .device-favorite-icon-wrapper .favorite-true {
+	display: block;
+}
+
+.device[data-favorite="false"] .device-favorite-icon-wrapper .favorite-false {
+	display: block;
+}
+
+.device-name {
+	z-index: 10;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.device-input {
+	position: relative;
+}
+
+@media(hover: hover) {
+	.device:hover .range-value {
+		opacity: 1 !important;
+	}
+}

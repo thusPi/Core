@@ -1,0 +1,42 @@
+{
+    "locale": {
+        "info": {
+            "needs_reload": true
+        },
+        "options": {
+            "English (United States)": "en_US",
+            "Nederlands (Nederland)": "nl_NL"
+        },
+        "default": "en_US"
+    },
+    "theme": {
+        "info": {
+            "needs_reload": true
+        },
+        "options": {
+            "generic.theme.blue": "blue",
+            "generic.theme.dark": "dark",
+            "generic.theme.gray": "gray",
+            "generic.theme.green": "green",
+            "generic.theme.light": "light"
+        },
+        "default": "gray"
+    },
+    "group_devices_by": {
+        "options": {
+            "settings.setting.group_devices_by.option.room": "room",
+            "settings.setting.group_devices_by.option.category": "category"
+        },
+        "default": "category"
+    },
+    "reduced_motion": {
+        "info": {
+            "needs_reload": true
+        },
+        "options": {
+            "generic.state.on": false,
+            "generic.state.off": true
+        },
+        "default": true
+    }
+}

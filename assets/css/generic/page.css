@@ -1,0 +1,27 @@
+.page-status {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+}
+
+@keyframes pageStatusFadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+body[data-status="animating_loading"]:not([data-reduced-motion="true"]) .page-status[data-status="animating_loading"] {
+    animation: pageStatusFadeIn var(--animation-duration-long) 1s ease-in forwards;
+}
+
+body[data-status="error"] .page-status[data-status="error"] {
+    animation: pageStatusFadeIn var(--animation-duration-short) ease-in forwards;
+}

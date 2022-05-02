@@ -1,0 +1,9 @@
+{
+	"name": "Headphone jack",
+	"description": "Play an audio file using the 3.5mm headphone jack on the Raspberry Pi.",
+	"run_type": "cli",
+	"control_type": "search",
+	"category": "music",
+	"analytics_support": false,
+	"control_support": true
+}

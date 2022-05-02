@@ -1,0 +1,12 @@
+{
+	"name": "HC-SR501 PIR Motion Sensor",
+	"description": "Detects nearby motion.",
+	"run_type": "cli",
+	"control_type": "none",
+	"category": "security",
+	"analytics_support": true,
+	"control_support": false,
+	"options": {
+		"gpio_pin": {"type": "integer", "default": 5, "min": 0, "max": 32}
+	}
+}

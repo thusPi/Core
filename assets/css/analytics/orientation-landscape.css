@@ -1,0 +1,20 @@
+@media (max-width: 850px) and (orientation: landscape) {
+	.graph-wrapper {
+		min-height: calc(100% - 4rem) !important;
+		flex: 0 !important;
+	}
+
+	.graph-axis-hor {
+		height: 2.5rem !important;
+		font-size: 0.75rem !important;
+		padding: 0.15rem !important;
+	}
+
+	.graph-axis-ver {
+		font-size: 0.75rem !important;
+	}
+
+	.graph-wrapper .row1 {
+		height: calc(100% - 2.5rem) !important;
+	}
+}

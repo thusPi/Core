@@ -1,0 +1,33 @@
+body[data-status*="animating_"] main {
+	pointer-events: none !important;
+}
+
+body[data-status*="animating_"] .transition-fade,
+body[data-status*="animating_"] .transition-fade-order,
+body[data-status*="animating_"] .transition-fade-random {
+	opacity: 0;
+}
+
+body[data-status*="animating_"] .transition-slide-top {
+	top: 0 !important;
+	transform: translateY(calc(-100% - var(--u3)));
+	opacity: 0;
+}
+
+body[data-status*="animating_"] .transition-slide-right {
+	right: 0 !important;
+	transform: translateX(calc(100% - var(--u3)));
+	opacity: 0;
+}
+
+body[data-status*="animating_"] .transition-slide-bottom {
+	bottom: 0 !important;
+	transform: translateY(calc(100% - var(--u3)));
+	opacity: 0;
+}
+
+body[data-status*="animating_"] .transition-slide-left {
+	left: 0 !important;
+	transform: translateX(calc(-100% - var(--u3)));
+	opacity: 0;
+}

@@ -1,0 +1,20 @@
+/* [data-label*="button"] {
+    background: var(--dark);
+}
+
+[data-label*="sidenav"] {
+    background: var(--dark);
+}
+
+[data-label*="sidenav_button"] {
+    background: var(--success);
+}
+
+[data-label*="tile"] {
+    background: var(--main);
+}
+
+[data-label*="body"] {
+    background: var(--dark);
+	color: var(--text);
+} */

@@ -1,0 +1,15 @@
+{
+	"name": "Serial Message (Toggle)",
+	"description": "Toggle a device when a serial message is received.",
+	"run_type": "cli",
+	"control_type": "none",
+	"group": "appliances",
+	"analytics_support": false,
+	"options": {
+        "port": {"type": "port", "default": "ttyACM0", "note": "Serial port your device is connected to."},
+		"baud": {"type": "integer", "default": 115200, "min": 0, "note": "The baudrate for serial data transmission."},
+		"msg_on": {"type": "text", "default": "key=1", "note": "String that the message should contain to toggle your device on."},
+		"msg_off": {"type": "text", "default": "key=0", "note": "String that the message should contain to toggle your device off."}
+	}
+}
+}

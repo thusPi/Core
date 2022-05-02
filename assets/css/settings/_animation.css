@@ -1,0 +1,26 @@
+main form .tile {
+	transition: 125ms opacity ease-out;
+}
+
+body[data-status*="animating_"] form .tile {
+	opacity: 0;
+}
+
+@media(max-width: 575.98px) {
+	body[data-status*="animating_"] form .tile {
+		opacity: 1;
+	}
+
+	main form .tile {
+		transition-delay: 0ms !important;
+		transition: var(--animation-duration-medium) transform ease-out;
+	}
+
+	body[data-status*="animating_"] form .tile:nth-child(odd) {
+		transform: translateX(-110%);
+	}
+
+	body[data-status*="animating_"] form .tile:nth-child(even) {
+		transform: translateX(110%);
+	}
+}

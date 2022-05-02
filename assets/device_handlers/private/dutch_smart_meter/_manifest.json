@@ -1,0 +1,14 @@
+{
+	"name": "Dutch Smart Meter",
+	"description": "Logs meter readings from a Dutch Smart Meter. These reading might include gas too, if it's available.",
+	"run_type": "cli",
+	"control_type": "none",
+	"group": "appliances",
+	"analytics_support": true,
+	"control_support": false,
+	"options": {
+		"port": {"type": "port", "default": "ttyUSB1", "note": "Serial port your P1 <-> USB cable is connected to."},
+        "dsmr_version": {"type": "select", "default": "ESMR 5.0", "note": "Smart Meter version (DSMR)", "values": {"DSMR2.0": "DSMR2.x", "DSMR4.2": "DSMR4.x", "ESMR5.0": "ESMR5.x"}},
+	}
+}
+}

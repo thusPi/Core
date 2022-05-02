@@ -1,0 +1,9 @@
+{
+    "icon": "far.clock",
+    "group": "time",
+    "predictable": true,
+    "parameters": {
+        "hours": "integer:0,23",
+        "minutes": "integer:0,59"
+    }
+}

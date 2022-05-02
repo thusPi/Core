@@ -1,0 +1,13 @@
+{
+	"name": "Adafruit / DHT22 Temperature and Humidity sensor",
+	"description": "Monitor temperature by using Adafruit's DHT22 sensor.",
+	"run_type": "cli",
+	"control_type": "none",
+	"category": "climate",
+	"analytics_support": true,
+	"control_support": false,
+	"options": {
+		"gpio_pin": {"type": "integer", "default": 4, "min": 0, "max": 32},
+		"filter": {"type": "alphanumeric", "default": "temperature&humidity"}
+	}
+}

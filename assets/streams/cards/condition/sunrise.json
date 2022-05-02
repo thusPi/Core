@@ -1,0 +1,16 @@
+{
+    "icon": "far.sunrise",
+    "group": "time",
+    "parameters": {
+        "compare": {
+            "less": "compare.less",
+            "more": "compare.more"
+        },
+        "duration": "integer:0,60",
+        "period": "mh",
+        "moment": {
+            "before": "moment.before",
+            "after": "moment.after"
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "music": {
+        "icon": "far.music",
+        "color": "debug"
+    },
+    "media": {
+        "icon": "far.tv",
+        "color": "success"
+    },
+    "lighting": {
+        "icon": "mi.lightbulb",
+        "color": "warning"
+    },
+    "climate": {
+        "icon": "far.thermometer-half",
+        "color": "danger"
+   },
+    "security": {
+        "icon": "mi.shield",
+        "color": "info"
+    },
+    "appliances": {
+        "icon": "far.plug",
+        "color": "caution"
+    }
+}

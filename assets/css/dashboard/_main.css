@@ -1,0 +1,20 @@
+.dashboard-widgets {
+	columns: 4 300px;
+	column-gap: 0;
+}
+
+.dashboard-widget {
+	display: grid;
+	grid-template-rows: 1fr auto;
+	break-inside: avoid;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.dashboard-widget .tile {
+	overflow: hidden;
+}
+
+.dashboard-widget[data-counterpart="false"] {
+	cursor: default;
+}

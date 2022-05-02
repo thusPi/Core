@@ -1,0 +1,11 @@
+{
+    "icon": "mi.toggle_on",
+    "group": "devices",
+    "parameters": {
+        "device_id": "control_type=toggle",
+        "value": {
+            "on": "state.on",
+            "off": "state.off"
+        }
+    }
+}

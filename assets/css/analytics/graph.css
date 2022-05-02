@@ -1,0 +1,315 @@
+/* Graph fundamentals */
+.graph-container {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex: 1;
+	position: relative;
+}
+
+.graph-container.popup {
+	width: 90%;
+	height: 90%;
+}
+
+.graph {
+	cursor: none;
+	background: var(--tertiary);
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+@media(max-width: 767.98px) {
+	.graph-container {
+		flex-direction: column;
+	}
+}
+
+.graph-body {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	display: grid;
+	grid-template-areas: 
+		'graph-area-ver  graph-main'
+		'graph-area-edge graph-area-hor';
+	grid-template-columns: max-content minmax(0, 1fr);
+	grid-template-rows: minmax(0, 1fr) max-content;
+	user-select: none;
+}
+
+.graph-wrapper {
+	grid-area: graph-main;
+	position: relative;
+	max-width: 100%;
+	max-height: 100%;
+	border-radius: var(--u3);
+}
+
+.graph-area-hor,
+.graph-area-ver {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	position: relative;
+}
+
+.graph-area-hor {
+	grid-area: graph-area-hor;
+	flex-direction: column;
+	row-gap: var(--u1);
+}
+
+.graph-area-ver {
+	grid-area: graph-area-ver;
+	flex-direction: row;
+	column-gap: var(--u1);
+}
+
+.graph-line {
+	fill: var(--text);
+	fill-opacity: 0.1;
+	stroke: var(--text);
+	stroke-opacity: 0.9;
+	stroke-width: 0.1px;
+	transition: var(--animation-duration-short);
+}
+
+.graph-line.inactive {
+	fill-opacity: 0.025;
+	stroke-opacity: 0.15;
+}
+
+/* Graph status */
+.graph-status {
+	display: none;
+}
+
+.graph-container[data-status="loading"] .graph-status-loading {
+	display: block;
+}
+
+.graph-container[data-status="error"] .graph-status-error {
+	display: block;
+}
+
+.graph-status {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.graph-overlay {
+	position: absolute;
+	pointer-events: none;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+/* Graph axis steps */
+.graph-axis-steps {
+	position: relative;
+	display: flex;
+	overflow: hidden;
+}
+
+.graph-axis-step {
+	font-size: var(--text-small);
+	line-height: var(--text-small);
+	white-space: nowrap;
+	text-align: right;
+}
+
+.graph-area-hor .graph-axis-steps {
+	flex-direction: row;
+	justify-content: space-between;
+	padding-top: var(--u3);
+	max-height: 10rem;
+	transition: var(--animation-duration-short);
+}
+
+.graph-area-ver .graph-axis-steps {
+	flex-direction: column-reverse;
+	justify-content: space-between;
+	padding-right: var(--u3);
+	max-width: 10rem;
+	transition: var(--animation-duration-short);
+}
+
+.graph-container[data-steps-visible="false"] .graph-area-hor .graph-axis-steps {
+	max-height: 0px;
+	padding: 0;
+}
+
+.graph-container[data-steps-visible="false"] .graph-area-ver .graph-axis-steps {
+	max-width: 0px;
+	padding: 0;
+}
+
+/* Graph selection */
+.graph-selection {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 0px;
+	width: 0px;
+	background: var(--info);
+	opacity: 0.25;
+}
+
+/* Graph crosshair */
+.graph-crosshair {
+	position: absolute;
+	opacity: 0.5;
+}
+
+.graph-crosshair.graph-crosshair-hor {
+	border-top: 1px dashed var(--text-muted);
+	width: 100%;
+}
+
+.graph-crosshair.graph-crosshair-ver {
+	border-left: 1px dashed var(--text-muted);
+	height: 100%;
+}
+
+.graph-target {
+	position: absolute;
+	border-radius: 50%;
+	height: 6px;
+	width: 6px;
+	background: var(--text-muted);
+	opacity: 0.5;
+	margin-top: -3px;
+	margin-left: -3px;
+}
+
+/* Graph sidebar */
+.graph-sidebar {
+	width: 20rem;
+	max-width: 20rem;
+	min-height: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+	margin-left: auto !important;
+}
+
+@media(max-width: 767.98px) {
+	.graph-sidebar {
+		min-height: initial;
+		height: auto;
+		min-width: 100%;
+		width: 100%;
+		max-width: 100%;
+	}
+}
+
+.graph-sidebar-items-group:not(:last-of-type) {
+	margin-bottom: var(--u4);
+}
+
+.graph-sidebar-item {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	row-gap: var(--u1);
+	column-gap: var(--u1);
+	margin: var(--u1) 0;
+}
+
+.graph-sidebar-item-icon {
+	width: 2rem;
+	height: 2rem;
+}
+
+.graph-sidebar-item-main {
+	width: 100%;
+	flex: 1;
+}
+
+.graph-sidebar .btn[data-graph-action="line_average"] .icon-loaded::after {
+	content: '';
+	position: absolute;
+	border-top: 0.15em solid currentColor;
+	width: 60%;
+	top: 3px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 0.825em;
+}
+
+.graph-sidebar .btn[data-graph-action="line_average"] .icon-loaded::before {
+	position: relative;
+	top: 1px;
+	font-size: 0.825em;
+}
+
+/* Graph legend */
+.graph-legend {
+	display: flex;
+	flex-direction: row;
+	flex-flow: row;
+	flex-wrap: wrap;
+	row-gap: var(--u2);
+	column-gap: var(--u2);
+}
+
+.graph-legend-item {
+	display: flex;
+	flex-direction: row;
+	column-gap: var(--u1);
+	width: max-content;
+	align-items: center;
+}
+
+.graph-legend-item-icon {
+	width: 1rem;
+	height: 1rem;
+	background: #000;
+}
+
+/* Graph tooltip */
+.graph-tooltip {
+	position: absolute;
+	box-shadow: var(--shadow-light);
+	padding: var(--u1) var(--u2);
+	flex-direction: column;
+	display: none;
+}
+
+.graph:hover .graph-tooltip,
+.graph:focus .graph-tooltip {
+	display: flex;
+}
+
+.graph-tooltip-item {
+	display: flex;
+	flex-direction: row;
+}
+
+.graph-tooltip-item-column {
+	width: 100%;
+	flex: 1;
+	padding-right: var(--u1);
+}
+
+.graph-tooltip-item-column::after {
+	content: ':';
+}
+
+.graph-tooltip-item-value {
+	width: auto;
+	white-space: nowrap;
+	text-align: right;
+	margin-left: auto;
+	min-width: 3rem;
+}

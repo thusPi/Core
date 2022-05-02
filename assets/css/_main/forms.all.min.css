@@ -1,0 +1,1 @@
+input:not([type]),input[type="text"],input[type="number"],input[type="email"],input[type="password"],input[type="search"]{background:var(--accent5);outline:0;border:0;color:var(--text);border-radius:var(--u3);padding:var(--u1) var(--u3);width:100%;position:relative;}

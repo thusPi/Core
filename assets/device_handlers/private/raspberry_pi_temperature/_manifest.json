@@ -1,0 +1,10 @@
+{
+	"name": "Raspberry Pi Temperature",
+	"description": "Monitor the temperature of your Raspberry Pi.",
+	"run_type": "cli",
+	"control_type": "none",
+	"category": "appliances",
+	"analytics_support": true,
+	"control_support": false,
+	"options": []
+}

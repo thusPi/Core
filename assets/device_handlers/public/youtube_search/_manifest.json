@@ -1,0 +1,8 @@
+{
+	"name": "YouTube Search",
+	"description": "Look for videos on YouTube.",
+	"run_type": "get",
+	"options": {
+		"api_key": {"type": "alphanumeric", "note": "Register at https://developers.google.com/youtube/v3/getting-started'"}
+	}
+}
