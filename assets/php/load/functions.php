@@ -52,28 +52,12 @@
 		return substr(bin2hex(random_bytes($length)), 0, $length);
 	}
 
-	function shell_arg_encode($arg) {
+	function encodeshellargarray(array $arg) {
 		return @base64_encode(@json_encode($arg));
 	}
 
-	function shell_arg_decode($arg) {
+	function decodeshellargarray(string $arg) {
 		return @json_decode(@base64_decode($arg), true);
-	}
-
-	function shell_args_encode($args) {
-		foreach ($args as &$arg) {
-			$arg = shell_arg_encode($arg);
-		}
-
-		return implode(' ', $args);
-	}
-
-	function shell_args_decode($args) {
-		foreach ($args as &$arg) {
-			$arg = shell_arg_decode($arg);
-		}
-
-		return $args;
 	}
 
 	function str_to_bool($var) {
@@ -335,13 +319,13 @@
 		// the timeout has ended. Let the process run otherwise.
 		$do_terminate = $timeout > 0;
 
-		// Timeout of at least 0.5 seconds
-		$timeout = max(0.5, $timeout);
+		// Timeout of at least 0.01 seconds
+		$timeout = max(0.01, $timeout);
 
 		// Keep process running in background so it doesn't end when
 		// the parent script ends
 		if(!$do_terminate) {
-			$cmd = "nohup $cmd &";
+			$cmd = "nohup $cmd >/dev/null 2>&1";
 		}
 
 		// Start process

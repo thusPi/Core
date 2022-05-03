@@ -9,7 +9,7 @@ $(document).on('thusPi.change', '.setting input', function() {
 
 	$wrapper.showLoading();
 
-	thusPi.users.currentUser.setSetting(key, value).then(() => {
+	thusPi.users.currentUser.setSetting(key, value).then(function() {
 		$wrapper.hideLoading();
 		
 		if($setting.attr('data-needs-reload') == 'true') {

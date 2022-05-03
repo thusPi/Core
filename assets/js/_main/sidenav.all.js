@@ -2,7 +2,7 @@ $(document).ready(function() {
 	$('.sidenav').on('mouseenter', function() {
 		sidenav = $(this);
 		sidenav.addClass('expand');
-		setTimeout(() => {
+		setTimeout(function() {
 			if(sidenav.hasClass('expand')) {
 				sidenav.addClass('expanded');
 			}

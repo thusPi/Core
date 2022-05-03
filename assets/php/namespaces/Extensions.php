@@ -23,28 +23,35 @@
             return file_put_contents("{$this->dir}/manifest.json", json_encode($properties));
         }
 
-        private function setData($filename, $data) {
+        public function saveData(string $filename, $data) {
             if(!file_exists("{$this->dir}/data")) {
                 mkdir("{$this->dir}/data");
             }
 
-            $filename = basename($filename);
+            $filename = preg_replace('/[^a-zA-Z0-9_-]+/', '', basename($filename));
 
             file_put_contents("{$this->dir}/data/{$filename}.json", @json_encode($data));
         }
 
-        public function setHookData($type, $name, $data) {
-            return $this->setData(sprintf("hooks.%s.%s", str_replace('/', '.', $type), $name), $data);
-        }
-
-        private function getData($filename = null) {
-            $filename = basename($filename);
+        public function getData(string $filename) {
+            $filename = preg_replace('/[^a-zA-Z0-9_-]+/', '', basename($filename));
 
             return @json_decode(@file_get_contents("{$this->dir}/data/{$filename}.json", true), true) ?? null;
         }
 
-        public function getHookData($type, $name) {
-            return $this->getData(sprintf("hooks.%s.%s", str_replace('/', '.', $type), $name));
+        public function translate($key, $replacements = null, $fallback = null) {
+            // Use user locale if it's supported, use en_US otherwise
+            $user_locale = \thusPi\Users\CurrentUser::getSetting('locale');
+
+            $locale_file = "{$this->dir}/assets/locale/{$user_locale}.json";
+            if(!file_exists($locale_file)) {
+                $locale_file = "{$this->dir}/assets/locale/en_US.json";
+            }
+
+            // Load translations
+            $translations = file_get_json($locale_file) ?? [];
+
+            return \thusPi\Locale\translate($key, $replacements, $fallback, $translations);
         }
 
         public function uninstall() {      
@@ -65,11 +72,11 @@
             return rmtree($this->dir);
         }
 
-        public function loadFeatureComponent($type, $feature, $component) {
+        public function callFeatureComponent($type, $name, $component) {
             if($component == 'main') {
-                $feature_component_path = glob("{$this->dir}/features/{$type}/{$feature}/main.*")[0] ?? null;
+                $feature_component_path = glob("{$this->dir}/features/{$type}/{$name}/main.*")[0] ?? null;
             } else {
-                $feature_component_path = "{$this->dir}/features/{$type}/{$feature}/{$component}";
+                $feature_component_path = "{$this->dir}/features/{$type}/{$name}/{$component}";
             }
 
             // Return if feature component does not exist
@@ -77,17 +84,20 @@
                 return null;
             }
 
-            // Will return null if feature component is not executable
-            $command = script_name_to_shell_cmd($feature_component_path);
+            $feature_component_filetype = PATHINFO($feature_component_path, PATHINFO_EXTENSION);
 
-            // Run feature component if it is executable, return file contents otherwise
-            if(isset($command)) {
-                execute($command, $res, 60);
+            // Encode the extension id so it can be used as shell argument
+            $extension_id_encoded = escapeshellarg($this->id);
+
+            // Obtain the output
+            if($feature_component_filetype == 'php') {
+                $cmd = "php -c ".DIR_SYSTEM."/extensions/features/php.ini {$feature_component_path} {$extension_id_encoded} {$type} {$name}";
+                execute($cmd, $output, 60);
             } else {
-                $res = file_get_contents($feature_component_path);
+                $output = file_get_contents($feature_component_path);
             }
 
-            return $res;
+            return $output;
         }
 
         public function callHookComponent($type, $name, $args = [], $component = 'main') {
@@ -99,29 +109,15 @@
                 return null;
             }
 
-            $extension_id_encoded = shell_arg_encode($this->id);
-            $name_encoded         = shell_arg_encode($name);
-            $type_encoded         = shell_arg_encode($type);
-            $args_encoded         = shell_args_encode($args);
+            $extension_id = escapeshellarg($this->id);
+            $name         = escapeshellarg($name);
+            $type         = escapeshellarg($type);
+            $args_encoded = encodeshellargarray($args);
 
-            $cmd = "php -c ".DIR_SYSTEM."/extensions/hooks/php.ini {$hook_component_path} {$extension_id_encoded} {$type_encoded} {$name_encoded} {$args_encoded}";
+            $cmd = "php -c ".DIR_SYSTEM."/extensions/hooks/php.ini {$hook_component_path} {$extension_id} {$type} {$name} {$args_encoded}";
             
+
             execute($cmd, $output, 0);
-        }
-        
-        public function translate($key, $replacements = null, $fallback = null) {
-            // Use user locale if it's supported, use en_US otherwise
-            $user_locale = \thusPi\Users\CurrentUser::getSetting('locale');
-
-            $locale_file = "{$this->dir}/assets/locale/{$user_locale}.json";
-            if(!file_exists($locale_file)) {
-                $locale_file = "{$this->dir}/assets/locale/en_US.json";
-            }
-
-            // Load translations
-            $translations = file_get_json($locale_file) ?? [];
-
-            return \thusPi\Locale\translate($key, $replacements, $fallback, $translations);
         }
     }
 

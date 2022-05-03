@@ -5,7 +5,7 @@
 	// Start session
 	session_start();
 
-	// Set timezone
+	// Set timezone to UTC
 	date_default_timezone_set('UTC');
 
 	// Constant directories

@@ -62,8 +62,6 @@
             });
         }
         
-        $diff = \thusPi\Locale\date_diff_round($diff);
-
         if($diff['y'] != 0) {
             $translation_key = \thusPi\Locale\date_diff_translation_key($diff['y'], 'year');
             $translation     = \thusPi\Locale\translate($translation_key, [abs($diff['y'])]);
@@ -101,28 +99,6 @@
         }
 
         return "generic.time_format_diff.{$translation_key}";
-    }
-
-    function date_diff_round($diff) {
-        $diff_result = $diff;
-
-        $diff = array_reverse(array_splice($diff, 0, 6));
-        $timestamp_map = ['s', 'i', 'h', 'd', 'm', 'y'];
-        $timestamp_max = ['s' => 60, 'i' => 60, 'h' => 24, 'd' => 30, 'm' => 12];
-
-        foreach ($diff as $timestamp => $difference) {
-            if($timestamp == 'y') {
-                break;
-            }
-            $timestamp_next = $timestamp_map[array_search($timestamp, $timestamp_map)+1];
-
-            if($difference >= $timestamp_max[$timestamp]/2) {
-                $diff_result[$timestamp] = 0;
-                $diff_result[$timestamp_next] = $diff[$timestamp_next] + 1;
-            }
-        }
-
-        return $diff_result;
     }
 
     function date_format($format, $time = 0) {

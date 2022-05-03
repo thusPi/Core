@@ -45,7 +45,7 @@
                 return 'stream_runner_not_found';
             }
 
-            $args = "{$this->id} {$name} ".shell_arg_encode($parameters);
+            $args = "{$this->id} {$name} ".encodeshellargarray($parameters);
             $cmd  = script_name_to_shell_cmd($stream_runner_path, $args);
 
             $output = execute($cmd, $output, 15);
@@ -68,7 +68,7 @@
             }
 
             $args = ['collection' => $collection, 'namespace' => $namespace, 'parameters' => $parameters];
-            $cmd = script_name_to_shell_cmd($card_runner_path, shell_arg_encode($args));
+            $cmd = script_name_to_shell_cmd($card_runner_path, encodeshellargarray($args));
 
             if($async) {
                 shell_exec("{$cmd} > /dev/null 2>&1 &");

@@ -1,20 +1,20 @@
 var updateValuesTimeout;
 
 thusPiAssign('devices', {
-	updateValuesLoop: (interval = 2500) => {
+	updateValuesLoop(interval = 2500) {
 		if(thusPi.page.current() != 'devices/main') {
 			return false;
 		}
 
 		thusPi.devices.updateValues();
 		
-		updateValuesTimeout = setTimeout(() => {
+		updateValuesTimeout = setTimeout(function() {
 			thusPi.devices.updateValuesLoop(interval);
 		}, interval);
 	},
 
-	updateValues: () => {
-		thusPi.api.call('devices-get-values', {}).then((response) => {
+	updateValues() {
+		thusPi.api.call('devices-get-values', {}).then(function(response) {
 			$.each(response.data, function(deviceId, properties) {
 				const $device = $(`.device[data-id="${deviceId}"]`);
 
@@ -38,7 +38,7 @@ thusPiAssign('devices', {
 	}
 })
 
-$(document).on('thusPi.ready', () => {
+$(document).on('thusPi.ready', function() {
 	if(thusPi.page.current() != 'devices/main') {
 		console.log(updateValuesTimeout);
 		clearTimeout(updateValuesTimeout);
@@ -96,7 +96,7 @@ $(document).on('click', '.categories-list-row', debounce(function() {
 
 	console.log('debounce!');
 
-	thusPi.users.currentUser.setSetting('devices_inactive_categories', inactive_categories).then(() => {
+	thusPi.users.currentUser.setSetting('devices_inactive_categories', inactive_categories).then(function() {
 		thusPi.page.reload();
 	}).catch();
 }, 500))
@@ -140,7 +140,7 @@ function setDeviceValue($device, value, shownValue = undefined) {
 		'force_set':   $device.attr('data-force-set')
 	};
 	
-	thusPi.api.call('device-set-value', data).then(() => {
+	thusPi.api.call('device-set-value', data).then(function() {
 		$device.attr('data-value-updating-disabled', 'false');
 		$deviceName.hideLoading();
 
@@ -152,7 +152,7 @@ function setDeviceValue($device, value, shownValue = undefined) {
 			thusPi.message.send(thusPi.locale.translate(`devices.message.changed_success`, [deviceName, shownValue]));
 		}
 
-	}).catch(() => {
+	}).catch(function() {
 		$device.attr('data-value-updating-disabled', 'false');
 		$deviceName.hideLoading();
 

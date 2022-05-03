@@ -1,5 +1,5 @@
 thusPiAssign('page', {
-    load: (page, reload = false) => {
+    load(page, reload = false) {
         page = trim(trim(trim(page, '/'), '#'), '/');
         window.location.hash = `/${page}`;
         
@@ -8,7 +8,7 @@ thusPiAssign('page', {
         }
     },
 
-    get: (url, reload = false) => {
+    get(url, reload = false) {
         let currentPage = thusPi.page.current();
         let old_animation_duration = parseFloat($('main').attr('data-animation-duration') || 0);
         let reduced_motion = thusPi.users.currentUser.getSetting('reduced_motion') || false;
@@ -20,7 +20,7 @@ thusPiAssign('page', {
         }
 
         // Show loading icon when old page has animated out but new page has not been received yet
-        setTimeout(() => {
+        setTimeout(function() {
             if(thusPi.page.current() == currentPage) {
                 if(thusPi.page.getStatus() != 'error') {
                     thusPi.page.setStatus('animating_loading');
@@ -29,14 +29,14 @@ thusPiAssign('page', {
         }, old_animation_duration);
 
         // Make a request to load the page
-        thusPi.api.call('page', {'url': url}).then((response) => {
+        thusPi.api.call('page', {'url': url}).then(function(response) {
             let new_animation_duration = response.data.manifest.animation_duration || 0;
 
             $('body').attr('data-page', response.data.manifest.name.trim('/'));
             $('main').attr('data-animation-duration', new_animation_duration);
             
             // Wait for the old page to finish animating out
-            setTimeout(() => { 
+            setTimeout(function() { 
                 if(reload) {
                     window.location.hash = `#/${url}`;
                     window.location.reload(true);
@@ -54,30 +54,30 @@ thusPiAssign('page', {
                 thusPi.page.setStatus('animating_in');
                 thusPi.page.animateIn(new_animation_duration);
             }, Math.max(old_animation_duration - response.took, 0));
-        }).catch((err) => {
+        }).catch(function(err) {
             console.error(err);
             $('main').html('');
             thusPi.page.setStatus('error');
         });
     },
 
-    animateOut: () => {
+    animateOut() {
         thusPi.page.setStatus('animating_out');
         $('.popup-shield').removeClass('show');
     },
 
-    animateIn: (animation_duration) => {
+    animateIn(animation_duration) {
         thusPi.page.animationSetup(animation_duration);
         
         thusPi.page.setStatus('animating_in');
-        setTimeout(() => {
+        setTimeout(function() {
             $(document).trigger('thusPi.ready');
             console.log('PAGE READY!');
             thusPi.page.setStatus('ready');
         }, animation_duration);
     },
 
-    animationSetup: (animation_duration) => {
+    animationSetup(animation_duration) {
         let transition_elements = {'fade': [], 'slide': []};
         transition_elements = {
             'fade': {
@@ -108,23 +108,23 @@ thusPiAssign('page', {
         });
     },
 
-    current: (include_query = false) => {
+    current(include_query = false) {
         const page  = $('body').attr('data-page');
         const query = window.location.hash.split('?')[1] || '';
         
         return include_query ? page + '?' + query : page;
     },
 
-    getStatus: () => {
+    getStatus() {
         return $('body').attr('data-status');
     },
 
-    setStatus: (status) => {
+    setStatus(status) {
         $('body').attr('data-status', status);
         return thusPi.page;
     },
 
-    reload: () => {
+    reload() {
         console.log(thusPi.page.current(true));
         thusPi.page.get(thusPi.page.current(true));
         return thusPi.page;

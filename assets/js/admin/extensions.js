@@ -1,6 +1,6 @@
 thusPiAssign('admin.extensions', {
-    print_list: (query) => {
-        thusPi.api.call('extensions/search', {'query': query}).then(response => {
+    print_list(query) {
+        thusPi.api.call('extensions/search', {'query': query}).then(function(response) {
             const $results = $('.extension-search-results');
             $results.empty();
 
@@ -22,19 +22,19 @@ thusPiAssign('admin.extensions', {
         })
     },
 
-    install: (id) => {
+    install(id) {
         $('[data-extension-action="install"]').showLoading();
-        thusPi.api.call('extensions/install', {'id': id}).then(response => {
+        thusPi.api.call('extensions/install', {'id': id}).then(function(response) {
             thusPi.message.send(thusPi.locale.translate('admin.extensions.message.installed', [response.data.name]));
             $('[data-extension-action="install"]').hideLoading();
             thusPi.page.reload();
         })
     },
 
-    uninstall: (id) => {
+    uninstall(id) {
         $('[data-extension-action="uninstall"]').showLoading();
-        setTimeout(() => {
-            thusPi.api.call('extensions/uninstall', {'id': id}).then(response => {
+        setTimeout(function() {
+            thusPi.api.call('extensions/uninstall', {'id': id}).then(function(response) {
                 thusPi.message.send(thusPi.locale.translate('admin.extensions.message.uninstalled', [response.data.name]));
                 $('[data-extension-action="enable"]').hideLoading();
                 thusPi.page.reload();
@@ -42,10 +42,10 @@ thusPiAssign('admin.extensions', {
         }, 1500);
     },
 
-    enable: (id) => {
+    enable(id) {
         $('[data-extension-action="enable"]').showLoading();
-        setTimeout(() => {
-            thusPi.api.call('extensions/toggle', {'id': id, 'action': 'enable'}).then(response => {
+        setTimeout(function() {
+            thusPi.api.call('extensions/toggle', {'id': id, 'action': 'enable'}).then(function(response) {
                 thusPi.message.send(thusPi.locale.translate('admin.extensions.message.enabled', [response.data.name]));
                 $('[data-extension-action="enable"]').hideLoading();
                 thusPi.page.reload();
@@ -53,10 +53,10 @@ thusPiAssign('admin.extensions', {
         }, 250);
     },
 
-    disable: (id) => {
+    disable(id) {
         $('[data-extension-action="disable"]').showLoading();
-        setTimeout(() => {
-            thusPi.api.call('extensions/toggle', {'id': id, 'action': 'disable'}).then(response => {
+        setTimeout(function() {
+            thusPi.api.call('extensions/toggle', {'id': id, 'action': 'disable'}).then(function(response) {
                 thusPi.message.send(thusPi.locale.translate('admin.extensions.message.disabled', [response.data.name]));
                 $('[data-extension-action="disable"]').hideLoading();
                 thusPi.page.reload();

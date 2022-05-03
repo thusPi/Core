@@ -30,7 +30,7 @@ function trim(str, chars = ' ') {
 }
 
 function closestArrayItem(needle, values) {
-	let closest = values.reduce((a, b) => {
+	let closest = values.reduce(function(a, b) {
 		return Math.abs(b - needle) < Math.abs(a - needle) ? b : a;
 	});
 
@@ -69,7 +69,7 @@ $.fn.showLoading = function(hideAfter = 0) {
 		this.append('<div class="loading-icon pl-1"><i class="far fa-circle-notch fa-spin loading-icon-inner text-category"></i></div>');
 		
 		if(hideAfter > 0) {
-			setTimeout(() => {
+			setTimeout(function() {
 				this.hideLoading();
 			}, hideAfter);
 		}
@@ -121,15 +121,19 @@ function throttle(callback, delay) {
 	let timeout;
 	return function(e) {
 		if (timeout) return;
-		timeout = setTimeout(() => (callback(e), timeout=undefined), delay)
+
+		timeout = setTimeout(function() {
+			callback(e), timeout=undefined
+		}, delay);
 	}
 }
 
 function debounce(callback, delay) {
   	let timeout;
-	return (...args) => {
+	return function(...args) {
 		clearTimeout(timeout);
-		timeout = setTimeout(() => {
+
+		timeout = setTimeout(function() {
 			callback(...args);
 		}, delay)
 	}
@@ -167,17 +171,17 @@ function sendMessage(translation_key, replace = [], isError = false , duration =
 	}
 
 	if(!userPrefersReducedMotion()) {
-		setTimeout(() => {
+		setTimeout(function() {
 			message_elem.removeClass('animate-in');
-			setTimeout(() => {
+			setTimeout(function() {
 				message_elem.addClass('animate-out');
-				setTimeout(() => {
+				setTimeout(function() {
 					message_elem.remove();
 				}, 600);
 			}, duration);
 		}, 10);
 	} else {
-		setTimeout(() => {
+		setTimeout(function() {
 			message_elem.remove();
 		}, duration);
 	}
@@ -192,10 +196,10 @@ function urlParam(key) {
 }
 
 function saveState(key, value, uuid = null) {
-	return new Promise((resolve, reject) => {
-		thusPi.api.call('user-set-setting', {'key': key, 'value': value, 'uuid': uuid}).then(() => {
+	return new Promise(function(resolve, reject) {
+		thusPi.api.call('user-set-setting', {'key': key, 'value': value, 'uuid': uuid}).then(function() {
 			resolve();
-		}).catch(() => {
+		}).catch(function() {
 			reject();
 		})
 	})

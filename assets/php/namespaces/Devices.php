@@ -9,6 +9,10 @@
                 \thusPi\Response\error('no_permission', "User is not permitted to view device {$id}.");
             }
 
+			if(!is_string($id)) {
+				return null;
+			}
+
             $this->id = $id;
         }
 
@@ -103,7 +107,7 @@
 					if(!$options = @array_merge($properties['options'], $additional_options)) {
 						return 'merging_options_failed';
 					}
-					$options_str = shell_arg_encode($options);
+					$options_str = encodeshellargarray($options);
 
 					$tunnel_file = dirname($handler_path).'/_tunnels/'.pathinfo($handler_path, PATHINFO_FILENAME).'.json';
 					$cmd = script_name_to_shell_cmd($handler_path, "{$tunnel_file} {$args['value']} {$options_str}");
@@ -128,17 +132,17 @@
 			$waypoints->printWaypoint('List of processes: ' . json_encode(\thusPi\Processes\get_all("handler_{$properties['handler']}")));
 
 			// Run handler
-			execute($cmd, $json, 15);
+			execute($cmd, $output_json, 15);
 
 			// Mark handler process as finished
 			$handler_process->status('finished');
 
 			$waypoints->printWaypoint('Process marked as finished');
 
-			if($handler_type == 'exec' || $json == '') {
+			if($handler_type == 'exec' || $output_json == '') {
 				$response = ['success' => true];
 			} else {
-				if(!($response = @json_decode($json, true))) {
+				if(!($response = @json_decode($output_json, true))) {
 					return 'handler_invalid_response';
 				}
 			}
@@ -153,7 +157,9 @@
 			$waypoints->printWaypoint('Properties set!');
 
 			// Trigger devices/value_change hook
-			\thusPi\Extensions\call_hooks_for_type('devices/value_change', [$this->id, $this->getProperty('value')]);
+			\thusPi\Extensions\call_hooks_for_type('devices/value_change', [
+				$this->id, $this->getProperty('value'), $this->getProperty('shown_value')
+			]);
 
 			// // Trigger streams
 			// \thusPi\Streams\trigger_all('device_value_change', ['id' => $this->id]);

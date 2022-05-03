@@ -7,7 +7,7 @@
 		\thusPi\Response\error('Insufficient amount of arguments given.');
 	}
 
-	$options = shell_arg_decode($argv[3]);
+	$options = decodeshellargarray($argv[3]);
 	
 	$state = $argv[2] == 'on' ? 1 : 0;
 

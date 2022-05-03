@@ -62,7 +62,7 @@ function openDialog(title = translate('popup.dialog.title'), description = trans
 	$('.popup-shield').addClass('show');
 	var dialog = `<div class="popup popup-dialog"><h3 class="tile-title">${title}</h3><div class="text-muted mb-2">${description}</div><div class="row"><div class="col-auto mr-auto px-0"><div type_button class="btn-sm bg-tertiary btn-primary">${yes_text}</div></div><div class="col-auto ml-auto px-0"><div type_button class="btn-sm bg-tertiary btn-primary" onclick="hidePopup($(this)); ${no_function}">${no_text}</div></div></div></div>`;
 	$('.body-inner').append(dialog);
-	setTimeout(() => {
+	setTimeout(function() {
 		$('.body-inner').find('.popup.popup-dialog').addClass('show');
 	}, 1);
 }

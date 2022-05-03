@@ -28,7 +28,7 @@
 
     $cmd = "/usr/bin/python3 inner.py {$port} {$dsmr_version}";
 
-    if(!execute(escapeshellcmd($cmd, $output_json, 65))) {
+    if(!execute(escapeshellcmd($cmd), $output_json, 65)) {
 		\thusPi\Response\error('error_running_script', 'Failed to run handler script.');
 	}
 

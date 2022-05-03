@@ -1,5 +1,5 @@
 thusPiAssign('template', {
-    get: (selector) => {
+    get(selector) {
         const $template = $(`${selector}.template`).first();
 
         if($template.length == 0) {

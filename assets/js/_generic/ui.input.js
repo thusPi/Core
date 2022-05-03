@@ -7,15 +7,15 @@ thusPiAssign('ui.input.search', class {
 		this.$wrapper = $input.parents('.input-wrapper.input-wrapper-search').first();
 		this.$results = this.$wrapper.find('.input-search-results').first();
 
-		this.$wrapper.on('click', (e) => {e.stopPropagation()});
+		this.$wrapper.on('click', function(e) {e.stopPropagation()});
 		
-		this.$input.on('click', (e) => {this.focusEvent(e)});
-		this.$input.on('input', (e) => {this.inputEvent(e)});
-		this.$input.on('change', (e) => {this.changeEvent(e)});
+		this.$input.on('click', function(e) {this.focusEvent(e)});
+		this.$input.on('input', function(e) {this.inputEvent(e)});
+		this.$input.on('change', function(e) {this.changeEvent(e)});
 
-		this.$results.on('click', '.input-search-result', (e) => {this.resultFocusEvent(e)});
+		this.$results.on('click', '.input-search-result', function(e) {this.resultFocusEvent(e)});
 
-		$(document).on('click', (e) => {this.focusOutEvent(e)});
+		$(document).on('click', function(e) {this.focusOutEvent(e)});
 	}
 
 	focusEvent(e) {
@@ -159,7 +159,7 @@ $(document).on('thusPi.load', function() {
 	$(document).find('.input[data-type="range"] .range-thumb').draggable({
 		axis: 'x',
 		containment: 'parent',
-		drag: function() {
+		drag() {
 			let $thumb   = $(this);
 			let $wrapper = $thumb.parent();
 			let $tooltip = $thumb.siblings('.range-tooltip');
@@ -173,7 +173,7 @@ $(document).on('thusPi.load', function() {
 			$wrapper.attr('data-value', closest);
 			$wrapper.trigger('input');
 		},
-		stop: function(event, ui) {
+		stop(event, ui) {
 			let $thumb   = $(this);
 			let $wrapper = $thumb.parent();
 			let $tooltip = $thumb.siblings('.range-tooltip');
@@ -216,7 +216,7 @@ document.addEventListener('mousewheel', function(e) {
 			$wrapper.attr('data-value', newvalue);
 			$wrapper.trigger('input');
 
-			setTimeout(() => {
+			setTimeout(function() {
 				if(newvalue == $wrapper.value()) {
 					$wrapper.trigger('change');
 				}

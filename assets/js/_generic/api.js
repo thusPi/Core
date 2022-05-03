@@ -1,5 +1,5 @@
 thusPiAssign('api', {
-    call: (url, data) => {
+    call(url, data) {
         url = `${thusPi.data.webroot}/api/${url}/`;
         let headers = {};
         let tokenId = localStorage.getItem('thusPi_tokenId');
@@ -10,7 +10,7 @@ thusPiAssign('api', {
             headers['x-token']    = token;
         }
         
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
             let callStart;
 
             $.ajax({

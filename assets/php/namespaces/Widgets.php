@@ -9,9 +9,10 @@
         protected $id;
 
         public function __construct($extension_id, $id) {
-            $this->extension_id  = $extension_id;
+            $this->extension_id  = basename($extension_id);
             $this->extension_dir = DIR_EXTENSIONS."/{$extension_id}";
-            $this->id            = $id;
+            $this->id            = basename($id);
+            $this->dir           = "{$this->extension_dir}/features/dashboard/widgets/{$this->id}";
         }
 
         public function getProperties() {
@@ -27,14 +28,14 @@
 
         public function getHTML() {
             $extension = new \thusPi\Extensions\Extension($this->extension_id);
-            $html      = $extension->loadFeatureComponent('dashboard/widgets', $this->id, 'main');
+            $html      = $extension->callFeatureComponent('dashboard/widgets', $this->id, 'main');
 
             return $html;
         }
 
         public function getCSS() {
             $extension = new \thusPi\Extensions\Extension($this->extension_id);
-            $css       = $extension->loadFeatureComponent('dashboard/widgets', $this->id, 'widget.css');
+            $css       = $extension->callFeatureComponent('dashboard/widgets', $this->id, 'widget.css');
 
             // ================================= //
             //    Limit styles to this widget    //
@@ -64,16 +65,21 @@
 
         public function getJS() {
             $extension = new \thusPi\Extensions\Extension($this->extension_id);
-            $js        = $extension->loadFeatureComponent('dashboard/widgets', $this->id, 'widget.js');
+            $js        = $extension->callFeatureComponent('dashboard/widgets', $this->id, 'widget.js');
+
+            // Prevent error in empty files
+            if(empty($js)) {
+                $js = 'class Widget {}';
+            }
             
             // Inject javascript which will register the widget
-            $js = "
-                thusPiAssign('data.dashboard.widgets.{$this->extension_id}_{$this->id}',
-                    $js
-                );
-            ";
+            $js = "thusPiAssign('data.dashboard.widgets.{$this->extension_id}_{$this->id}',{$js});";
 
             return $js;
+        }
+
+        public function getConfig() {
+            return @file_get_json("{$this->dir}/widget.json") ?? null;
         }
 
         public function translate($key, $replacements = null, $fallback = null) {

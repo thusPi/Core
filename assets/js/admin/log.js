@@ -22,7 +22,7 @@ document.addEventListener('scroll', function (e) {
 }, true);
 
 function toggleLogCategory(category) {
-    setTimeout(() => {
+    setTimeout(function() {
         let categories_inactive = getInactiveLogCategories();
         $('.log-items').attr('data-hide-categories', categories_inactive.join(','));
         
@@ -77,7 +77,7 @@ function refreshLogsLoop() {
     if(thusPi.page.current() == 'admin/log/main') {
         refreshLogs();
     
-        setTimeout(() => {
+        setTimeout(function() {
             refreshLogsLoop();
         }, 1500);
     }
@@ -85,12 +85,12 @@ function refreshLogsLoop() {
 
 function requestLogs(min = null, max = null, nLatest = null, print = true, newestAtMin = 0, printMode = 'append') {
     requestingLogs = true;
-    thusPi.api.call('logs-get', {'latest': nLatest, 'min': min, 'max': max}).then((response) => {
+    thusPi.api.call('logs-get', {'latest': nLatest, 'min': min, 'max': max}).then(function(response) {
         console.log(response);
-    }).catch(() => {
+    }).catch(function() {
         console.error('Something went wrong while getting logs.');
     })
-    // return new Promise(resolve => {
+    // return new Promise(function(resolve, reject) {
     //     var url = `/api/get/log.php?min=${min}&max=${max}&latest=${nLatest}&no_indexes=true`;
         
     //     $.get(url, function(response) {
@@ -150,7 +150,7 @@ function printLogMessage(title = '', content = '', category = 'info', at = 0, at
 
     if(animation) {
         $log_item.addClass('log-item-new');
-        setTimeout(() => {
+        setTimeout(function() {
             $log_item.removeClass('log-item-new');
         }, 300);
     }

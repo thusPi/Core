@@ -1,5 +1,5 @@
 thusPiAssign('locale', {
-    translate: (key, replacements = []) => {
+    translate: function(key, replacements = []) {
         if(!(key in thusPi.data.locale.translations)) {
             return key;
         }

@@ -6,9 +6,9 @@ thusPiAssign('analytics.graph', {
 
 		this.refresh();
 
-		$(document).on('mouseenter mouseleave mousemove touchmove', '.graph-body', (e) => {this.eventMouseMove(e)});
-		$(document).on('mousedown touchstart', '.graph-body', (e) => {this.eventMouseDown(e)});
-		$(document).on('mouseup touchend', '.graph-body', (e) => {this.eventMouseUp(e)});
+		$(document).on('mouseenter mouseleave mousemove touchmove', '.graph-body', function(e) {this.eventMouseMove(e)});
+		$(document).on('mousedown touchstart', '.graph-body', function(e) {this.eventMouseDown(e)});
+		$(document).on('mouseup touchend', '.graph-body', function(e) {this.eventMouseUp(e)});
 		
 		return this;
 	},
@@ -73,9 +73,9 @@ thusPiAssign('analytics.graph', {
 	paint(debug = false) {
 		this.clear();
 
-		this.paintInfo(debug).then(() => {
+		this.paintInfo(debug).then(function() {
 			this.paintGraph();
-		}).catch((err) => {
+		}).catch(function(err) {
 			console.error(err);
 			this.setStatus('error');
 		})
@@ -85,13 +85,13 @@ thusPiAssign('analytics.graph', {
 
 	paintInfo(debug) {
 		console.log(this.selection_points);
-		return new Promise((resolve, reject) => {
+		return new Promise(function(resolve, reject) {
 			thusPi.api.call('analytic-json', {
 				'id': this.analyticId,
 				'max_rows': this.maxRows,
 				'selection': this.selection_points,
 				'debug': debug
-			}).then((response) => {
+			}).then(function(response) {
 				try {
 					console.log(response.data);
 					this.rows      = response.data.rows;
@@ -118,7 +118,7 @@ thusPiAssign('analytics.graph', {
 				} catch(err) {
 					console.error(err);
 				}
-			}).catch((err) => {
+			}).catch(function(err) {
 				console.error(err);
 				reject(this);
 			})
@@ -192,12 +192,12 @@ thusPiAssign('analytics.graph', {
 	paintGraph() {
 		this.setStatus('loading');
 
-		return new Promise((resolve, reject) => {
+		return new Promise(function(resolve, reject) {
 			thusPi.api.call('analytic-graph', {
 				'id': this.analyticId,
 				'max_rows': this.maxRows,
 				'selection': this.selection_points
-			}).then((response) => {
+			}).then(function(response) {
 				this.setContent(response.data.svg);
 
 				$.each(response.data.manifest.columns, function(column, info) {
@@ -208,7 +208,7 @@ thusPiAssign('analytics.graph', {
 				})
 				
 				this.setStatus('loaded').refresh();
-			}).catch((err) => {
+			}).catch(function(err) {
 				console.error(err);
 				this.setStatus('error');
 			})
@@ -252,7 +252,7 @@ thusPiAssign('analytics.graph', {
 		return this;
 	},
 
-	paintAxisTitles: (horAxisTitle = undefined, verAxisTitle = undefined) => {
+	paintAxisTitles(horAxisTitle = undefined, verAxisTitle = undefined) {
 		let $graphContainer = $('.graph-container');
 		if(typeof horAxisTitle != 'undefined') {
 			$graphContainer.find('.graph-area-hor .graph-axis-title').text(horAxisTitle);
@@ -308,7 +308,7 @@ thusPiAssign('analytics.graph', {
 		return this;
 	},
 
-	// data: (key, value = undefined) => {
+	// data(key, value = undefined) {
 	// 	let $graph = $('.graph');
 	// 	if(typeof value == 'undefined') {
 	// 		return $graph.data(key);

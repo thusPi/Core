@@ -9,7 +9,7 @@ $(document).on('thusPi.ready', function() {
 
 	$.each(thusPi.data.dashboard.widgets, function(widgetId, widget) {
 		// Find widget element
-		const elem = document.querySelector(`[data-widget-id="${widgetId}"] .dashboard-widget-content`);
+		const elem = document.querySelector(`[data-widget-id="${widgetId}"]`);
 
 		// Load the widget
 		try {

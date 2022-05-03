@@ -64,7 +64,7 @@
 			continue;
 		}
 
-		$cmd = script_name_to_shell_cmd($handler, @shell_arg_encode($sensor['options']));
+		$cmd = script_name_to_shell_cmd($handler, @encodeshellargarray($sensor['options']));
 
 		output("Running command {$cmd}");
 
