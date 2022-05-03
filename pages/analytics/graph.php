@@ -41,11 +41,11 @@
 					</div>
 					<div class="graph-status graph-status-loading">
 						<i class="far fa-spinner-third fa-spin fa-2x text-info"></i>
-						<span class="d-block px-2" style="font-size: 2rem;"><?php echo(\thusPi\Locale\translate('generic.state.loading')); ?></span>
+						<span class="d-block px-2" style="font-size: 2rem;"><?php echo(\thusPi\Locale\translate('generic.loading')); ?></span>
 					</div>
 					<div class="graph-status graph-status-error">
 						<i class="far fa-exclamation-circle fa-2x text-danger"></i>
-						<span class="d-block px-2" style="font-size: 2rem;"><?php echo(\thusPi\Locale\translate('generic.state.error')); ?></span>
+						<span class="d-block px-2" style="font-size: 2rem;"><?php echo(\thusPi\Locale\translate('generic.error')); ?></span>
 					</div>
 				</div>
 			</div>

@@ -25,7 +25,8 @@ thusPiAssign('message', {
         thusPi.message.send(content, 'info');
     },
 
-    error(content) {
+    error(content = null) {
+        content = content || thusPi.locale.translate('generic.error');
         thusPi.message.send(content, 'error');
     },
 

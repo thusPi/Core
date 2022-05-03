@@ -25,9 +25,9 @@
         \thusPi\Response\error('extension_not_installed', $properties);
     }
 
-    if($extension->uninstall()) {
+    if(($res = $extension->uninstall()) === true) {
         \thusPi\Response\success('uninstalled', $properties);
     }
 
-    \thusPi\Response\error('error_uninstalling', $properties);
+    \thusPi\Response\error('error_uninstalling', $res);
 ?>

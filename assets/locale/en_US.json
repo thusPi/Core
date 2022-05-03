@@ -38,6 +38,8 @@
 	
 	"generic.error.no_page_access": "You're not permitted to view this page.",
 	"generic.error.search_no_results": "No matches found.",
+	"generic.loading": "Loading...",
+	"generic.error": "Something went wrong!",
 
 	"generic.interval.day_other": "Every other day",
 	"generic.interval.day": "Every day",
@@ -88,8 +90,6 @@
 	"generic.state.on": "On",
 	"generic.state.unknown": "Unknown",
 	"generic.state.yes": "Yes",
-	"generic.state.loading": "Loading...",
-	"generic.state.error": "Something went wrong!",
 
 	"generic.theme.blue": "Blue",
 	"generic.theme.dark": "Dark",

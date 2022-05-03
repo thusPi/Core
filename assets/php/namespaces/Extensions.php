@@ -12,7 +12,7 @@
         }
 
         public function getProperties() {
-			return \thusPi\Extensions\get($this->id);
+			return \thusPi\Extensions\get($this->id) ?? [];
         }
 
         public function setProperties(array $properties) {
@@ -69,7 +69,18 @@
             @unlink("{$this->dir}/manifest.json");
 
             // Delete the remaining files
-            return rmtree($this->dir);
+            $res = [];
+
+            // Catch warnings if they occur
+            set_error_handler(function($errno, $errstr) use (&$res) {
+                // Store the warning
+                $res[] = $errstr;
+            }, E_WARNING);
+            rmtree($this->dir);
+            restore_error_handler();
+
+            // Return true if no warnings occured, otherwise return them
+            return empty($res) ? true : $res;
         }
 
         public function callFeatureComponent($type, $name, $component) {
@@ -155,13 +166,14 @@
             }
 
             $extension['repository']['pushed_ago'] = \thusPi\Locale\date_format('best,best', $extension['repository']['pushed_at']);
+            $extension_installed = (\thusPi\Extensions\get($extension['id'])['installed'] ?? false) !== false;
 
             $res[] = [
                 'id'          => $extension['id'] ?? null,
                 'name'        => $extension['manifest']['name'] ?? null,
                 'description' => $extension['manifest']['description'] ?? null,
                 'repository'  => $extension['repository'],
-                'installed'   => !is_null(\thusPi\Extensions\get($extension['id'])),
+                'installed'   => $extension_installed,
                 'enabled'     => \thusPi\Extensions\get($extension['id'])['enabled'] ?? false,
                 'verified'    => $extension['verified'] ?? false
             ];
@@ -237,15 +249,11 @@
     function get($extension_id) {
         $manifest_file = DIR_EXTENSIONS."/{$extension_id}/manifest.json";
 
-        // Return if the extension is not installed
-        if(!file_exists($manifest_file)) {
-            return null;
-        }
-
         // Read the manifest
-        $manifest = file_get_json($manifest_file);
+        $manifest = file_get_json($manifest_file) ?? [];
 
-        $manifest['enabled'] = (isset($manifest['enabled']) && $manifest['enabled'] === true);
+        $manifest['enabled']   = (isset($manifest['enabled']) && $manifest['enabled'] === true);
+        $manifest['installed'] = file_exists(DIR_EXTENSIONS."/{$extension_id}/");
 
         return $manifest;
     }
@@ -288,7 +296,7 @@
         // Create HTTP client
         $client = new \GuzzleHttp\Client();
 
-        // Check if manifest.json file exists
+        // Check if manifest.json file exists in remote repository
         $res = $client->request('GET', "https://raw.githubusercontent.com/{$extension['repository']['full_name']}/{$extension['repository']['default_branch']}/manifest.json", [
             'http_errors'    => false,
             'decode_content' => 'json'
@@ -317,9 +325,14 @@
             return 'Failed to clone the repository';
         }
 
+        // Throw an error if the repository was not cloned
+        if(!file_exists($destination)) {
+            return 'The repository could not be cloned.';
+        }
+
         // Throw an error if the manifest file was not cloned
         if(!file_exists($destination.'/manifest.json')) {
-            return 'The repository was cloned, however the manifest file could not be found.';
+            return 'The repository was cloned, however the manifest file could not be found locally.';
         }
         
         // Enable the extension

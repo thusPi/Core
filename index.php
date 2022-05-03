@@ -29,11 +29,11 @@
 	<main class="container"></main>
 	<div class="page-status" data-status="animating_loading">
 		<i class="far fa-spinner-third fa-spin fa-3x text-info mb-2"></i>
-		<h2 class="d-block px-2"><?php echo(\thusPi\Locale\translate('generic.state.loading')); ?></h2>
+		<h2 class="d-block px-2"><?php echo(\thusPi\Locale\translate('generic.loading')); ?></h2>
 	</div>
 	<div class="page-status" data-status="error">
 		<i class="far fa-exclamation-circle fa-3x text-danger mb-2"></i>
-		<h2 class="d-block px-2"><?php echo(\thusPi\Locale\translate('generic.state.error')); ?></h2>
+		<h2 class="d-block px-2"><?php echo(\thusPi\Locale\translate('generic.error')); ?></h2>
 	</div>
 	<div class="message-area"></div>
 </body>

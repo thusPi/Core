@@ -28,6 +28,9 @@ thusPiAssign('admin.extensions', {
             thusPi.message.send(thusPi.locale.translate('admin.extensions.message.installed', [response.data.name]));
             $('[data-extension-action="install"]').hideLoading();
             thusPi.page.reload();
+        }).catch(function(response) {
+            $('[data-extension-action="install"]').hideLoading();
+            thusPi.message.error(response.data);
         })
     },
 
@@ -36,8 +39,11 @@ thusPiAssign('admin.extensions', {
         setTimeout(function() {
             thusPi.api.call('extensions/uninstall', {'id': id}).then(function(response) {
                 thusPi.message.send(thusPi.locale.translate('admin.extensions.message.uninstalled', [response.data.name]));
-                $('[data-extension-action="enable"]').hideLoading();
+                $('[data-extension-action="uninstall"]').hideLoading();
                 thusPi.page.reload();
+            }).catch(function(response) {
+                $('[data-extension-action="uninstall"]').hideLoading();
+                thusPi.message.error();
             })
         }, 1500);
     },
@@ -49,6 +55,9 @@ thusPiAssign('admin.extensions', {
                 thusPi.message.send(thusPi.locale.translate('admin.extensions.message.enabled', [response.data.name]));
                 $('[data-extension-action="enable"]').hideLoading();
                 thusPi.page.reload();
+            }).catch(function(response) {
+                $('[data-extension-action="enable"]').hideLoading();
+                thusPi.message.error();
             })
         }, 250);
     },
@@ -60,6 +69,9 @@ thusPiAssign('admin.extensions', {
                 thusPi.message.send(thusPi.locale.translate('admin.extensions.message.disabled', [response.data.name]));
                 $('[data-extension-action="disable"]').hideLoading();
                 thusPi.page.reload();
+            }).catch(function(response) {
+                $('[data-extension-action="disable"]').hideLoading();
+                thusPi.message.error();
             })
         }, 250);
     }

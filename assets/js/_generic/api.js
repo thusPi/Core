@@ -42,8 +42,6 @@ thusPiAssign('api', {
                             thusPi.page.load(`login/main?redirect=home/main`, true);
                         }
                         reject(response.responseJSON);
-                    } else {
-                        reject(response);
                     }
 
                     return false;

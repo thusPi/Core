@@ -9,13 +9,13 @@ thusPiAssign('ui.input.search', class {
 
 		this.$wrapper.on('click', function(e) {e.stopPropagation()});
 		
-		this.$input.on('click', function(e) {this.focusEvent(e)});
-		this.$input.on('input', function(e) {this.inputEvent(e)});
-		this.$input.on('change', function(e) {this.changeEvent(e)});
+		this.$input.on('click', (e) => {this.focusEvent(e)});
+		this.$input.on('input', (e) => {this.inputEvent(e)});
+		this.$input.on('change', (e) => {this.changeEvent(e)});
 
-		this.$results.on('click', '.input-search-result', function(e) {this.resultFocusEvent(e)});
+		this.$results.on('click', '.input-search-result', (e) => {this.resultFocusEvent(e)});
 
-		$(document).on('click', function(e) {this.focusOutEvent(e)});
+		$(document).on('click', (e) => {this.focusOutEvent(e)});
 	}
 
 	focusEvent(e) {

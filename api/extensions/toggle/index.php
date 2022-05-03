@@ -23,7 +23,7 @@
     $extension = new \thusPi\Extensions\Extension($extension_id);
 
     // Return an error if extension is not installed
-    if(is_null($extension->getProperties())) {
+    if(!$extension->getProperty('installed')) {
         \thusPi\Response\error('extension_not_installed');
     }
 

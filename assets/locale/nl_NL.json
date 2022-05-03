@@ -42,6 +42,8 @@
 
 	"generic.error.no_page_access": "Je bent niet gemachtigd om deze pagina te bekijken.",
 	"generic.error.search_no_results": "Geen resultaten gevonden.",
+	"generic.loading": "Laden...",
+	"generic.error": "Er is iets misgegaan!",
 
 	"generic.interval.day_other": "Om de dag",
 	"generic.interval.day": "Elke dag",
@@ -92,8 +94,6 @@
 	"generic.state.on": "Aan",
 	"generic.state.unknown": "Onbekend",
 	"generic.state.yes": "Ja",
-	"generic.state.loading": "Laden...",
-	"generic.state.error": "Er is iets misgegaan!",
 
 	"generic.theme.blue": "Blauw",
 	"generic.theme.dark": "Donker",
