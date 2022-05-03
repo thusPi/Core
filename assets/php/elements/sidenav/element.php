@@ -3,7 +3,7 @@
 
 	// Don't show sidebar if user is not signed in
 	if(!\thusPi\Users\CurrentUser::authorized()) {
-		return '<nav class="sidenav" style="display: none;"></nav><style>body{grid-template-columns:0px auto;}</style>';
+		return '<nav class="sidenav" style="display: none;"></nav>';
 	}
 	
 	// Load sidenav items
@@ -26,9 +26,9 @@
 
 			$html .= "
 				<li class='sidenav-item'>
-					<a class='btn btn-lg btn-tertiary sidenav-link text-{$info['color']}' data-target='{$info['target']}' href='#/{$info['target']}'>
+					<a class='btn btn-fw btn-lg btn-tertiary sidenav-link text-{$info['color']} flex-row' data-target='{$info['target']}' href='#/{$info['target']}'>
 						{$icon}
-						<div class='sidenav-name'>{$name_translated}</div>
+						<span class='sidenav-item-name'>{$name_translated}</span>
 					</a>
 				</li>
 			";
@@ -41,7 +41,7 @@
 
 	return "
 		<nav class='sidenav bg-secondary'>
-			<ul class='sidenav-items btn-list' data-type='single'>
+			<ul class='sidenav-items btn-column'>
 				{$html}
 			</ul>
 		</nav>

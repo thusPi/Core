@@ -29,12 +29,7 @@
 	if(!$manifest = file_get_json($manifest_path)) {
 		\thusPi\response\error('error_loading_manifest');
 	}
-
-	// Authorize user unless specified otherwise in page manifest
-	if(!isset($manifest['require_auth']) || $manifest['require_auth'] !== false) {
-		\thusPi\Authorization\authorize();
-	}
-
+	
 	// Load page content
 	if(!$content = get_script_output($content_path)) {
 		\thusPi\response\error('error_loading_content');

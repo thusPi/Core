@@ -6,7 +6,7 @@
     class Device extends defaultInterface {      
         public function __construct($id, $respect_permissions = false) {
 			if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
-                \thusPi\Response\error('no_permission', "User is not permitted to view device {$id}.");
+            	\thusPi\Response\error('no_permission');
             }
 
 			if(!is_string($id)) {
@@ -219,7 +219,7 @@
 
     function get($id, $respect_permissions = false) {
 		if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
-            \thusPi\Response\error('no_permission', "User is not permitted to view device {$id}.");
+            \thusPi\Response\error('no_permission');
             return null;
         }
 

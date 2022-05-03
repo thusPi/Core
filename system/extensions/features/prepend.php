@@ -8,12 +8,13 @@
 	}
 
 	// Arguments
-	list($feature_path, $extension_id, $feature_type, $feature_name) = $argv;
+	list($feature_path, $extension_id, $feature_type, $feature_name, $user_locale) = $argv;
 	
     // Save the extension id as a constant
     define('EXTENSION_ID', $extension_id);
 	define('TRANSLATION_PREFIX', "features.{$feature_type}.{$feature_name}.");
+	define('EXTENSIONS_OVERRIDE_LOCALE', $user_locale);
 
-	// Make only the constant accessible
-	unset($extension_id);
+	// Make only the constants and session accessible
+	unset($feature_path, $extension_id, $feature_type, $feature_name, $user_locale);
 ?>

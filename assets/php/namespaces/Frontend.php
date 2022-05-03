@@ -1,7 +1,7 @@
 <?php 
     namespace thusPi\Frontend;
 
-    function print_scripts() {
+    function load_scripts() {
         $html = '';
 
         // Print variables
@@ -59,17 +59,13 @@
         return true;
 	}
 
-    function print_stylesheets() {
+    function load_stylesheets() {
         $html = '';
         
         // Find stylesheets
         $stylesheets = glob(DIR_ASSETS.'/css/*/*.css');
         foreach ($stylesheets as $stylesheet) {
             if(strpos($stylesheet, '.min.') !== false) {
-                continue;
-            }
-
-            if(basename(dirname($stylesheet)) == '_themes') {
                 continue;
             }
 
@@ -81,7 +77,7 @@
         return true;
     }
 
-    function print_category_css() {
+    function load_category_css() {
         $categories = \thusPi\Categories\get_all();
 
         foreach ($categories as $namespace => $category) {
@@ -101,28 +97,18 @@
         }
     }
     
-    function print_theme() {
+    function load_themes() {
         $html = '';
+        
+        // Find themes
+        $themes = glob(DIR_ASSETS.'/themes/*.css');
+        foreach ($themes as $theme) {
+            if(strpos($theme, '.min.') !== false) {
+                continue;
+            }
 
-        // Get theme preferred by user or fall back on the config theme
-        if(!($theme = \thusPi\Users\CurrentUser::getSetting('theme') ?? \thusPi\Config\get('theme'))) {
-            $theme = \thusPi\Config\get('theme');
+            $html .= '<style file="themes.'.basename($theme).'" type="text/css">'.file_get_contents($theme).'</style>'."\n";
         }
-
-        if(!file_exists(DIR_ASSETS."/css/_themes/{$theme}.css")) {
-            $theme = \thusPi\Config\get('theme');
-        }
-
-        if(!file_exists(DIR_ASSETS."/css/_themes/{$theme}.css")) {
-            return false;
-        }
-
-        // Load theme file contents
-        if(!$css = file_get_contents(DIR_ASSETS."/css/_themes/{$theme}.css")) {
-            return false;
-        }
-
-        $html .= "<style>{$css}</style>";
 
         echo($html);
 

@@ -1,0 +1,16 @@
+.device {
+    padding: calc(var(--spacing-md) / 2);
+}
+
+.device-inner {
+    height: 100%;
+}
+
+.device-control-wrapper {
+    margin-top: var(--spacing-sm);
+    min-height: 1.75rem;
+}
+
+.device-toolbar {
+    margin-top: var(--spacing-md);
+}

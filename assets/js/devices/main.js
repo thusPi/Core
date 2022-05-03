@@ -86,20 +86,21 @@ function loadDeviceSearchResults($device) {
 	})
 }
 
-$(document).on('click', '.categories-list-row', debounce(function() {
-	let inactive_categories = [];
+$(document).on('click', '.categories-list-row', function() {
+	let inactiveCategories = [];
+	
 	$('.categories-list-row').find('.category-button').each(function() {
-		if(!$(this).hasClass('active')) {
-			inactive_categories.push($(this).attr('data-category'));
+		const $btn = $(this);
+
+		if(!$btn.hasClass('active')) {
+			inactiveCategories.push($btn.attr('data-category'));
 		}
 	})
 
-	console.log('debounce!');
-
-	thusPi.users.currentUser.setSetting('devices_inactive_categories', inactive_categories).then(function() {
+	thusPi.users.currentUser.setSetting('devices_inactive_categories', inactiveCategories).then(function() {
 		thusPi.page.reload();
 	}).catch();
-}, 500))
+})
 
 $(document).on('thusPi.search_value_change', '.device .input[data-type="search"]', function() {
 	let $input  = $(this);

@@ -8,7 +8,7 @@
         "color": "success"
     },
     "lighting": {
-        "icon": "mi.lightbulb",
+        "icon": "far.lightbulb",
         "color": "warning"
     },
     "climate": {
@@ -16,7 +16,7 @@
         "color": "danger"
    },
     "security": {
-        "icon": "mi.shield",
+        "icon": "far.shield",
         "color": "info"
     },
     "appliances": {

@@ -59,4 +59,10 @@
 		'Locale',
 		'Frontend'
 	);
+
+	// Try to authorize the user. If this fails,
+	// authorize the user as guest
+	if(!\thusPi\Authorization\authorize()) {
+		$_SESSION['thusPi_uuid'] = '__GUEST__';
+	}
 ?>

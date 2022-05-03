@@ -39,11 +39,18 @@
             return @json_decode(@file_get_contents("{$this->dir}/data/{$filename}.json", true), true) ?? null;
         }
 
-        public function translate($key, $replacements = null, $fallback = null) {
-            // Use user locale if it's supported, use en_US otherwise
-            $user_locale = \thusPi\Users\CurrentUser::getSetting('locale');
+        public function translate($key, $replacements = null, $fallback = null, $locale = null) {
+            // Use user locale if it's supported
+            $locale = \thusPi\Users\CurrentUser::getSetting('locale');
 
-            $locale_file = "{$this->dir}/assets/locale/{$user_locale}.json";
+            // Use override locale (constant from feature) instead
+            // if it has been defined
+            if(defined('EXTENSIONS_OVERRIDE_LOCALE')) {
+                $locale = \EXTENSIONS_OVERRIDE_LOCALE;
+            }
+
+            // Check if requested locale exists, else use en_US instead
+            $locale_file = "{$this->dir}/assets/locale/{$locale}.json";
             if(!file_exists($locale_file)) {
                 $locale_file = "{$this->dir}/assets/locale/en_US.json";
             }
@@ -97,12 +104,15 @@
 
             $feature_component_filetype = PATHINFO($feature_component_path, PATHINFO_EXTENSION);
 
-            // Encode the extension id so it can be used as shell argument
-            $extension_id_encoded = escapeshellarg($this->id);
+            // Escape the extension id
+            $extension_id_escaped = escapeshellarg($this->id);
+
+            // Escape the user's locale
+            $user_locale_escaped = escapeshellarg(\thusPi\Users\CurrentUser::getSetting('locale'));
 
             // Obtain the output
             if($feature_component_filetype == 'php') {
-                $cmd = "php -c ".DIR_SYSTEM."/extensions/features/php.ini {$feature_component_path} {$extension_id_encoded} {$type} {$name}";
+                $cmd = "php -c ".DIR_SYSTEM."/extensions/features/php.ini {$feature_component_path} {$extension_id_escaped} {$type} {$name} {$user_locale_escaped}";
                 execute($cmd, $output, 60);
             } else {
                 $output = file_get_contents($feature_component_path);

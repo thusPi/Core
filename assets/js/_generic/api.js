@@ -3,11 +3,9 @@ thusPiAssign('api', {
         url = `${thusPi.data.webroot}/api/${url}/`;
         let headers = {};
         let tokenId = localStorage.getItem('thusPi_tokenId');
-        let token = localStorage.getItem('thusPi_token');
 
-        if(token !== null && tokenId !== null) {
+        if(tokenId !== null) {
             headers['x-token-id'] = tokenId;
-            headers['x-token']    = token;
         }
         
         return new Promise(function(resolve, reject) {

@@ -780,7 +780,7 @@
 		}
 
 		// Set default classes
-		array_push($arguments['classes'], "icon-scale-{$arguments['scale']}", 'icon-loaded', "icon-library-{$library}");
+		array_push($arguments['classes'], "icon-scale-{$arguments['scale']}", 'icon', "icon-library-{$library}");
 		
 		// Create attributes string
 		foreach($arguments['attributes'] as $attribute => $value) {
@@ -813,11 +813,11 @@
 			$service = explode('.', $icon)[0];
 			$icon = strtolower(explode('.', $icon)[1]);
 			if($service == 'mi') { // MATERIAL ICONS
-				$icon_html = "<{$elem} class='icon-loaded icon-library-mi material-icons-outlined{$classes}' {$style}>{$icon}</{$elem}>";
+				$icon_html = "<{$elem} class='icon icon-library-mi material-icons-outlined{$classes}' {$style}>{$icon}</{$elem}>";
 			} else if($service == 'mdi') { // MATERIAL DESIGN ICONS
-				$icon_html = "<{$elem} class='icon-loaded icon-library-mdi mdi mdi-{$icon}{$classes}' {$style}></{$elem}>";
+				$icon_html = "<{$elem} class='icon icon-library-mdi mdi mdi-{$icon}{$classes}' {$style}></{$elem}>";
 			} else if($service == 'far') { // FONT AWESOME REGULAR
-				$icon_html = "<{$elem} class='icon-loaded icon-library-far far fa-{$icon}{$classes}' {$style}></{$elem}>";
+				$icon_html = "<{$elem} class='icon icon-library-far far fa-{$icon}{$classes}' {$style}></{$elem}>";
 			}
 		}
 		if(isset($icon_html)) {

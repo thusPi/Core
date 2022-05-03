@@ -1,0 +1,81 @@
+.btn {
+	position: relative;
+	z-index: 5;
+	text-align: center;
+	user-select: none;
+	cursor: pointer;
+	transition: .15s color;
+	padding: var(--spacing-md);
+	border-radius: var(--border-radius);
+	text-decoration: none !important;
+    background: var(--background);
+	display: flex;
+	width: fit-content;
+	outline: none;
+	border: none;
+    --background: var(--secondary);
+    --background-active: var(--tertiary);
+}
+
+.btn-scale-sm {
+	padding: var(--spacing-sm);
+}
+
+a.btn,
+a.btn:hover,
+a.btn:focus {
+	color: inherit;
+}
+
+.btn-column .btn {
+	justify-content: start;
+	width: 100%;
+}
+
+.btn::after {
+    content: '';
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-radius: 50%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: -1;
+	transition-duration: var(--animation-duration-short);
+    background: var(--background-active);
+}
+
+.btn.active::after {
+	opacity: 1;
+	height: 100%;
+	width: 100%;
+	border-radius: var(--spacing-lg);
+	box-shadow: var(--shadow-light);
+}
+
+@media(hover: hover) {
+	.btn:not(.btn-no-hover):hover::after,
+	.btn:not(.btn-no-hover):focus::after {
+		opacity: 1;
+		height: 100%;
+		width: 100%;
+		border-radius: var(--spacing-lg);
+		box-shadow: var(--shadow-light);
+	}
+}
+
+/* Other related elements */
+.btn-row {
+	display: flex;
+	flex-direction: row;
+	column-gap: var(--spacing-md);
+	overflow: auto hidden;
+}
+
+.btn-column {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--spacing-md);
+	overflow: hidden auto;
+}

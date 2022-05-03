@@ -8,12 +8,12 @@
             },
             "devices": {
                 "color": "caution",
-                "icon": "mdi.devices",
+                "icon": "far.computer-speaker",
                 "target": "devices/main"
             },
             "analytics": {
                 "color": "danger",
-                "icon": "far.chart-area",
+                "icon": "far.chart-bar",
                 "target": "analytics/main"
             },
             "streams": {
@@ -23,30 +23,30 @@
             },
             "rooms": {
                 "color": "debug",
-                "icon": "mi.door_front",
+                "icon": "far.door-closed",
                 "target": "rooms/main"
             }
         },
         "bottom": {
-            "logout": {
+            "admin": {
                 "color": "info",
-                "icon": "mi.logout",
-                "target": "logout/main"
+                "icon": "far.cogs",
+                "target": "admin/main"
             },
             "account": {
                 "color": "info",
-                "icon": "mi.person",
+                "icon": "far.user",
                 "target": "account/main"
-            },
-            "admin": {
-                "color": "info",
-                "icon": "mi.shield",
-                "target": "admin/main"
             },
             "settings": {
                 "color": "info",
-                "icon": "mi.settings",
+                "icon": "far.cog",
                 "target": "settings/main"
+            },
+            "logout": {
+                "color": "info",
+                "icon": "far.sign-out",
+                "target": "logout/main"
             }
         }
     }

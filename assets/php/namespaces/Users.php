@@ -76,11 +76,11 @@
         }
 
         public function getSetting($key) {
-            if(!isset($this->user['settings'][$key])) {
-                return null;
-            }
+            return $this->getSettings()[$key] ?? null;
+        }
 
-            return $this->user['settings'][$key];
+        public function getSettings() {
+            return $this->user['settings'];
         }
 
         public function setSetting($key, $value) {
@@ -100,13 +100,13 @@
         }
 
         public function signOut() {
-            return \thusPi\Authorization\delete_token($_COOKIE['thusPi_token_id'] ?? null);
+            return \thusPi\Authorization\delete_token($_COOKIE['thusPi_token'] ?? null);
         }
     }
 
     class CurrentUser {
         static public function authorized() {
-            return (isset($_SESSION['thusPi_uuid']) && isset($_COOKIE['thusPi_token']) && isset($_COOKIE['thusPi_token_id']));
+            return (isset($_SESSION['thusPi_uuid']) && $_SESSION['thusPi_uuid'] != '__GUEST__' && isset($_COOKIE['thusPi_token']));
         }
 
         static public function getFlag($flag) {
@@ -132,6 +132,11 @@
         static public function getSetting($key) {
             $user = @new \thusPi\Users\User($_SESSION['thusPi_uuid']);
             return $user->getSetting($key);
+        }
+
+        static public function getSettings() {
+            $user = @new \thusPi\Users\User($_SESSION['thusPi_uuid']);
+            return $user->getSettings();
         }
 
         static public function setSetting($key, $value) {

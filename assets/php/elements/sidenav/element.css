@@ -1,8 +1,8 @@
-.sidenav {
+/* .sidenav {
 	grid-area: sidenav;
 	overflow: hidden;
 	width: 3.5rem;
-	padding: 0 var(--u1) !important;
+	padding: 0 var(--spacing-sm) !important;
 	transition: var(--animation-duration-medium) width, var(--animation-duration-medium) padding-right, var(--animation-duration-medium) padding-left;
 	box-shadow: var(--shadow-heavy);
 	z-index: 50;
@@ -10,7 +10,7 @@
 
 @media(hover: hover) {
 	.sidenav.expand {
-		padding: 0 var(--u2);
+		padding: 0 var(--spacing-md);
 		width: 13rem;
 	}
 }
@@ -22,7 +22,7 @@
 	overflow-x: hidden;
 	margin: 0;
 	height: 100%;
-	padding: var(--u2) 0;
+	padding: var(--spacing-md) 0;
 }
 
 .sidenav .sidenav-item {
@@ -32,7 +32,7 @@
 
 .sidenav .sidenav-link {
 	display: flex;
-	padding: var(--u2) 0.375rem;
+	padding: var(--spacing-md) 0.375rem;
 }
 
 .sidenav .sidenav-link,
@@ -48,4 +48,4 @@
 	line-height: 2.25rem;
 	vertical-align: middle;
 	white-space: nowrap;
-}
+} */

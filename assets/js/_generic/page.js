@@ -45,9 +45,9 @@ thusPiAssign('page', {
 
                 $('main').html(response.data.html);
                
-                // Make the new sidenav item active
+                // Make the new sidenav link active
                 $('.sidenav-link').removeClass('active');
-                $(`.sidenav-link[data-target="${response.data.manifest.name.split('/')[0]}"]`).addClass('active');
+                $(`.sidenav-link[data-target^="${response.data.manifest.name.split('/')[0]}"]`).addClass('active');
                 
                 $(document).trigger('thusPi.load');
 

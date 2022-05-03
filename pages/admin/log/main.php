@@ -14,7 +14,7 @@
 		?>
 			<div 
 				tabindex="0" 
-				class="btn bg-tertiary btn-<?php echo($color); ?> no-hover mx-1<?php echo(!in_array($namespace, $log_inactive_groups) ? ' active' : ''); ?>" 
+				class="btn bg-tertiary btn-<?php echo($color); ?> btn-no-hover mx-1<?php echo(!in_array($namespace, $log_inactive_groups) ? ' active' : ''); ?>" 
 				data-category="<?php echo($namespace); ?>"
 				onclick="toggleLogCategory('<?php echo($namespace); ?>');">
 				<?php echo(\thusPi\Locale\translate("admin.log.message_type.{$namespace}")); ?>

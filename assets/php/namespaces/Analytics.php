@@ -9,7 +9,7 @@
         
         public function __construct($id, $respect_permissions = false) {
             if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
-                \thusPi\Response\error('no_permission', "User is not permitted to view device {$id}.");
+                \thusPi\Response\error('no_permission', "You are not permitted to view device {$id}.");
             }
 
             $this->id = $id;
@@ -182,7 +182,7 @@
 
     function get($id, $respect_permissions = false) {
         if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
-            \thusPi\Response\error('no_permission', "User is not permitted to view device {$id}.");
+            \thusPi\Response\error('no_permission');
             return null;
         }
 
@@ -190,6 +190,10 @@
 
         $db->where('id', $id);
         $analytic = $db->getOne('analytics');
+
+        if(!isset($analytic)) {
+            return null;
+        }
 
         if(is_string($analytic['axes'])) {
             $analytic['axes'] = @json_decode($analytic['axes'], true);

@@ -29,7 +29,7 @@
                 <div class=\"dashboard-widget p-1 transition-fade-order\" data-widget-id=\"{$widget->getProperty('extension_id')}_{$widget->getProperty('id')}\" {$widget_config_str}>
                     <div class=\"tile\">
                         <h3 class=\"tile-title\">{$widget_title}</h3>
-                        <div class=\"dashboard-widget-content\">
+                        <div class=\"tile-content dashboard-widget-content\">
                             {$widget_html}
                         </div>
                     </div>

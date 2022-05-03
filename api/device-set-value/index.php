@@ -3,8 +3,6 @@
 	include_once("{$_SERVER['DOCUMENT_ROOT']}/autoload.php");
 ?>
 <?php
-	session_write_close();
-
 	// Check if device id is given
 	if(!isset($_POST['id'])) {
 		\thusPi\Response\error('request_field_missing', 'Field id is missing.');

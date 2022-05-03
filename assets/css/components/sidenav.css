@@ -1,0 +1,41 @@
+.sidenav {
+    grid-area: nav;
+    max-height: 100vh;
+    max-width: var(--nav-width);
+    width: 999999px;
+    padding: var(--spacing-md) var(--spacing-sm);
+    overflow: hidden;
+    transition: var(--animation-duration-medium) max-width;
+    background: var(--secondary);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    box-shadow: var(--shadow-heavy);
+}
+
+@media(min-width: 768px) {
+    .sidenav.expand {
+        max-width: 12rem;
+    }
+}
+
+.sidenav-items {
+    height: 100%;
+    overflow: hidden auto;
+}
+
+.sidenav-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.sidenav-link {
+    --background: transparent; 
+}
+
+.sidenav-item-name {
+    white-space: nowrap;
+}
