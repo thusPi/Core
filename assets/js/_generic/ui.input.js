@@ -4,61 +4,111 @@
 thusPiAssign('ui.input.search', class {
 	constructor($input) {
 		this.$input   = $input;
+
+		// Wrap input
+		this.$input.wrap('<div class="input-wrapper input-wrapper-search"></div>');
+
+		// Store wrapper
 		this.$wrapper = $input.parents('.input-wrapper.input-wrapper-search').first();
+
+		// Create results list
+		this.$wrapper.append('<ul class="input-search-results btn-column"></ul>');
+
+		// Store results list
 		this.$results = this.$wrapper.find('.input-search-results').first();
 
 		this.$wrapper.on('click', function(e) {e.stopPropagation()});
 		
-		this.$input.on('click', (e) => {this.focusEvent(e)});
-		this.$input.on('input', (e) => {this.inputEvent(e)});
-		this.$input.on('change', (e) => {this.changeEvent(e)});
+		this.$input.on('click', (e) => {this._focusEvent(e)});
+		this.$input.on('input', (e) => {this._inputEvent(e)});
+		this.$input.on('change', (e) => {this._changeEvent(e)});
 
-		this.$results.on('click', '.input-search-result', (e) => {this.resultFocusEvent(e)});
+		this.$results.on('click', '.input-search-result', (e) => {this._resultFocusEvent(e)});
 
-		$(document).on('click', (e) => {this.focusOutEvent(e)});
+		$(document).on('click', (e) => {this._focusOutEvent(e)});
 	}
 
-	focusEvent(e) {
+	addResult(result) {
+		if(!isSet(result.value)) {
+			return false;
+		}
+		result.shownValue = result.shownValue || result.value;
+		result.match      = result.match || result.shownValue;
+
+		const elType = isSet(result.href) ? 'a' : 'li';
+
+		let $result;
+		
+		if(isSet(result.description) || isSet(result.thumbnail)) {
+			$result = $(`<${elType} class="input-search-result input-search-result-rich btn bg-tertiary btn-secondary" value="${result.value}" data-match="${result.match}"></${elType}>`);
+			
+			$result.append(`<span class="input-search-result-title">${result.shownValue}</span>`);
+
+			if(isSet(result.description)) {
+				$result.append(`<span class="input-search-result-description flex-row">${result.description}</span>`);
+			}
+
+			if(isSet(result.thumbnail)) {
+				$result.append(`<span class="input-search-result-thumbnail"><img src="${result.thumbnail}"></span>`);
+			}
+		} else {
+			// A plain search result
+			$result = $(`<${elType} class="input-search-result btn bg-tertiary btn-secondary" value="${result.value}" data-match="${result.match}" data-shown-value="${result.shownValue}">${result.shownValue}</${elType}>`);
+		}
+
+		// Set href attribute if it is specified
+		if(isSet(result.href)) {
+			$result.attr('href', result.href);
+		}
+
+		// Append the result
+		this.$results.append($result);
+
+		// Refresh results list
+		this._resultsFilter(this.$input.val());
+	}
+
+	_focusEvent(e) {
 		this.$wrapper.addClass('active');
-		this.resultsToggleAll(true);
-		this.resultsToggle(true);
+		this._resultsToggleAll(true);
+		this._resultsToggle(true);
 	}
 
-	focusOutEvent(e) {
+	_focusOutEvent(e) {
 		this.$wrapper.removeClass('active');
-		this.resultsToggle(false);
+		this._resultsToggle(false);
 	}
 
-	inputEvent(e) {
+	_inputEvent(e) {
 		e.preventDefault();
 		if(this.$input.attr('filter-on') != 'change') {
-			this.resultsFilter(this.$input.val());
+			this._resultsFilter(this.$input.val());
 		}
 	}
 
-	changeEvent(e) {
+	_changeEvent(e) {
 		e.preventDefault();
 		if(this.$input.attr('filter-on') == 'change') {
-			this.resultsFilter(this.$input.val());
+			this._resultsFilter(this.$input.val());
 		}
 	}
 
-	resultsToggle(show = true) {
+	_resultsToggle(show = true) {
 		this.$results.toggleClass('show', show);
 	}
 
-	resultsToggleAll(show = true) {
-		this.$results.find('.input-search-result[data-search-match]').toggleClass('show', show);
+	_resultsToggleAll(show = true) {
+		this.$results.find('.input-search-result[data-match]').toggleClass('show', show);
 	}
 
-	resultsFilter(query, caseSensitive = false) {
+	_resultsFilter(query, caseSensitive = false) {
 		if(!caseSensitive) {
 			query = query.toLowerCase(); 
 		}
 
-		this.$results.find('.input-search-result[data-search-match]').each(function(i, result) {
+		this.$results.find('.input-search-result[data-match]').each(function(i, result) {
 			let $result = $(result);
-			let match   = $result.attr('data-search-match');
+			let match   = $result.attr('data-match');
 
 			if(!caseSensitive) {
 				match = match.toLowerCase();
@@ -67,22 +117,25 @@ thusPiAssign('ui.input.search', class {
 			$result.toggleClass('show', match.includes(query));
 		})
 
-		this.$results.attr('data-search-matches', this.$results.find('.input-search-result[data-search-match].show').length);
+		this.$results.attr('data-search-matches', this.$results.find('.input-search-result[data-match].show').length);
 	}
 
-	resultFocusEvent(e) {
+	_resultFocusEvent(e) {
 		let $result    = $(e.target).closest('.input-search-result');
 		let value      = $result.attr('value');
 		let shownValue = $result.attr('data-shown-value');
 
-		
+		if(isSet($result.attr('href'))) {
+			return;
+		}
+
 		this.$results.find('.input-search-result.active').removeClass('active');
 		$result.addClass('active');
 
 		this.$wrapper.removeClass('active');
 		
 		if(this.$wrapper.attr('data-select-type') != 'multiple') {
-			this.resultsToggle(false);
+			this._resultsToggle(false);
 		}
 
 		if(this.$input.value() == value) {
@@ -96,12 +149,14 @@ thusPiAssign('ui.input.search', class {
 })
 
 $.fn.value = function(value = undefined, shownValue = undefined) {
-	let $input = this;
-	let input  = $input.get(0);
+	const $input = this;
+	const input  = $input.get(0);
+	
+	shownValue = shownValue || value;
 
 	if(typeof value == 'undefined') {
-		if($input.hasClass('input-search')) {
-			return $input.closest('.input-wrapper-search').attr('data-value');
+		if($input.attr('data-type') == 'search') {
+			return $input.attr('data-value');
 		} else if(typeof input.value != 'undefined') {
 			return $input.value;
 		} else if(typeof $input.attr('data-value') != 'undefined') {		
@@ -112,9 +167,9 @@ $.fn.value = function(value = undefined, shownValue = undefined) {
 
 		return undefined;
 	} else {
-		if($input.hasClass('input-search')) {
-			$input.closest('.input-wrapper-search').attr('data-value', value);
-			$input.closest('input').attr('value', shownValue || value).val(shownValue || value);
+		if($input.attr('data-type') == 'search') {
+			$input.attr('data-value', value);
+			$input.attr('value', shownValue).val(shownValue);
 		} else if(typeof input.value != 'undefined') {
 			$input.value = value;
 		} else if(typeof $input.attr('data-value') != 'undefined') {		
@@ -138,7 +193,7 @@ $(document).on('click', '.input[data-type="checkbox"]', function() {
 })
 
 // Make range thumbs draggable
-$(document).on('thusPi.load', function() {
+$(document).on('thuspi.load', function() {
 	$(document).find('.input[data-type="range"]').each(function() {
 		let $input = $(this);
 
@@ -263,8 +318,8 @@ $(document).on('click', '.input[data-type="toggle"]', function() {
 	$(this).attr('data-value', $(this).attr('data-value') == 'on' ? 'off' : 'on').trigger('change');
 })
 
-$(document).on('thusPi.load', function() {
-	$('.input-wrapper-search input').each(function() {
+$(document).on('thuspi.load', function() {
+	$('input[data-type="search"]').each(function() {
 		$(this).data('input', new thusPi.ui.input.search($(this)));
 	})
 })

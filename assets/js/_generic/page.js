@@ -49,7 +49,7 @@ thusPiAssign('page', {
                 $('.sidenav-link').removeClass('active');
                 $(`.sidenav-link[data-target^="${response.data.manifest.name.split('/')[0]}"]`).addClass('active');
                 
-                $(document).trigger('thusPi.load');
+                $(document).trigger('thuspi.load');
 
                 thusPi.page.setStatus('animating_in');
                 thusPi.page.animateIn(new_animation_duration);
@@ -71,7 +71,7 @@ thusPiAssign('page', {
         
         thusPi.page.setStatus('animating_in');
         setTimeout(function() {
-            $(document).trigger('thusPi.ready');
+            $(document).trigger('thuspi.ready');
             console.log('PAGE READY!');
             thusPi.page.setStatus('ready');
         }, animation_duration);

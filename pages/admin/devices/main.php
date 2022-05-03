@@ -6,13 +6,14 @@
 			<a 
 				class="btn btn-tertiary tile transition-fade-order"
 				data-page-search="<?php echo($device['name']); ?>"
-				data-category="<?php echo($device['category']); ?>">
+				data-category="<?php echo($device['category']); ?>"
+				href="#/admin/devices/manage/?id=<?php echo($device['id']); ?>">
 				<?php echo(create_icon($device['icon'], 'xl', ['tile-icon text-category'])); ?>
 					<h3 class="tile-title"><?php echo($device['name']); ?></h3>
 					<span class="tile-subtitle"><?php echo(\thusPi\Locale\translate("generic.category.{$device['category']}.title")); ?></span>
 			</a>
 		<?php } ?>
 </div>
-<div class="btn btn-xl-square bg-secondary btn-info btn-floating btn-floating-bottom btn-floating-right btn-lg-square transition-slide-right" onclick="loadPage('admin', 'devices>edit_device');">
+<div class="btn bg-secondary btn-info btn-floating transition-slide-right" onclick="loadPage('admin', 'devices>edit_device');">
 <?php echo(create_icon('far.plus', 'xl')); ?>
 </div>

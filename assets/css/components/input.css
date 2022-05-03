@@ -15,6 +15,10 @@ input[type="search"] {
 	position: relative;
 }
 
+input::placeholder {
+    color: var(--text-muted);
+}
+
 /* Icon picker */
 .input[data-type="iconpicker"] {
     overflow: hidden;
@@ -112,8 +116,8 @@ input[type="search"] {
 }
 
 .input-search-result {
-    position: relative;
-    text-align: left;
+    width: 100%;
+    padding: 0.125rem var(--spacing-sm);
 }
 
 .input-search-result:not(.show) {
@@ -124,30 +128,23 @@ input[type="search"] {
     height: 3.5rem;
     min-height: 3.5rem;
     max-height: 3.5rem;
-    width: 100%;
     display: grid !important;
     grid-template-areas: 
         'srr-thumbnail srr-title'
         'srr-thumbnail srr-description';
     grid-template-rows: 1fr 1fr;
-    grid-template-columns: max-content auto;
+    grid-template-columns: max-content 1fr;
 }
 
 .input-search-result-rich .input-search-result-title {
     grid-area: srr-title;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0;
+    text-align: left;
 }
 
 .input-search-result-rich .input-search-result-description {
     grid-area: srr-description;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0;
     color: var(--text-muted);
+    justify-content: start;
 }
 
 .input-search-result-rich .input-search-result-thumbnail {

@@ -19,6 +19,7 @@
 }
 
 /* Sizes */
+.icon.icon-scale-text { --icon-scale: 1em; }
 .icon.icon-scale-xs { --icon-scale: var(--icon-scale-xs); }
 .icon.icon-scale-sm { --icon-scale: var(--icon-scale-sm); }
 .icon.icon-scale-md { --icon-scale: var(--icon-scale-md); }

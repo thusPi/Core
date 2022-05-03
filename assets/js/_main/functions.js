@@ -16,6 +16,10 @@ function showPopup(elem) {
 	$('.popup-shield').addClass('show');
 }
 
+function isSet(variable) {
+	return (typeof variable != 'undefined' && variable !== null);
+}
+
 function trim(str, chars = ' ') {
     let start = 0, 
         end = str.length;

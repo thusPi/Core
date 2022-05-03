@@ -179,13 +179,12 @@
             $extension_installed = (\thusPi\Extensions\get($extension['id'])['installed'] ?? false) !== false;
 
             $res[] = [
-                'id'          => $extension['id'] ?? null,
-                'name'        => $extension['manifest']['name'] ?? null,
-                'description' => $extension['manifest']['description'] ?? null,
-                'repository'  => $extension['repository'],
-                'installed'   => $extension_installed,
-                'enabled'     => \thusPi\Extensions\get($extension['id'])['enabled'] ?? false,
-                'verified'    => $extension['verified'] ?? false
+                'id'              => $extension['id'] ?? null,
+                'name'            => $extension['manifest']['name'] ?? null,
+                'description'     => $extension['manifest']['description'] ?? null,
+                'repository'      => $extension['repository'],
+                'installed'       => $extension_installed,
+                'enabled'         => \thusPi\Extensions\get($extension['id'])['enabled'] ?? false
             ];
         }
 

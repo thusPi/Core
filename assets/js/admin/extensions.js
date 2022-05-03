@@ -1,27 +1,4 @@
 thusPiAssign('admin.extensions', {
-    print_list(query) {
-        thusPi.api.call('extensions/search', {'query': query}).then(function(response) {
-            const $results = $('.extension-search-results');
-            $results.empty();
-
-            $.each(response.data, function(i, extension) {
-                const $extension = thusPi.template.get('.extension-brief');
-
-                $extension.find('.extension-name').text(extension.name);
-                $extension.find('.extension-description').text(extension.description || extension.name);
-                $extension.find('.extension-owner').text(extension.repository.owner.name);
-                $extension.find('.extension-stars').text(extension.repository.stars_count);
-                $extension.find('.extension-issues').text(extension.repository.open_issues_count);
-                $extension.find('.extension-pushed-ago').text(extension.repository.pushed_ago);
-                $extension.attr('data-verified', extension.verified);
-                $extension.attr('href', `/#/admin/extensions/view/?id=${extension.id}`);
-                
-
-                $extension.appendTo($results);
-            })
-        })
-    },
-
     install(id) {
         $('[data-extension-action="install"]').showLoading();
         thusPi.api.call('extensions/install', {'id': id}).then(function(response) {
@@ -75,4 +52,61 @@ thusPiAssign('admin.extensions', {
             })
         }, 250);
     }
+})
+
+$(document).on('thuspi.ready', function() {
+    if(thusPi.page.current() != 'admin/extensions/main') {
+        return false;
+    }
+
+    // Extension search input
+    const $input = $('.extension-search');
+    
+    // Load extension catalogue
+    thusPi.api.call('extensions/catalogue').then(function(response) {
+        // Append search results
+        $.each(response.data, function(i, extension) {
+            $input.data('input').addResult({
+                value: extension.id,
+                shownValue: extension.name,
+                description: `
+                    <i class="far fa-user icon icon icon-scale-text text-info"></i>
+                    <span>${extension.repository.owner.name}</span>
+                    <span>|</span>
+                    <i class="far fa-star icon icon icon-scale-text text-warning"></i>
+                    <span>${extension.repository.stars_count}</span>
+                    <span>|</span>
+                    <i class="far fa-dot-circle icon icon icon-scale-text text-danger d-none d-sm-inline"></i>
+                    <span class="d-none d-sm-inline">${extension.repository.open_issues_count}</span>
+                    <span class="d-none d-sm-inline">|</span>
+                    <i class="far fa-code-commit icon icon icon-scale-text text-success"></i>
+                    <span>${extension.repository.pushed_ago}</span>`,
+                href: `#/admin/extensions/view/?id=${extension.id}`
+            });
+        })
+    })
+
+    // Load popular extensions
+    thusPi.api.call('extensions/catalogue', {category: 'popular'}).then(function(response) {
+        // Append search results
+        // $.each(response.data, function(i, extension) {
+        //     $input.data('input').addResult({
+        //         value: extension.id,
+        //         shownValue: extension.name,
+        //         description: `
+        //             <i class="far fa-user icon icon icon-scale-text text-info"></i>
+        //             <span>${extension.repository.owner.name}</span>
+        //             <span>|</span>
+        //             <i class="far fa-star icon icon icon-scale-text text-warning"></i>
+        //             <span>${extension.repository.stars_count}</span>
+        //             <span>|</span>
+        //             <i class="far fa-dot-circle icon icon icon-scale-text text-danger d-none d-sm-inline"></i>
+        //             <span class="d-none d-sm-inline">${extension.repository.open_issues_count}</span>
+        //             <span class="d-none d-sm-inline">|</span>
+        //             <i class="far fa-code-commit icon icon icon-scale-text text-success"></i>
+        //             <span>${extension.repository.pushed_ago}</span>`,
+        //         href: '#jeroen'
+        //     });
+        // })
+    })
 })

@@ -1,0 +1,17 @@
+.extension-detailed[data-installed="true"] [data-extension-action="install"] {
+    display: none;
+}
+
+.extension-detailed[data-installed="false"] [data-extension-action="uninstall"],
+.extension-detailed[data-installed="false"] [data-extension-action="enable"],
+.extension-detailed[data-installed="false"] [data-extension-action="disable"] {
+    display: none;
+}
+
+.extension-detailed[data-enabled="true"] [data-extension-action="enable"] {
+    display: none;
+}
+
+.extension-detailed[data-enabled="false"] [data-extension-action="disable"] {
+    display: none;
+}

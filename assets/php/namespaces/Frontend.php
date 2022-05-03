@@ -210,6 +210,7 @@
                 if(!isset($result[0]) || count($result) > 3) {
                     $this->addResult($result);
                 } else {
+                    // value, shown_value, match
                     $this->addResult($result[0] ?? null, $result[1] ?? null, $result[2] ?? null);
                 }
             }

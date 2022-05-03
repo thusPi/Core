@@ -434,7 +434,7 @@ $(document).on('mouseenter mouseleave mousemove touchmove', '.graph-body', funct
 	}).appendTo($graphTooltip);
 })
 
-$(document).on('thusPi.load', function() {
+$(document).on('thuspi.load', function() {
 	if(thusPi.page.current() == 'recordings/graph') {
 		let analyticId = urlParam('id');
 		thusPi.recordings.graph.setup($('.graph'), analyticId).paint();

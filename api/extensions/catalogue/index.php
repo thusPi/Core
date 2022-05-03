@@ -8,8 +8,7 @@
         \thusPi\Response\error('no_permission', 'You don\'t have permission to manage extensions settings');
     }
 
-    $_POST['query'] = $_POST['query'] ?? null;
     $_POST['category'] = $_POST['category'] ?? null;
 
-    \thusPi\Response\success(null, \thusPi\Extensions\get_all_from_server($_POST['category'], $_POST['query']));
+    \thusPi\Response\success(null, \thusPi\Extensions\get_all_from_server($_POST['category']));
 ?>

@@ -1,4 +1,4 @@
-$(document).on('thusPi.ready', function() {
+$(document).on('thuspi.ready', function() {
 	if(thusPi.page.current() != 'dashboard/main') {
 		return;
 	}

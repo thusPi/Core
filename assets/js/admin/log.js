@@ -30,7 +30,7 @@ function toggleLogCategory(category) {
     }, 1);
 }
 
-$(document).on('thusPi.ready', function() {
+$(document).on('thuspi.ready', function() {
     if(thusPi.page.current() == 'admin/log/main') {
         let categories_inactive = getInactiveLogCategories();
         $('.log-items').attr('data-hide-categories', categories_inactive.join(','));
