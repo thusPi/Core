@@ -54,7 +54,7 @@
 		'Devices', 
 		'Users',
 		'Streams',
-		'Analytics',
+		'Recordings',
 		'Dashboard',
 		'Locale',
 		'Frontend'

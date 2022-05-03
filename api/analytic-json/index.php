@@ -9,7 +9,7 @@
 	}
 
     $analytic_id  = $_POST['id'];
-    $analytic     = new \thusPi\Analytics\Analytic($analytic_id, true);
+    $analytic     = new \thusPi\Recordings\Analytic($analytic_id, true);
 
     $analytic->setHistorySelection(
         $_POST['selection']['x0'] ?? null,

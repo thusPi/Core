@@ -1,5 +1,5 @@
 <?php 
-    namespace thusPi\Analytics;
+    namespace thusPi\Recordings;
 
 	use \thusPi\Interfaces\defaultInterface;
 
@@ -16,7 +16,7 @@
         }
 
         public function record($async = true) {
-            $recorder = DIR_SYSTEM.'/analytics/record.php';
+            $recorder = DIR_SYSTEM.'/recordings/record.php';
 
             if($async === true) {
                 execute(script_name_to_shell_cmd($recorder, [$this->id]), $output, 0);
@@ -30,7 +30,7 @@
         public function getHistory($max_rows = -1) {
             $rows = [];
 
-            $files = glob(DIR_DATA."/analytics/history/{$this->id}/*.csv");
+            $files = glob(DIR_DATA."/recordings/history/{$this->id}/*.csv");
 
             foreach($files as $file) {
                 if(($handle = fopen($file, 'r')) !== false) {
@@ -154,7 +154,7 @@
 
         public function saveRecording($recording) {
             $filename = date('Y-m-d');
-            $filepath = DIR_DATA."/analytics/history/{$this->id}/{$filename}.csv";
+            $filepath = DIR_DATA."/recordings/history/{$this->id}/{$filename}.csv";
 
             $csv_string = str_putcsv($recording);
 
@@ -164,7 +164,7 @@
         }
 
         public function getProperties() {
-			$properties = \thusPi\Analytics\get($this->id);
+			$properties = \thusPi\Recordings\get($this->id);
 			return $properties;
 		}
 
@@ -226,7 +226,7 @@
     function get_all($respect_permissions = false) {
         $db = \thusPi\Database\connect();
 
-        $analytics = [];
+        $recordings = [];
 
         $ids = array_column($db->get('analytics', null, 'id'), 'id');
 
@@ -235,15 +235,15 @@
 				continue;
 			}
 
-            $analytic = \thusPi\Analytics\get($id);
+            $analytic = \thusPi\Recordings\get($id);
 
             if(!is_array($analytic)) {
                 continue;
             }
 
-            $analytics[] = $analytic;
+            $recordings[] = $analytic;
         }
 
-        return $analytics;
+        return $recordings;
     }
 ?>

@@ -113,7 +113,7 @@
 				<div class="device-toolbar btn-row justify-content-end">
 					<?php 
 						// Print shortcut to recordings if device is being recorded
-						$analytic = new \thusPi\Analytics\Analytic($device['id'], false); 
+						$analytic = new \thusPi\Recordings\Analytic($device['id'], false); 
 						if(!is_null($analytic->getProperties())) :
 					?>
 						<button class="btn btn-scale-sm bg-secondary btn-tertiary">

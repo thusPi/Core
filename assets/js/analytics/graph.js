@@ -1,4 +1,4 @@
-thusPiAssign('analytics.graph', {
+thusPiAssign('recordings.graph', {
 	setup($graph, analyticId, maxRows = undefined) {
 		this.$graph     = $graph;
 		this.analyticId = analyticId;
@@ -101,17 +101,17 @@ thusPiAssign('analytics.graph', {
 					let horAxisTitle = `${this.manifest.axes.x.title}` + (this.manifest.axes.x.unit.length > 0 ? ` (${this.manifest.axes.x.unit})` : '');
 					let verAxisTitle = `${this.manifest.axes.y.title}` + (this.manifest.axes.x.unit?.length > 0 ? ` (${this.manifest.axes.y.unit})` : '');
 
-					thusPi.analytics.graph.paintAxisTitles(horAxisTitle, verAxisTitle);
+					thusPi.recordings.graph.paintAxisTitles(horAxisTitle, verAxisTitle);
 
-					thusPi.analytics.graph.paintAxisSteps();
+					thusPi.recordings.graph.paintAxisSteps();
 
-					thusPi.analytics.graph.paintTooltipItem(response.data.manifest.axes.x.title, 'var(--text)', 'x', response.data.manifest.axes.x.unit, false);
+					thusPi.recordings.graph.paintTooltipItem(response.data.manifest.axes.x.title, 'var(--text)', 'x', response.data.manifest.axes.x.unit, false);
 
 					$.each(response.data.manifest.columns, function(column, info) {
 						let axis = column.substring(0, 1);
 
-						thusPi.analytics.graph.paintLegendItem(info.title, info.color, column);
-						thusPi.analytics.graph.paintTooltipItem(info.title, info.color, column, response.data.manifest.axes[axis].unit);
+						thusPi.recordings.graph.paintLegendItem(info.title, info.color, column);
+						thusPi.recordings.graph.paintTooltipItem(info.title, info.color, column, response.data.manifest.axes[axis].unit);
 
 						resolve(this);
 					})
@@ -178,7 +178,7 @@ thusPiAssign('analytics.graph', {
 			this.$graphBody.popupDismantle();
 		}
 
-		thusPi.analytics.graph.paint();
+		thusPi.recordings.graph.paint();
 
 		return this;
 	},
@@ -338,9 +338,9 @@ $(document).on('mouseenter mouseleave mousemove touchmove', '.graph-body', funct
 	let $graph             = $('.graph');
 	let $graphTooltip      = $('.graph-tooltip');
 	let $graphTarget       = $graphContainer.find('.graph-target');
-	let size               = thusPi.analytics.graph.data('size');
-	let rows               = thusPi.analytics.graph.data('rows');
-	let manifest           = thusPi.analytics.graph.data('manifest');
+	let size               = thusPi.recordings.graph.data('size');
+	let rows               = thusPi.recordings.graph.data('rows');
+	let manifest           = thusPi.recordings.graph.data('manifest');
 
 	let mouseTop  = clamp(0, mouseY - $graph.offset().top, $graph.outerHeight());
 	let mouseLeft = clamp(0, mouseX - $graph.offset().left, $graph.outerWidth())
@@ -348,12 +348,12 @@ $(document).on('mouseenter mouseleave mousemove touchmove', '.graph-body', funct
 	// Paint selection if user is pressing left mouse button
 	if(mouseDown) {
 		try {
-			let selection = thusPi.analytics.graph.data('selection');
+			let selection = thusPi.recordings.graph.data('selection');
 
 			if(typeof selection == 'undefined' || selection.length < 4) {
-				thusPi.analytics.graph.paintSelectionFrame(mouseLeft, mouseTop, mouseLeft, mouseTop);
+				thusPi.recordings.graph.paintSelectionFrame(mouseLeft, mouseTop, mouseLeft, mouseTop);
 			} else {
-				thusPi.analytics.graph.paintSelectionFrame(selection.x0, selection.y0, mouseLeft, mouseTop);
+				thusPi.recordings.graph.paintSelectionFrame(selection.x0, selection.y0, mouseLeft, mouseTop);
 			}
 		} catch(err) {
 			console.error(err);
@@ -435,8 +435,8 @@ $(document).on('mouseenter mouseleave mousemove touchmove', '.graph-body', funct
 })
 
 $(document).on('thusPi.load', function() {
-	if(thusPi.page.current() == 'analytics/graph') {
+	if(thusPi.page.current() == 'recordings/graph') {
 		let analyticId = urlParam('id');
-		thusPi.analytics.graph.setup($('.graph'), analyticId).paint();
+		thusPi.recordings.graph.setup($('.graph'), analyticId).paint();
 	}
 })

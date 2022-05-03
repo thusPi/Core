@@ -11,7 +11,7 @@
 		}
 
 		foreach($sensors as $sensor_key => $sensor) {
-			$info_file = "{$d['data']}/analytics/info/{$sensor_key}.json";
+			$info_file = "{$d['data']}/recordings/info/{$sensor_key}.json";
 			if($info = file_get_json($info_file)) {
 				if(isset($sensor['handler']) && $handler_manifest = \thusPi\Devices\get_handler_manifest($sensor['handler'])) {
 					
@@ -49,7 +49,7 @@
 					echo("<script>sendMessage('Failed to load device handler manifest for sensor {$sensor_key}', true);</script>");
 				}
 			} else {
-				echo("<script>sendMessage('error.analytics.failed_to_load_info_file', ['{$sensor_key}'], true);</script>");
+				echo("<script>sendMessage('error.recordings.failed_to_load_info_file', ['{$sensor_key}'], true);</script>");
 			}
 		}
 	?>

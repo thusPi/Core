@@ -480,11 +480,11 @@
 				return array_keys($devices);
 			}
 		} else if($flag_base == 'analytics') {
-			$analytics = glob("{$d['analytics']}/info/*.json");
-			foreach ($analytics as $key => $analytic) {
-				$analytics[$key] = strtolower(pathinfo($analytic, PATHINFO_FILENAME));
+			$recordings = glob("{$d['analytics']}/info/*.json");
+			foreach ($recordings as $key => $analytic) {
+				$recordings[$key] = strtolower(pathinfo($analytic, PATHINFO_FILENAME));
 			}
-			return $analytics;
+			return $recordings;
 		} else if($flag_base == 'widgets') {
 			$widgets = glob("{$d['assets']}/widgets/*/widget.json");
 			foreach ($widgets as $key => $widget) {

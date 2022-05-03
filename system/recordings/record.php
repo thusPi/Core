@@ -9,7 +9,7 @@
 
     $id = trim($argv[1]);
 
-    $analytic   = new \thusPi\Analytics\Analytic($id);
+    $analytic   = new \thusPi\Recordings\Analytic($id);
     $device     = new \thusPi\Devices\Device($id);
     $properties = $device->getProperties();
 

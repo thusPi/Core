@@ -1,5 +1,5 @@
 <?php 
-	$analytics_fallback = [
+	$recordings_fallback = [
 		'axes' => [
 			'x' => ['title' =>\thusPi\Locale\translate('state.unknown'), 'unit' => ''],
 			'y' => ['title' =>\thusPi\Locale\translate('state.unknown'), 'unit' => ''],

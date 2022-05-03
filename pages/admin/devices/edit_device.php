@@ -289,7 +289,7 @@
 				<div class="dropdown-search-wrapper">
 					<div class="bg-tertiary dropdown-search-results" data-type="single" forinput="device_control_type">
 						<?php 
-							$analytics_intervals = [
+							$recordings_intervals = [
 								0     =>\thusPi\Locale\translate('state.never'),
 								1     =>\thusPi\Locale\translate('generic.interval.minute'),
 								2     =>\thusPi\Locale\translate('generic.interval.minutes', false, [2]),
@@ -310,13 +310,13 @@
 								40320 =>\thusPi\Locale\translate('generic.interval.weeks', false, [4]),
 							];
 
-							foreach ($analytics_intervals as $seconds => $translation) { ?>
+							foreach ($recordings_intervals as $seconds => $translation) { ?>
 								<span class="btn btn-secondary dropdown-search-result" val="<?php echo($seconds); ?>"><?php echo($translation); ?></span> 	
 							<?php }
 						?>
 						<span class="no-results dropdown-search-result"><?php \thusPi\Locale\translate('generic.error.search_no_results', true); ?></span>
 					</div>
-					<input class="dropdown-search" data-name="device_control_type" type="text" value="<?php echo($analytics_intervals[0]); ?>"/>
+					<input class="dropdown-search" data-name="device_control_type" type="text" value="<?php echo($recordings_intervals[0]); ?>"/>
 					<input data-setting="control_type" class="dropdown-search-hidden" type="hidden" name="device_control_type" value="0" />
 				</div>
 			</div>

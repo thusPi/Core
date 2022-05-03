@@ -5,7 +5,7 @@
 
     $analytic_id = $_GET['id'];
 
-    $analytic = new \thusPi\Analytics\Analytic($analytic_id);
+    $analytic = new \thusPi\Recordings\Analytic($analytic_id);
 	$device   = new \thusPi\Devices\Device($analytic_id);
 ?>
 <div class="graph-container transition-slide-top transparent-selection" data-status="loading">
@@ -54,14 +54,14 @@
 	<div class="p-1">
 		<div class="graph-sidebar tile">
 			<div class="graph-sidebar-items-group">
-				<h3 class="tile-title"><?php echo(\thusPi\Locale\Translate('analytics.graph.sidebar.item.view.title')); ?></h3>
+				<h3 class="tile-title"><?php echo(\thusPi\Locale\Translate('recordings.graph.sidebar.item.view.title')); ?></h3>
 				<div class="graph-sidebar-item">
 					<?php echo(create_icon([
 						'icon'       => 'far.layer-plus', 
 						'scale'      => 'md', 
 						'classes'    => ['graph-sidebar-item-icon', 'text-info'],
 						'attributes' => [
-							'data-tooltip'          => \thusPi\Locale\Translate('analytics.graph.sidebar.item.add_layer.tooltip'),
+							'data-tooltip'          => \thusPi\Locale\Translate('recordings.graph.sidebar.item.add_layer.tooltip'),
 							'data-tooltip-position' => 'below'
 						]
 					])); ?>
@@ -75,7 +75,7 @@
 						'scale'      => 'md', 
 						'classes'    => ['graph-sidebar-item-icon', 'text-info'],
 						'attributes' => [
-							'data-tooltip'          => \thusPi\Locale\Translate('analytics.graph.sidebar.item.line_smoothing.tooltip'),
+							'data-tooltip'          => \thusPi\Locale\Translate('recordings.graph.sidebar.item.line_smoothing.tooltip'),
 							'data-tooltip-position' => 'below'
 						]
 					])); ?>
@@ -85,7 +85,7 @@
 				</div>
 			</div>
 			<div class="graph-sidebar-items-group">
-				<h3 class="tile-title"><?php echo(\thusPi\Locale\Translate('analytics.graph.sidebar.item.tools.title')); ?></h3>
+				<h3 class="tile-title"><?php echo(\thusPi\Locale\Translate('recordings.graph.sidebar.item.tools.title')); ?></h3>
 				<div class="graph-sidebar-item btn-list" data-type="single">
 					<div class="btn btn-md-square bg-tertiary btn-primary no-hover" data-graph-action="line_total">
 						<?php echo(create_icon([
@@ -103,14 +103,14 @@
 					</div>
 				</div>
 				<div class="graph-sidebar-item btn-list" data-type="multiple">
-					<div class="btn btn-md-square bg-tertiary btn-primary no-hover" data-graph-action="toggle_view" onchange="thusPi.analytics.graph.toggleView();">
+					<div class="btn btn-md-square bg-tertiary btn-primary no-hover" data-graph-action="toggle_view" onchange="thusPi.recordings.graph.toggleView();">
 						<?php echo(create_icon([
 							'icon'    => 'far.expand',
 							'scale'   => 'md',
 							'classes' => ['text-info']
 						])); ?>
 					</div>
-					<div class="btn btn-md-square bg-tertiary btn-primary no-hover active" data-graph-action="toggle_steps" onchange="thusPi.analytics.graph.toggleStepsVisibility();">
+					<div class="btn btn-md-square bg-tertiary btn-primary no-hover active" data-graph-action="toggle_steps" onchange="thusPi.recordings.graph.toggleStepsVisibility();">
 						<?php echo(create_icon([
 							'icon'    => 'far.grip-lines',
 							'scale'   => 'md',
@@ -120,7 +120,7 @@
 				</div>
 			</div>
 			<div class="graph-sidebar-items-group mt-auto">
-				<h3 class="tile-title"><?php echo(\thusPi\Locale\Translate('analytics.graph.sidebar.item.legend.title')); ?></h3>
+				<h3 class="tile-title"><?php echo(\thusPi\Locale\Translate('recordings.graph.sidebar.item.legend.title')); ?></h3>
 				<div class="graph-sidebar-item">
 					<div class="graph-sidebar-item-main">
 						<div class="graph-legend">
@@ -150,7 +150,7 @@
 					<?php echo(create_icon('mdi.arrow-expand-horizontal', 'md', ['icon-enable'])); ?>
 					<?php echo(create_icon('mdi.arrow-collapse-horizontal', 'md', ['icon-disable'], ['display' => 'none'])); ?>
 				</div>
-				<a class="btn btn-md-square btn-primary bg-tertiary text-info no-active" href="./api/get/analytics-download.php?analytics_id=<?php echo($_GET['analytics_id']); ?>" download>
+				<a class="btn btn-md-square btn-primary bg-tertiary text-info no-active" href="./api/get/recordings-download.php?analytics_id=<?php echo($_GET['analytics_id']); ?>" download>
 					<?php echo(create_icon('mi.file_download', 'md')); ?>
 				</a>
 				<div class="btn btn-md-square btn-primary bg-tertiary text-info no-active" onclick="addGraphLayer()">

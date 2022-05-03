@@ -3,7 +3,7 @@
         "top": {
             "dashboard": {
                 "color": "warning",
-                "icon": "mi.dashboard",
+                "icon": "far.home",
                 "target": "dashboard/main"
             },
             "devices": {
@@ -11,10 +11,10 @@
                 "icon": "far.computer-speaker",
                 "target": "devices/main"
             },
-            "analytics": {
+            "recordings": {
                 "color": "danger",
                 "icon": "far.chart-bar",
-                "target": "analytics/main"
+                "target": "recordings/main"
             },
             "streams": {
                 "color": "success",

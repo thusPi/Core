@@ -120,7 +120,7 @@
 		array_unshift($output['message'], time());
 		$csv_string = str_putcsv($output['message']);
 
-		$historical_logs_dir = "{$d['data']}/analytics/historical/{$sensor_key}";
+		$historical_logs_dir = "{$d['data']}/recordings/historical/{$sensor_key}";
 		if(is_dir($historical_logs_dir)) {
 			# Create new file every day to save SD-card write-cycles
 			$log_file = date('Y-m-d').'.csv';
