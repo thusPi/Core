@@ -2,12 +2,12 @@ html[data-theme="gray"] {
 	--primary: #283039;
 	--tertiary: #2e3842;
 	--secondary: #323d48;
-	--info: #1e8cfa;
-	--danger: #ee443f;
-	--warning: #ffa94d;
-	--success: #05c783;
-	--debug: #9549b6;
-	--caution: #f58b34;
+	--blue: #1e8cfa;
+	--red: #ee443f;
+	--yellow: #ffa94d;
+	--green: #05c783;
+	--purple: #9549b6;
+	--orange: #f58b34;
 	--text: #ffffff;
 	--text-muted: #ffffff80;
 	--selection: #ffffff19;

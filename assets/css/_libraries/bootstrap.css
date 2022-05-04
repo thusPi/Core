@@ -2035,8 +2035,16 @@ pre code {
 	display: flex;
 	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
+}
+
+.flex-row,
+.flex-row-reverse {
 	align-items: center;
-	justify-content: center
+}
+
+.flex-column,
+.flex-column-reverse {
+	justify-content: center;
 }
 
 .flex-wrap {

@@ -3,12 +3,21 @@
 	include_once("{$_SERVER['DOCUMENT_ROOT']}/autoload.php");
 ?>
 <?php 
-    // Check if analytic id is given
+    // Check if recording id is given
 	if(!isset($_POST['id'])) {
 		\thusPi\Response\error('request_field_missing', 'Field id is missing.');
 	}
 
-    $analytic_id = $_POST['id'];
+    $graph = new Goat1000\SVGGraph\SVGGraph(640, 480);
+
+    $graph->colours(['red','green','blue']);
+    $graph->values(100, 200, 150);
+    $graph->links('/Tom/', '/Dick/', '/Harry/');
+    $graph->render('BarGraph');
+    
+    exit();
+
+    $recording_id = $_POST['id'];
     $_POST['curves'] = false;
 
     $svg_data = [
@@ -16,18 +25,20 @@
         'lines' => []
     ];
 
-    $analytic = new \thusPi\Recordings\Analytic($analytic_id, true);
+    $recording = new \thusPi\Recordings\Analytic($recording_id, true);
 
-    $analytic->setHistorySelection(
+    $recording->setHistorySelection(
         $_POST['selection']['x0'] ?? null,
-        $_POST['selection']['y0'] ?? null,
         $_POST['selection']['x1'] ?? null,
-        $_POST['selection']['y1'] ?? null,
     );
 
-    $rows             = $analytic->getHistory($_POST['max_rows'] ?? 750);
-    $manifest         = $analytic->getProperties();
-    $svg_data['size'] = $analytic->getHistorySize();
+    if(isset($_POST['selection'])) {
+        echo(@$_POST['selection']['x1'] - @$_POST['selection']['x0']);
+    }
+
+    $rows             = $recording->getHistory($_POST['max_rows'] ?? 750);
+    $manifest         = $recording->getProperties();
+    $svg_data['size'] = $recording->getHistorySize();
 
     // $rows = [
     //     ['x' => 1, 'y' => [9, 10]],
@@ -49,9 +60,7 @@
     //     ['x' => 7, 'y' => [8]]
     // ];
 
-    // Create svg which resembles the data
-
-
+    // Create SVG graph
     foreach ($rows as $i => $row) {
         foreach ($row as $column => $value) {
             if(!is_array($value)) {
@@ -66,6 +75,10 @@
                 if(!isset($rows[$i-1]['x']) || !isset($rows[$i+1]['x']) ||
                    !isset($rows[$i-1]['y'][$key]) || !isset($rows[$i+1]['y'][$key])) {
                     continue;
+                }
+
+                if(isset($_POST['debug']) && $_POST['debug'] == 'true') {
+                    var_dump($svg_data);
                 }
                 
                 $x0 = $rows[$i-1]['x'];

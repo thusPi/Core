@@ -9,7 +9,7 @@
 	date_default_timezone_set('UTC');
 
 	// Constant directories
-	define('SERVER_ROOT',     rtrim(__DIR__, '/'));
+	define('SERVER_ROOT',     rtrim(__DIR__, DIRECTORY_SEPARATOR));
 	define('DIR_ASSETS',      SERVER_ROOT.'/assets');
 	define('DIR_CONFIG',      SERVER_ROOT.'/config');
 	define('DIR_DATA',        SERVER_ROOT.'/data');
@@ -17,7 +17,7 @@
 	define('DIR_PAGES',       SERVER_ROOT.'/pages');
 	define('DIR_SYSTEM',      SERVER_ROOT.'/system');
 	define('DIR_NAMESPACES',  DIR_ASSETS.'/php/namespaces');
-	define('DIR_CLASSES',     DIR_ASSETS.'/php/classes');
+	define('DIR_LIBRARIES',   DIR_ASSETS.'/php/libraries');
 
 	// Constant files
 	define('FIL_FUNCTIONS',   DIR_ASSETS.'/php/load/functions.php');
@@ -25,7 +25,7 @@
 	// Include composer autoload
 	include_once(SERVER_ROOT.'/vendor/autoload.php');
 
-	// Include base functions and classes
+	// Include some standard functions
 	include_once(FIL_FUNCTIONS);
 
 	// Load config
@@ -35,29 +35,32 @@
 		exit('Class mysqli does not exist. Try installing the mysqli extension.');
 	} 
 
-	// Include database support
-	include_classes('MysqliDb');
+	// Include libraries
+	include_libraries(
+		'MysqliDb',
+		'SVGGraph/autoloader'
+	);
 
 	// Load namespaces
 	include_namespaces(
-		'Debug',
-		'Log',
-		'Response',
-		'Config', 
-		'Authorization', 
-		'Database',
-		'Interfaces',
-		'Processes',
-		'Extensions',
-		'Widgets',
-		'Categories',
-		'Devices', 
-		'Users',
-		'Streams',
-		'Recordings',
-		'Dashboard',
-		'Locale',
-		'Frontend'
+		'thusPi/Debug',
+		'thusPi/Log',
+		'thusPi/Response',
+		'thusPi/Config', 
+		'thusPi/Authorization', 
+		'thusPi/Database',
+		'thusPi/Interfaces',
+		'thusPi/Processes',
+		'thusPi/Extensions',
+		'thusPi/Widgets',
+		'thusPi/Categories',
+		'thusPi/Devices', 
+		'thusPi/Users',
+		'thusPi/Streams',
+		'thusPi/Recordings',
+		'thusPi/Dashboard',
+		'thusPi/Locale',
+		'thusPi/Frontend'
 	);
 
 	// Try to authorize the user. If this fails,

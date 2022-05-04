@@ -4,8 +4,8 @@
 	use \thusPi\Interfaces\defaultInterface;
 
     class Analytic extends defaultInterface {
-        private $history_size;
-        private $history_wanted_selection;
+        private $historySize;
+        private $userHistorySelection;
         
         public function __construct($id, $respect_permissions = false) {
             if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
@@ -35,31 +35,19 @@
             foreach($files as $file) {
                 if(($handle = fopen($file, 'r')) !== false) {
                     while(($values = fgetcsv($handle, 512, ',')) !== false) {
+                        // Continue if value row doesn't have at least two values (x and y)
                         if(!isset($values[0]) || !isset($values[1])) {
                             continue;
                         }
 
-                        // Force float values
+                        // Force values to be float
                         $values = array_map('floatval', $values);
-
-                        // Skip if x does not fit into selection
-                        if(isset($this->history_wanted_selection['x_min']) && $values[0] < $this->history_wanted_selection['x_min'] || 
-                           isset($this->history_wanted_selection['x_max']) && $values[0] > $this->history_wanted_selection['x_max']) {
-                                continue;
-                        }
 
                         // Save x value in row
                         $row['x'] = $values[0];
-                        unset($values[0]);
-
-                        // Skip if y does not fit into selection
-                        // if(isset($this->history_wanted_selection['y_min']) && max($values) < $this->history_wanted_selection['y_min'] || 
-                        //    isset($this->history_wanted_selection['y_max']) && min($values) > $this->history_wanted_selection['y_max']) {
-                        //         continue;
-                        // }
 
                         // Save y values in row
-                        $row['y'] = array_values($values); // Re-index the numeric keys
+                        $row['y'] = array_values(array_slice($values, 1)); // Re-index the numeric keys
 
                         // Save row in output
                         $rows[] = $row;
@@ -72,29 +60,17 @@
         }
 
         public function getHistorySize() {
-            if(!isset($this->history_size)) {
-                $this->getHistory(750);
-            }
-
-            return $this->history_size;
+            return $this->historySize;
         }
 
-        public function setHistorySelection($x0 = null, $y0 = null, $x1 = null, $y1 = null) {
-            $x0 = is_numeric($x0) ? floatval($x0) : null;
-            $y0 = is_numeric($y0) ? floatval($y0) : null;
-            $x1 = is_numeric($x1) ? floatval($x1) : null;
-            $y1 = is_numeric($y1) ? floatval($y1) : null;
+        public function setHistorySelection($x0 = null, $x1 = null) {
+            $x0 = is_numeric($x0) ? intval($x0) : null;
+            $x1 = is_numeric($x1) ? intval($x1) : null;
 
-            $this->history_wanted_selection = [
+            $this->userHistorySelection = [
                 'x_min' => min($x0, $x1) ?? null,
-                'y_min' => min($y0, $y1) ?? null,
                 'x_max' => max($x0, $x1) ?? null,
-                'y_max' => max($y0, $y1) ?? null
             ];
-
-            if(@$_POST['debug'] == 'true') {
-                var_dump($this->history_wanted_selection);
-            }
 
             return $this;
         }
@@ -104,7 +80,7 @@
                 return $rows;
             } 
 
-            $history_size = [
+            $historySize = [
                 'min_x' => null,
                 'max_x' => null,
                 'dif_x' => null,
@@ -113,41 +89,43 @@
                 'dif_y' => null
             ];
 
+            // If the total number of rows is smaller than the 
+            // number of max rows, return the input rows
             $total_rows = count($rows);
-            if($max_rows > $total_rows) {
-                return $rows;
-            }
 
             $keep_nth_row = ceil($total_rows/$max_rows);
 
             foreach ($rows as $i => $row) {
-                if($i % $keep_nth_row != 0) {
-                    unset($rows[$i]);
-                } else {
-                    // Check for min and max x or y to determine graph size 
-                    if(!isset($history_size['min_x']) || $row['x'] < $history_size['min_x']) { $history_size['min_x'] = $row['x']; }
-                    if(!isset($history_size['max_x']) || $row['x'] > $history_size['max_x']) { $history_size['max_x'] = $row['x']; }
-
-                    if(count($row['y']) > 1) {
-                        $row_min_y = min(...$row['y']);
-                        $row_max_y = max(...$row['y']);
-                    } else {
-                        $row_min_y = reset($row['y']);
-                        $row_max_y = reset($row['y']);
+                if($total_rows > $max_rows && $max_rows >= 0) {
+                    if($i % $keep_nth_row != 0) {
+                        unset($rows[$i]);
+                        continue;
                     }
-
-                    if(!isset($history_size['min_y']) || $row_min_y < $history_size['min_y']) { $history_size['min_y'] = $row_min_y; }
-                    if(!isset($history_size['max_y']) || $row_max_y > $history_size['max_y']) { $history_size['max_y'] = $row_max_y; }
                 }
+
+                // Find min and max points to determine graph size 
+                if(!isset($historySize['min_x']) || $row['x'] < $historySize['min_x']) { $historySize['min_x'] = $row['x']; }
+                if(!isset($historySize['max_x']) || $row['x'] > $historySize['max_x']) { $historySize['max_x'] = $row['x']; }
+
+                if(count($row['y']) > 1) {
+                    $row_min_y = min(...$row['y']);
+                    $row_max_y = max(...$row['y']);
+                } else {
+                    $row_min_y = reset($row['y']);
+                    $row_max_y = reset($row['y']);
+                }
+
+                if(!isset($historySize['min_y']) || $row_min_y < $historySize['min_y']) { $historySize['min_y'] = $row_min_y; }
+                if(!isset($historySize['max_y']) || $row_max_y > $historySize['max_y']) { $historySize['max_y'] = $row_max_y; }
             }
 
-            // Re-index keys
+            // Re-index rows
             $rows = array_values($rows);
 
-            // Save new history area
-            $history_size['dif_x'] = abs($history_size['max_x'] - $history_size['min_x']);
-            $history_size['dif_y'] = abs($history_size['max_y'] - $history_size['min_y']);
-            $this->history_size = $history_size;
+            // Save new history selection
+            $historySize['dif_x'] = abs($historySize['max_x'] - $historySize['min_x']);
+            $historySize['dif_y'] = abs($historySize['max_y'] - $historySize['min_y']);
+            $this->historySize = $historySize;
             
             return $rows;
         }

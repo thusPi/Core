@@ -28,7 +28,7 @@
 		</div>
 		<div class="col-12 col-md-6 mb-2">
 			<h3 class="tile-title"><?php \thusPi\Locale\translate('admin.rooms.edit_room.icon.title', true); ?></h3>
-			<?php echo(input_iconpicker(['var(--info)' => [
+			<?php echo(input_iconpicker(['var(--blue)' => [
 				'mi.tv', 'mi.weekend', 'mi.chair', '_ROW_',
 				'mi.king_bed', 'far.bed', 'mi.boy', 'mi.girl', '_ROW_',
 				'mi.kitchen', 'mi.blender', 'mi.microwave', 'mi.countertops', '_ROW_',

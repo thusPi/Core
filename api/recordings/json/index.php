@@ -3,23 +3,21 @@
 	include_once("{$_SERVER['DOCUMENT_ROOT']}/autoload.php");
 ?>
 <?php 
-    // Check if analytic id is given
+    // Check if recording id is given
 	if(!isset($_POST['id'])) {
 		\thusPi\Response\error('request_field_missing', 'Field id is missing.');
 	}
 
-    $analytic_id  = $_POST['id'];
-    $analytic     = new \thusPi\Recordings\Analytic($analytic_id, true);
+    $recording_id  = $_POST['id'];
+    $recording     = new \thusPi\Recordings\Analytic($recording_id, true);
 
-    $analytic->setHistorySelection(
+    $recording->setHistorySelection(
         $_POST['selection']['x0'] ?? null,
-        $_POST['selection']['y0'] ?? null,
-        $_POST['selection']['x1'] ?? null,
-        $_POST['selection']['y1'] ?? null,
+        $_POST['selection']['x1'] ?? null
     );
 
-    $rows         = $analytic->getHistory($_POST['max_rows'] ?? 750);
-    $size         = $analytic->getHistorySize();
+    $rows         = $recording->getHistory($_POST['max_rows'] ?? 750);
+    $size         = $recording->getHistorySize();
 
     foreach ($rows as &$row) {
         if(!isset($row['x']) || !isset($row['y'])) {
@@ -30,7 +28,7 @@
     }
 
     \thusPi\Response\success(null, [ 
-        'manifest' => $analytic->getProperties(),
+        'manifest' => $recording->getProperties(),
         'rows'     => $rows,
         'size'     => $size
     ]);

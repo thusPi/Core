@@ -128,6 +128,8 @@ function setDeviceValue($device, value, shownValue = undefined) {
 	let id          = $device.attr('data-id');
 	let handler     = $device.attr('data-handler');
 
+	console.log($device, $deviceName);
+
 	$deviceName.showLoading();
 
 	if(typeof shownValue == 'undefined') {

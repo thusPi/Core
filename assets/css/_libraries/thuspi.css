@@ -84,26 +84,32 @@ h1, h2, h3, h4, h5, h6 {
 	gap: var(--spacing-md);
 }
 
+/* Text transforms */
+.text-vertical {
+	writing-mode: vertical-rl !important;
+	transform: scale(-1, -1) !important;
+}
+
 /* Colors */
 .bg-primary {background: var(--primary) !important;}
 .bg-secondary {background: var(--secondary) !important;}
-.bg-info {background: var(--info) !important;}
-.bg-danger {background: var(--danger) !important;}
-.bg-warning {background: var(--warning) !important;}
-.bg-success {background: var(--success) !important;}
-.bg-debug {background: var(--debug) !important;}
+.bg-info {background: var(--blue) !important;}
+.bg-danger {background: var(--red) !important;}
+.bg-warning {background: var(--yellow) !important;}
+.bg-success {background: var(--green) !important;}
+.bg-debug {background: var(--purple) !important;}
 .bg-tertiary {background: var(--tertiary) !important;}
-.bg-caution {background: var(--caution) !important;}
+.bg-caution {background: var(--orange) !important;}
 
 .border-primary {border-color: var(--primary) !important;}
 .border-secondary {border-color: var(--secondary) !important;}
-.border-info {border-color: var(--info) !important;}
-.border-danger {border-color: var(--danger) !important;}
-.border-warning {border-color: var(--warning) !important;}
-.border-success {border-color: var(--success) !important;}
-.border-debug {border-color: var(--debug) !important;}
+.border-info {border-color: var(--blue) !important;}
+.border-danger {border-color: var(--red) !important;}
+.border-warning {border-color: var(--yellow) !important;}
+.border-success {border-color: var(--green) !important;}
+.border-debug {border-color: var(--purple) !important;}
 .border-tertiary {border-color: var(--tertiary) !important;}
-.border-caution {border-color: var(--caution) !important;}
+.border-caution {border-color: var(--orange) !important;}
 
 .border-top { border-top-width: 0.25rem !important;}
 .border-right { border-right-width: 0.25rem !important;}
@@ -112,20 +118,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .text-muted {color: var(--text-muted) !important;}
 .text-default {color: var(--text) !important;}
-.text-info {color: var(--info) !important;}
-.text-danger {color: var(--danger) !important;}
-.text-warning {color: var(--warning) !important;}
-.text-success {color: var(--success) !important;}
-.text-debug {color: var(--debug) !important;}
+.text-info {color: var(--blue) !important;}
+.text-danger {color: var(--red) !important;}
+.text-warning {color: var(--yellow) !important;}
+.text-success {color: var(--green) !important;}
+.text-debug {color: var(--purple) !important;}
 .text-tertiary {color: var(--tertiary) !important;}
-.text-caution {color: var(--caution) !important;}
+.text-caution {color: var(--orange) !important;}
 
 .btn-primary {--background-active: var(--primary) !important;}
 .btn-secondary {--background-active: var(--secondary) !important;}
-.btn-info {--background-active: var(--info) !important;}
-.btn-danger {--background-active: var(--danger) !important;}
-.btn-warning {--background-active: var(--warning) !important;}
-.btn-success {--background-active: var(--success) !important;}
-.btn-debug {--background-active: var(--debug) !important;}
+.btn-info {--background-active: var(--blue) !important;}
+.btn-danger {--background-active: var(--red) !important;}
+.btn-warning {--background-active: var(--yellow) !important;}
+.btn-success {--background-active: var(--green) !important;}
+.btn-debug {--background-active: var(--purple) !important;}
 .btn-tertiary {--background-active: var(--tertiary) !important;}
-.btn-caution {--background-active: var(--caution) !important;}
+.btn-caution {--background-active: var(--orange) !important;}

@@ -144,7 +144,6 @@ input::placeholder {
 .input-search-result-rich .input-search-result-description {
     grid-area: srr-description;
     color: var(--text-muted);
-    justify-content: start;
 }
 
 .input-search-result-rich .input-search-result-thumbnail {
@@ -248,7 +247,7 @@ input::placeholder {
 
 .input[data-type="range"] > .range-thumb {
 	position: absolute !important;
-	background: var(--info);
+	background: var(--blue);
 	height: 1.75rem;
 	padding: 0 var(--spacing-md);
 	border-radius: var(--spacing-lg);
@@ -287,7 +286,7 @@ input::placeholder {
     height: 1.25rem;
     width: 1.25rem;
 	transition: var(--animation-duration-medium) margin-left ease-in-out;
-	background: var(--info);
+	background: var(--blue);
 	display: block;
 	position: relative;
     margin-left: 0;

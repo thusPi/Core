@@ -27,17 +27,14 @@
     grid-area: tile-title;
     text-align: left;
     position: relative;
-}
-
-.tile-title .loading-icon {
-    position: absolute;
-    right: 0;
+    display: block;
 }
 
 .tile-subtitle {
     grid-area: tile-subtitle;
     text-align: left;
     color: var(--text-muted);
+    display: block;
 }
 
 .tile-title-aside {

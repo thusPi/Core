@@ -116,9 +116,9 @@
 						$analytic = new \thusPi\Recordings\Analytic($device['id'], false); 
 						if(!is_null($analytic->getProperties())) :
 					?>
-						<button class="btn btn-scale-sm bg-secondary btn-tertiary">
+						<a class="btn btn-scale-sm bg-secondary btn-tertiary" href="#/recordings/graph/?id=<?php echo($device['id']); ?>">
 							<?php echo(create_icon('far.chart-bar', 'sm', ['text-muted'])); ?>
-						</button>
+						</a>
 					<?php endif; ?>
 					<button class="btn btn-scale-sm bg-secondary btn-tertiary">
 						<?php echo(create_icon('mi.star_outline', 'sm', ['text-muted'])); ?>

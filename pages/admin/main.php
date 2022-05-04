@@ -1,13 +1,13 @@
 <?php 
 	$tiles = [
-		'devices' => ['far.computer-speaker', 'var(--caution)', 'devices/main'],
-		'recordings' => ['far.chart-bar', 'var(--danger)', 'recordings/main'],
-		'streams' => ['far.stream', 'var(--success)', 'streams/main'],
-		'rooms' => ['far.door-closed', 'var(--debug)', 'rooms/main'],
-		'users' => ['far.users', 'var(--warning)', 'users/main'],
-		'sysconf' => ['far.sliders-h', 'var(--info)', 'config/main'],
-		'logfiles' => ['far.list', 'var(--caution)', 'log/main'],
-		'extensions' => ['far.puzzle-piece', 'var(--success)', 'extensions/main']
+		'devices' => ['far.computer-speaker', 'var(--orange)', 'devices/main'],
+		'recordings' => ['far.chart-bar', 'var(--red)', 'recordings/main'],
+		'streams' => ['far.stream', 'var(--green)', 'streams/main'],
+		'rooms' => ['far.door-closed', 'var(--purple)', 'rooms/main'],
+		'users' => ['far.users', 'var(--yellow)', 'users/main'],
+		'sysconf' => ['far.sliders-h', 'var(--blue)', 'config/main'],
+		'logfiles' => ['far.list', 'var(--orange)', 'log/main'],
+		'extensions' => ['far.puzzle-piece', 'var(--green)', 'extensions/main']
 	];
 ?>
 <div class="row m-n1" data-type="single">

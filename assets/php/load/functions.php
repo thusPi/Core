@@ -1,21 +1,21 @@
 <?php 
-	function include_classes($classes) {
-		foreach (func_get_args() as $class) {
-			$class_path = DIR_CLASSES."/{$class}.php";
+	function include_libraries($libraries) {
+		foreach (func_get_args() as $library) {
+			$library_path = DIR_LIBRARIES."/{$library}.php";
 
-			if(!file_exists($class_path)) {
-				exit("Failed to load class {$class} ({$class_path}): No such file!");
+			if(!file_exists($library_path)) {
+				exit("Failed to load library {$library} ({$library_path}): No such file!");
 			}
 		
-			if(!include_once($class_path)) {
-				exit("Failed to load class {$class} ({$class_path})!");
+			if(!include_once($library_path)) {
+				exit("Failed to load library {$library} ({$library_path})!");
 			}
 		}
 	}
 
 	function include_namespaces($namespaces) {
 		foreach (func_get_args() as $namespace) {
-			$namespace_path = DIR_NAMESPACES."/{$namespace}.php";
+			$namespace_path = DIR_ASSETS."/php/{$namespace}.php";
 
 			if(!file_exists($namespace_path)) {
 				exit("Failed to load namespace {$namespace} ({$namespace_path}): No such file!");

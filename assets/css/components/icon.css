@@ -1,4 +1,5 @@
 :root {
+    --icon-scale-xxs: 1rem;
 	--icon-scale-xs: 1.25rem;
 	--icon-scale-sm: 1.5rem;
 	--icon-scale-md: 1.75rem;
@@ -20,6 +21,7 @@
 
 /* Sizes */
 .icon.icon-scale-text { --icon-scale: 1em; }
+.icon.icon-scale-xxs { --icon-scale: var(--icon-scale-xxs); }
 .icon.icon-scale-xs { --icon-scale: var(--icon-scale-xs); }
 .icon.icon-scale-sm { --icon-scale: var(--icon-scale-sm); }
 .icon.icon-scale-md { --icon-scale: var(--icon-scale-md); }

@@ -125,10 +125,6 @@ thusPiAssign('ui.input.search', class {
 		let value      = $result.attr('value');
 		let shownValue = $result.attr('data-shown-value');
 
-		if(isSet($result.attr('href'))) {
-			return;
-		}
-
 		this.$results.find('.input-search-result.active').removeClass('active');
 		$result.addClass('active');
 
@@ -136,6 +132,10 @@ thusPiAssign('ui.input.search', class {
 		
 		if(this.$wrapper.attr('data-select-type') != 'multiple') {
 			this._resultsToggle(false);
+		}
+
+		if(isSet($result.attr('href'))) {
+			return;
 		}
 
 		if(this.$input.value() == value) {
