@@ -201,7 +201,7 @@
 			<?php endforeach; ?>
 		<?php if(in_array('and', $category_info['sub_categories'])) : ?>
 			<div class="tile-row category-actions-wrapper">
-				<div class="btn bg-tertiary btn-primary stream-add-card-button btn-md-square mx-auto no-active" onclick="addStreamSubCategory($(this).parents('.stream-category').attr('data-category'));">
+				<div class="btn bg-tertiary btn-primary stream-add-card-button btn-md-square mx-auto btn-no-focus" onclick="addStreamSubCategory($(this).parents('.stream-category').attr('data-category'));">
 					<?php echo(create_icon('far.plus', 'md', [], ['color' => $stream_group->getProperty('color')])); ?>
 				</div>
 			</div>

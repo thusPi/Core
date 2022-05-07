@@ -19,7 +19,7 @@
 				<div class="btn btn-tertiary bg-secondary d-block mb-2 transition-fade-order">
 					<div class="row">
 						<div class="col-auto d-none d-sm-flex pl-0 pr-2">
-							<?php echo(icon_html($sensor['icon'], 'icon-scale-lg text-debug')); ?>
+							<?php echo(icon_html($sensor['icon'], 'icon-scale-lg text-purple')); ?>
 						</div>
 						<div class="col">
 							<h3 class="tile-title">

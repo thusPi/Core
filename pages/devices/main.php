@@ -11,7 +11,7 @@
 	?>
 		<div 
 			data-category="<?php echo($namespace); ?>"
-			class="btn btn-no-hover btn-<?php echo($category['color']); ?> bg-tertiary flex-row category-button<?php echo(in_array($namespace, $inactive_categories) ? '' : ' active'); ?>" 
+			class="btn btn-no-hover btn-category bg-tertiary flex-row category-button<?php echo(in_array($namespace, $inactive_categories) ? '' : ' active'); ?>" 
 			tabindex="0">
 			<?php echo(create_icon($category['icon'], 'md')); ?>
 			<?php echo(ucfirst(\thusPi\Locale\translate("generic.category.{$namespace}.title"))); ?>
@@ -130,7 +130,7 @@
 	<?php endforeach; ?>
 </div>
 <?php if(get_user_flag('is_admin') === true) : ?>
-	<div class="btn btn-xl-square bg-secondary btn-info btn-floating btn-floating-bottom btn-floating-right btn-lg-square transition-slide-right" onclick="loadPage('admin', 'devices>edit_device');">
+	<div class="btn btn-xl-square bg-secondary btn-blue btn-floating btn-floating-bottom btn-floating-right btn-lg-square transition-slide-right" onclick="loadPage('admin', 'devices>edit_device');">
 		<?php echo(create_icon('far.plus', 'xl')); ?>
 	</div>
 <?php endif; ?>

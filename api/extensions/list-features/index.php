@@ -9,4 +9,6 @@
 	}
     
     $features = \thusPi\Extensions\list_all_features($_POST['feature']);
+
+	\thusPi\Response\success($features);
 ?>

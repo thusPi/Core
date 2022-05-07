@@ -9,8 +9,8 @@
 			<div class="position-relative">
 				<input name="password" type="password" placeholder="<?php echo(\thusPi\Locale\translate('login.placeholder.password')); ?>"/>
 				<div class="toggle-password" onclick="togglePassword($(this), $(this).siblings('input').first())">
-					<?php echo(icon_html('mi.visibility', 'show-password text-info', 'display: none;')); ?>
-					<?php echo(icon_html('mi.visibility_off', 'hide-password text-info')); ?>
+					<?php echo(icon_html('mi.visibility', 'show-password text-blue', 'display: none;')); ?>
+					<?php echo(icon_html('mi.visibility_off', 'hide-password text-blue')); ?>
 				</div>
 			</div>
 		</div>

@@ -70,16 +70,16 @@ $(document).on('thuspi.ready', function() {
                 value: extension.id,
                 shownValue: extension.name,
                 description: `
-                    <i class="far fa-user icon icon icon-scale-text text-info"></i>
+                    <i class="far fa-user icon icon icon-scale-text text-blue"></i>
                     <span>${extension.repository.owner.name}</span>
                     <span>|</span>
-                    <i class="far fa-star icon icon icon-scale-text text-warning"></i>
+                    <i class="far fa-star icon icon icon-scale-text text-yellow"></i>
                     <span>${extension.repository.stars_count}</span>
                     <span>|</span>
-                    <i class="far fa-dot-circle icon icon icon-scale-text text-danger d-none d-sm-inline"></i>
+                    <i class="far fa-dot-circle icon icon icon-scale-text text-red d-none d-sm-inline"></i>
                     <span class="d-none d-sm-inline">${extension.repository.open_issues_count}</span>
                     <span class="d-none d-sm-inline">|</span>
-                    <i class="far fa-code-commit icon icon icon-scale-text text-success"></i>
+                    <i class="far fa-code-commit icon icon icon-scale-text text-green"></i>
                     <span>${extension.repository.pushed_ago}</span>`,
                 href: `#/admin/extensions/view/?id=${extension.id}`
             });
@@ -94,16 +94,16 @@ $(document).on('thuspi.ready', function() {
         //         value: extension.id,
         //         shownValue: extension.name,
         //         description: `
-        //             <i class="far fa-user icon icon icon-scale-text text-info"></i>
+        //             <i class="far fa-user icon icon icon-scale-text text-blue"></i>
         //             <span>${extension.repository.owner.name}</span>
         //             <span>|</span>
-        //             <i class="far fa-star icon icon icon-scale-text text-warning"></i>
+        //             <i class="far fa-star icon icon icon-scale-text text-yellow"></i>
         //             <span>${extension.repository.stars_count}</span>
         //             <span>|</span>
-        //             <i class="far fa-dot-circle icon icon icon-scale-text text-danger d-none d-sm-inline"></i>
+        //             <i class="far fa-dot-circle icon icon icon-scale-text text-red d-none d-sm-inline"></i>
         //             <span class="d-none d-sm-inline">${extension.repository.open_issues_count}</span>
         //             <span class="d-none d-sm-inline">|</span>
-        //             <i class="far fa-code-commit icon icon icon-scale-text text-success"></i>
+        //             <i class="far fa-code-commit icon icon icon-scale-text text-green"></i>
         //             <span>${extension.repository.pushed_ago}</span>`,
         //         href: '#jeroen'
         //     });

@@ -741,7 +741,7 @@
 
 		$arguments = $icon;
 		$arguments = array_replace([
-			'icon'    => 'far.exclamation-circle',
+			'icon'    => 'far.question-circle',
 			'scale'   => 'md',
 			'element' => 'span',
 			'attributes' => [],

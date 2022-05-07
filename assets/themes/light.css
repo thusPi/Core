@@ -11,4 +11,5 @@ html { /* Fallback theme */
 	--text: #212529;
 	--text-muted: #373737ee;
 	--selection: #21252914;
+	color-scheme: light;
 }

@@ -26,7 +26,7 @@
 
 			$html .= "
 				<li class='sidenav-item'>
-					<a class='btn btn-fw btn-lg btn-tertiary sidenav-link text-{$info['color']} flex-row' data-target='{$info['target']}' href='#/{$info['target']}'>
+					<a class='btn btn-fw btn-lg btn-tertiary sidenav-link flex-row' data-target='{$info['target']}' href='#/{$info['target']}' style='color:{$info['color']};'>
 						{$icon}
 						<span class='sidenav-item-name'>{$name_translated}</span>
 					</a>

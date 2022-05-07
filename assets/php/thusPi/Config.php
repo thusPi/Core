@@ -1,11 +1,11 @@
 <?php 
     namespace thusPi\Config;
 
-    function get($key, $config = 'main') {
-        if(!isset(CONFIG[$config][$key])) {
-            return null;
+    function get($key = null, $config = 'main') {
+        if(!isset($key)) {
+            return CONFIG[$config] ?? null;
         }
 
-        return CONFIG[$config][$key];
+        return CONFIG[$config][$key] ?? null;
     }
 ?>

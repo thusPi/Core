@@ -16,6 +16,33 @@ thusPiAssign('ui.input.search', class {
 
 		// Store results list
 		this.$results = this.$wrapper.find('.input-search-results').first();
+	
+		// Find existing results list
+		const $existingResults = $(`ul.input-search-results[for="${this.$input.attr('name')}"]`);
+		if($existingResults.length > 0) {
+			$existingResults.find('li').each((i, result) => {
+				const $result = $(result);
+
+				const value = $result.attr('value');
+				const shownValue = $result.text();
+
+				this.addResult({
+					value: value,
+					description: $result.attr('data-description'),
+					shownValue: shownValue, 
+					href: $result.attr('href'), 
+					onclick: $result.attr('onclick'),
+					match: $result.attr('data-match'),
+					iconHTML: $result.attr('data-icon-html')
+				});
+
+				if(isSet($result.attr('selected'))) {
+					this.$input.value(value, shownValue);
+				}
+			})
+
+			$existingResults.remove();
+		}
 
 		this.$wrapper.on('click', function(e) {e.stopPropagation()});
 		
@@ -23,7 +50,7 @@ thusPiAssign('ui.input.search', class {
 		this.$input.on('input', (e) => {this._inputEvent(e)});
 		this.$input.on('change', (e) => {this._changeEvent(e)});
 
-		this.$results.on('click', '.input-search-result', (e) => {this._resultFocusEvent(e)});
+		this.$results.on('click', '.input-search-result', (e) => {this._resultClickEvent(e)});
 
 		$(document).on('click', (e) => {this._focusOutEvent(e)});
 	}
@@ -39,8 +66,8 @@ thusPiAssign('ui.input.search', class {
 
 		let $result;
 		
-		if(isSet(result.description) || isSet(result.thumbnail)) {
-			$result = $(`<${elType} class="input-search-result input-search-result-rich btn bg-tertiary btn-secondary" value="${result.value}" data-match="${result.match}"></${elType}>`);
+		if(isSet(result.description) || isSet(result.thumbnail) || isSet(result.iconHTML)) {
+			$result = $(`<${elType} class="input-search-result input-search-result-rich btn bg-tertiary btn-secondary flex-row" value="${result.value}" data-match="${result.match}" data-shown-value="${result.shownValue}"></${elType}>`);
 			
 			$result.append(`<span class="input-search-result-title">${result.shownValue}</span>`);
 
@@ -50,16 +77,18 @@ thusPiAssign('ui.input.search', class {
 
 			if(isSet(result.thumbnail)) {
 				$result.append(`<span class="input-search-result-thumbnail"><img src="${result.thumbnail}"></span>`);
+			} else if(isSet(result.iconHTML)) {
+				$result.append(`<span class="input-search-result-thumbnail">${result.iconHTML}</span>`);
 			}
 		} else {
 			// A plain search result
 			$result = $(`<${elType} class="input-search-result btn bg-tertiary btn-secondary" value="${result.value}" data-match="${result.match}" data-shown-value="${result.shownValue}">${result.shownValue}</${elType}>`);
 		}
 
-		// Set href attribute if it is specified
-		if(isSet(result.href)) {
-			$result.attr('href', result.href);
-		}
+		// Set custom attributes if specified
+		if(isSet(result.href)) { $result.attr('href', result.href); }          // href
+		if(isSet(result.onclick)) { $result.attr('onclick', result.onclick); } // onclick
+		if(isSet(result.match)) { $result.attr('data-match', result.match); }  // data-match
 
 		// Append the result
 		this.$results.append($result);
@@ -120,10 +149,10 @@ thusPiAssign('ui.input.search', class {
 		this.$results.attr('data-search-matches', this.$results.find('.input-search-result[data-match].show').length);
 	}
 
-	_resultFocusEvent(e) {
-		let $result    = $(e.target).closest('.input-search-result');
-		let value      = $result.attr('value');
-		let shownValue = $result.attr('data-shown-value');
+	_resultClickEvent(e) {
+		const $result    = $(e.target).closest('.input-search-result');
+		const value      = $result.attr('value');
+		const shownValue = $result.attr('data-shown-value');
 
 		this.$results.find('.input-search-result.active').removeClass('active');
 		$result.addClass('active');
@@ -170,6 +199,8 @@ $.fn.value = function(value = undefined, shownValue = undefined) {
 		if($input.attr('data-type') == 'search') {
 			$input.attr('data-value', value);
 			$input.attr('value', shownValue).val(shownValue);
+			$input.siblings('.input-search-results').find('.input-search-result').removeClass('active');
+			$input.siblings('.input-search-results').find(`.input-search-result[value="${value}"]`).addClass('active');
 		} else if(typeof input.value != 'undefined') {
 			$input.value = value;
 		} else if(typeof $input.attr('data-value') != 'undefined') {		

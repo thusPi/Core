@@ -17,10 +17,10 @@
 	}
 
 	if(@execute('sudo vcgencmd measure_temp', $temperature_str, 2)) {
-		$temperature = floatval(preg_replace('/[^0-9.]/', '', trim($temperature_str)));
+		$temperature = floatval(preg_replace('/[^0-9.CFK]/', '', trim($temperature_str)));
 	}
 
-	$unit = substr($temperature_str, -1);
+	$unit = substr(trim($temperature_str), -1);
 
 	// Convert to Kelvin
 	switch($unit) {
@@ -44,7 +44,7 @@
 			break;
 	}
 
-	$temperature = round($temperature, 3);
+	$temperature = round($temperature, 1);
 
 	# Return temperature
 	\thusPi\Response\success(null, ['temperature' => $temperature]);

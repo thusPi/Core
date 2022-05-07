@@ -79,7 +79,7 @@ a.btn:focus {
 
 @media(hover: hover) {
 	.btn:not(.btn-no-hover):hover::after,
-	.btn:not(.btn-no-hover):focus::after {
+	.btn:not(.btn-no-hover):not(.btn-no-focus):focus::after {
 		opacity: 1;
 		height: 100%;
 		width: 100%;
@@ -92,13 +92,13 @@ a.btn:focus {
 .btn-row {
 	display: flex;
 	flex-direction: row;
-	column-gap: var(--spacing-md);
+	gap: var(--spacing-md);
 	overflow: auto hidden;
 }
 
 .btn-column {
     display: flex;
     flex-direction: column;
-    row-gap: var(--spacing-md);
+    gap: var(--spacing-md);
 	overflow: hidden auto;
 }

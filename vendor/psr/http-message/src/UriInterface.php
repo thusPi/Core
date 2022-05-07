@@ -48,14 +48,14 @@ interface UriInterface
      * The authority syntax of the URI is:
      *
      * <pre>
-     * [user-info@]host[:port]
+     * [user-blue@]host[:port]
      * </pre>
      *
      * If the port component is not set or is the standard port for the current
      * scheme, it SHOULD NOT be included.
      *
      * @see https://tools.ietf.org/html/rfc3986#section-3.2
-     * @return string The URI authority, in "[user-info@]host[:port]" format.
+     * @return string The URI authority, in "[user-blue@]host[:port]" format.
      */
     public function getAuthority();
 

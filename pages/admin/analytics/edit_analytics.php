@@ -45,7 +45,7 @@
 									$manifest['namespace'] = basename(dirname($manifest_file));
 
 									if($manifest['analytics_support'] == true) {
-										$manifest['icon'] = icon_html('far.chart-area', 'icon-inline dropdown-search-result-icon-end text-debug');
+										$manifest['icon'] = icon_html('far.chart-area', 'icon-inline dropdown-search-result-icon-end text-purple');
 									}
 
 									if($manifest['run_type'] == 'cli') { ?>

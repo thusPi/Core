@@ -7,16 +7,8 @@
 	}
 	
 	$action = isset($device_id) ? 'manage' : 'create';
-
-	$handlers = \thusPi\Extensions\list_all_features('devices/handlers');
-
-	$handlers = [
-		'aaa', 'bb', 'ccc', 'dddd'
-	];
-
-	var_dump($handlers);
 ?>
-<form class="form" method="POST">
+<form class="form transition-slide-top" method="POST">
 	<!-- Name -->
 	<div class="form-group col-12 col-md-6">
 		<h3 class="form-group-title"><?php echo(\thusPi\Locale\translate('admin.devices.manage_device.name.title')); ?></h3>
@@ -27,12 +19,61 @@
 	<div class="form-group col-12 col-md-6">
 		<h3 class="form-group-title" data-tooltip="bbbb"><?php echo(\thusPi\Locale\translate('admin.devices.manage_device.handler.title')); ?></h3>
 		<span class="form-group-description"><?php echo(\thusPi\Locale\translate('admin.devices.manage_device.handler.description')); ?></span>
-		<input name="handler" class="form-group-input" type="text" data-type="search" placeholder="<?php echo(\thusPi\Locale\translate('admin.devices.manage_device.handler.title')); ?>" data-value="<?php echo($properties['handler'] ?? ''); ?>">
+		<input name="handler" class="form-group-input" type="text" data-type="search" placeholder="<?php echo(\thusPi\Locale\translate('admin.devices.manage_device.handler.title')); ?>">
+		<ul class="input-search-results" for="handler">
+			<?php 
+				// Print list of all installed device handlers
+				$handlers = \thusPi\Extensions\list_all_features('devices/handlers');
+				foreach ($handlers as $handler) {
+					$extension = new \thusPi\Extensions\Extension($handler['extension_id']);
+					$manifest  = @json_decode($extension->callFeatureComponent('devices/handlers', $handler['feature']['id'], 'manifest.json'), true) ?? [];
+
+					$handler_selected = isset($device) && $handler['feature']['id'] === $device->getProperty('handler');
+
+					if(isset($manifest['name']) && isset($manifest['description'])) {
+						echo("<li ".($handler_selected ? 'selected ' : '')."value=\"{$handler['feature']['id']}\" data-description=\"{$manifest['description']}\">{$manifest['name']}</li>");
+					} else {
+						echo("<li ".($handler_selected ? 'selected ' : '')."value=\"{$handler['feature']['id']}\">{$handler['feature']['id']}</li>");
+					}				
+				}
+			?>
+		</ul>
 	</div>
 	<!-- Icon -->
 	<div class="form-group col-12 col-md-6">
 		<h3 class="form-group-title" data-tooltip="bbbb"><?php echo(\thusPi\Locale\translate('admin.devices.manage_device.icon.title')); ?></h3>
 		<span class="form-group-description"><?php echo(\thusPi\Locale\translate('admin.devices.manage_device.icon.description')); ?></span>
+		<input type="text" data-type="search" name="icon">
+		<ul class="input-search-results" for="icon">
+			<?php 
+				$categories = \thusPi\Categories\get_all();
+
+				// Generate a list of all available icons
+				foreach ($categories as $category_id => $category) {
+					if(!isset($category['icons'])) {
+						continue;
+					}
+
+					$category_name = \thusPi\Locale\translate("generic.category.{$category_id}.title");
+					
+					// Print icon
+					foreach ($category['icons'] as $icon_tags => $icon) {
+						$result_icon_html = htmlspecialchars(create_icon([
+							'icon'       => $icon, 
+							'classes'    => ['text-category'],
+							'scale'      => 'lg',
+							'attributes' => ['data-category' => $category_id]
+						]));
+
+						$result_match       = $icon_tags;
+						$result_title       = ucfirst(strtok($icon_tags, ','));
+						$result_selected    = isset($device) && $icon === $device->getProperty('icon');
+
+						echo("<li ".($result_selected ? 'selected ' : '')."value=\"{$icon}\" data-icon-html=\"{$result_icon_html}\" data-description=\"{$result_match}\" data-match=\"{$result_match}\">{$result_title}</li>");
+					}
+				}
+			?>
+		</ul>
 	</div>
 	<!-- Properties -->
 	<div class="form-group col-12 col-md-6">
@@ -128,7 +169,7 @@
 				<input data-setting="control_type" class="dropdown-search-hidden" type="hidden" name="device_control_type" value="0" />
 			</div>
 		</div> -->
-	<button role="submit" class="btn bg-secondary btn-success btn-floating transition-slide-right">
-		<?php echo(create_icon('far.check', 'xl')); ?>
-	</button>
 </form>
+<button class="btn bg-secondary btn-green btn-floating transition-slide-right">
+	<?php echo(create_icon('far.check', 'xl')); ?>
+</button>

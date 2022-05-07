@@ -38,7 +38,28 @@
         return $translation;
 	}
 
-    function date_format_diff($time, $compare_with = null) {
+    function date_format_period($time1, $time2, $timezone = null, $format = 'full') {
+        if(date('d-m-Y', $time1) == date('d-m-Y', $time2)) {
+            // Dates are on the same day
+            $day_formatted   = \thusPi\Locale\date_format("full,none", $time1, $timezone);
+            $time1_formatted = \thusPi\Locale\date_format("none,full", $time1, $timezone);
+            $time2_formatted = \thusPi\Locale\date_format("none,full", $time2, $timezone);
+
+            return \thusPi\Locale\translate("generic.time_format_period.same_date_{$format}", [$day_formatted, $time1_formatted, $time2_formatted]);
+        } else {
+            // Dates are not on the same day (ignore time)
+            $time1_formatted = \thusPi\Locale\date_format('full,none', $time1, $timezone);
+            $time2_formatted = \thusPi\Locale\date_format('full,none', $time2, $timezone);
+
+            return \thusPi\Locale\translate("generic.time_format_period.different_date_{$format}", [$time1_formatted, $time2_formatted]);
+        }
+    }
+
+    function date_format_diff($time, $compare_with = null, $timezone = null) {
+        if(!isset($timezone)) {
+            $timezone = \thusPi\Users\CurrentUser::getSetting('timezone') ?? 'UTC';
+        }
+
         if(is_string($time)) {
             $time = strtotime($time);
         }
@@ -101,7 +122,11 @@
         return "generic.time_format_diff.{$translation_key}";
     }
 
-    function date_format($format, $time = 0) {
+    function date_format($format, $time = 0, $timezone = null) {
+        if(!isset($timezone)) {
+            $timezone = \thusPi\Users\CurrentUser::getSetting('timezone') ?? 'UTC';
+        }
+
         if(is_string($time)) {
             $time = strtotime($time);
         }
@@ -109,6 +134,9 @@
         if(!is_numeric($time)) {
             return false;
         }
+        
+        // Convert the UTC unix to the user's timezone
+        $time = \thusPi\Locale\convert_utc_unix_timezone($time, $timezone);
 
         list($date_format, $time_format) = explode(',', $format);
         if($time_format == 'best') {
@@ -150,7 +178,7 @@
             \date('H', $time),  // 0: Time in 24-hour format
             \date('i', $time),  // 1: Minutes of hour
             \date('s', $time),  // 2: Seconds of hour
-            $day,               // 3: Name of day, today or yesterday
+            $day,               // 3: Name of day, 'today' or 'yesterday'
             \date('d', $time),  // 4: Day of month
             \date('m', $time),  // 5: Month of year
             \date('Y', $time),  // 6: Year
@@ -158,5 +186,11 @@
             $am_pm_translation, // 8: AM or PM,
             $day_of_week        // 9: Name of day of week
         ]);
+    }
+
+    function convert_utc_unix_timezone($utc_unix, $timezone) {
+        $dt = new \DateTime('@'.$utc_unix);
+        $dt->setTimeZone(new \DateTimeZone($timezone));
+        return $dt->getTimestamp();
     }
 ?>

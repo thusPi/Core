@@ -11,4 +11,5 @@ html[data-theme="green"] {
 	--text: #ffffff;
 	--text-muted: #ffffff80;
 	--selection: #ffffff19;
+	color-scheme: dark;
 }

@@ -4,7 +4,9 @@ input[type="text"],
 input[type="number"],
 input[type="email"],
 input[type="password"],
-input[type="search"] {
+input[type="search"],
+input[type="date"],
+input[type="time"] {
 	background: var(--tertiary);
 	outline: 0;
 	border: 0;
@@ -15,27 +17,22 @@ input[type="search"] {
 	position: relative;
 }
 
+input {
+    color-scheme: inherit;
+}
+
 input::placeholder {
     color: var(--text-muted);
 }
 
 /* Icon picker */
-.input[data-type="iconpicker"] {
-    overflow: hidden;
-    position: relative;
-    padding: 0 !important;
-}
-
-.input[data-type="iconpicker"] > .icons {
+.input[data-type="icon"] {
     transition: var(--animation-duration-medium) min-height;
     min-height: 13rem;
     max-height: 13rem;
-	display: grid;
-	grid-template-columns: repeat(auto-fill, calc(var(--btn-md-size) + var(--spacing-md)));
-	grid-auto-flow: row;
-	justify-content: space-between;
-    overflow-y: scroll;
-    overflow-x: hidden;
+	display: flex;
+    flex-direction: column;
+    overflow: hidden scroll !important;
     border-radius: var(--spacing-lg);
     margin: calc(var(--spacing-sm)/-2) 0;
     padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-sm);

@@ -1,10 +1,10 @@
 <?php 
     namespace thusPi\Recordings;
 
-	use \thusPi\Interfaces\defaultInterface;
+use DateTime;
+use \thusPi\Interfaces\defaultInterface;
 
     class Analytic extends defaultInterface {
-        private $historySize;
         private $userHistorySelection;
         
         public function __construct($id, $respect_permissions = false) {
@@ -27,10 +27,24 @@
             }
         }
 
-        public function getHistory($max_rows = -1) {
+        public function getHistory($options) {
+            $options = array_replace([
+                'max_rows' => 750,
+                'interval' => null,
+                'x_start'  => null,
+                'x_end'    => null
+            ], $options);
+
+            // Check if the interval is valid, otherwise unset it
+            if(!in_array($options['interval'], ['hour', 'day', 'week', 'month', 'year'])) {
+                $options['interval'] = null;
+            }
+
             $rows = [];
 
             $files = glob(DIR_DATA."/recordings/history/{$this->id}/*.csv");
+
+            $properties = $this->getProperties();
 
             foreach($files as $file) {
                 if(($handle = fopen($file, 'r')) !== false) {
@@ -46,8 +60,21 @@
                         // Save x value in row
                         $row['x'] = $values[0];
 
+                        // // Get array of all y values
+                        // $y_values = array_values(array_slice($values, 1, count($properties['columns'])));
+                        
+                        // // Mirror them if specified in the manifest
+                        // array_walk($y_values, function(&$value, $column_index) use ($properties) {
+                        //     if(isset($properties['columns']['y'.$column_index]['mirrored']) && $properties['columns']['y'.$column_index]['mirrored'] == true) {
+                        //         $value = $value * -1;
+                        //     }
+                        // });
+                        
+                        // // Save y values in row
+                        // $row['y'] = $y_values;
+
                         // Save y values in row
-                        $row['y'] = array_values(array_slice($values, 1)); // Re-index the numeric keys
+                        $row['y'] = array_values(array_slice($values, 1, count($properties['columns'])));
 
                         // Save row in output
                         $rows[] = $row;
@@ -56,78 +83,117 @@
                 }
             }
 
-            return $this->compressRows($rows, $max_rows);
+            return $this->compressRows($rows, $options);
         }
 
-        public function getHistorySize() {
-            return $this->historySize;
-        }
-
-        public function setHistorySelection($x0 = null, $x1 = null) {
-            $x0 = is_numeric($x0) ? intval($x0) : null;
-            $x1 = is_numeric($x1) ? intval($x1) : null;
-
-            $this->userHistorySelection = [
-                'x_min' => min($x0, $x1) ?? null,
-                'x_max' => max($x0, $x1) ?? null,
-            ];
-
-            return $this;
-        }
-
-        public function compressRows($rows, $max_rows = -1) {
-            if($max_rows < 0) {
-                return $rows;
-            } 
-
-            $historySize = [
-                'min_x' => null,
-                'max_x' => null,
-                'dif_x' => null,
-                'min_y' => null,
-                'max_y' => null,
-                'dif_y' => null
-            ];
-
-            // If the total number of rows is smaller than the 
-            // number of max rows, return the input rows
-            $total_rows = count($rows);
-
-            $keep_nth_row = ceil($total_rows/$max_rows);
-
-            foreach ($rows as $i => $row) {
-                if($total_rows > $max_rows && $max_rows >= 0) {
-                    if($i % $keep_nth_row != 0) {
-                        unset($rows[$i]);
-                        continue;
-                    }
-                }
-
-                // Find min and max points to determine graph size 
-                if(!isset($historySize['min_x']) || $row['x'] < $historySize['min_x']) { $historySize['min_x'] = $row['x']; }
-                if(!isset($historySize['max_x']) || $row['x'] > $historySize['max_x']) { $historySize['max_x'] = $row['x']; }
-
-                if(count($row['y']) > 1) {
-                    $row_min_y = min(...$row['y']);
-                    $row_max_y = max(...$row['y']);
-                } else {
-                    $row_min_y = reset($row['y']);
-                    $row_max_y = reset($row['y']);
-                }
-
-                if(!isset($historySize['min_y']) || $row_min_y < $historySize['min_y']) { $historySize['min_y'] = $row_min_y; }
-                if(!isset($historySize['max_y']) || $row_max_y > $historySize['max_y']) { $historySize['max_y'] = $row_max_y; }
+        private function compressRows($rows, $options) {
+            if(!isset($rows[0])) {
+                return false;
             }
 
-            // Re-index rows
-            $rows = array_values($rows);
+            // Calculate the total amount of rows that are given
+            $total_rows = count($rows);
 
-            // Save new history selection
-            $historySize['dif_x'] = abs($historySize['max_x'] - $historySize['min_x']);
-            $historySize['dif_y'] = abs($historySize['max_y'] - $historySize['min_y']);
-            $this->historySize = $historySize;
+            // Variable for storing the result
+            $res = [];
+
+            // Calculate the Nth row that should pass
+            $keep_nth_row = ceil($total_rows/$options['max_rows']);
+
+            // New row index counter
+            $a = 0;
+
+            $last_row = null;
+            foreach ($rows as $i => $row) {
+                if(!isset($options['interval'])) {
+                    // User has not selected an interval, save the row
+                    // unless it leads to exceeding the max number of rows
+                    if($i % $keep_nth_row == 0) {
+                        $res[$a] = $row;
+                        $a++;
+                    }
+
+                    continue;
+                }
+
+                // User has selected an interval, check if both rows
+                // have been recorded during the same interval
+                if(!isset($last_row['x']) || $this->recordedAtSameInterval($row['x'], $last_row['x'], $options['interval'])) {
+                    // This row was recorded during the same interval as the last row,
+                    // store the row if it was not yet stored and continue
+                    if(!isset($res[$a])) {
+                        // Convert type to array so the values from other rows that were
+                        // recorded during the same period can be pushed
+                        $res[$a]['x'] = [$row['x']];
+
+                        foreach ($row['y'] as $column_index => $value_numeric) {
+                            // Convert value type to array so the values from other rows that were
+                            // recorded during the same period can be pushed
+                            $res[$a]['y'][$column_index] = [$value_numeric];
+                        }
             
-            return $rows;
+                        continue;
+                    }
+
+                    $res[$a]['x'][] = $row['x'];
+
+                    foreach ($res[$a]['y'] as $column_index => &$value) {
+                        // Continue if the column index doesn't exist in the current row or if the value is zero
+                        if(!isset($row['y'][$column_index]) || $row['y'][$column_index] == 0) {
+                            continue;
+                        }
+
+                        // Push the value of this row so the average can be calculated later
+                        array_push($value, $row['y'][$column_index]);
+                    }
+                } else {
+                    // The current row was not recorded during the same interval as the last row,
+                    // increment the counter to create a new row
+                    $a++;
+                }
+
+                $last_row = $row;
+            }
+
+            // If the user has selected an interval, loop all rows one last time to calculate the y averages
+            // and the interval of the x
+            if(isset($options['interval'])) {
+                foreach ($res as &$row) {
+                    // Calculate the start and end x
+                    $row['x_end'] = end($row['x']);
+                    $row['x']     = reset($row['x']);
+
+                    // Calculate the average y value per column
+                    foreach ($row['y'] as $column_index => &$value) {
+                        $value = array_sum($value) / count($value);
+                    }
+                }
+            }
+
+            return array_values($res);
+        }
+
+        private function recordedAtSameInterval($unix1, $unix2, $interval) {
+            $format = [
+                'hour'  => 'd-m-Y H',
+                'day'   => 'd-m-Y',
+                'week'  => 'W m-Y',
+                'month' => 'm-Y',
+                'year'  => 'Y'
+            ][$interval] ?? null;
+
+            if(!isset($format)) {
+                return false;
+            }
+
+            $date1 = date($format, $unix1);
+            $date2 = date($format, $unix2);
+
+            if($date1 == false || $date2 == false) {
+                return false;
+            }
+
+            return ($date1 == $date2);
         }
 
         public function saveRecording($recording) {
@@ -142,8 +208,7 @@
         }
 
         public function getProperties() {
-			$properties = \thusPi\Recordings\get($this->id);
-			return $properties;
+			return \thusPi\Recordings\get($this->id);
 		}
 
         public function setProperties($new_properties) {

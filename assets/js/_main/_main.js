@@ -1,6 +1,9 @@
-var mouseDown = false;
-var screen_orientation = (screen.orientation || screen.mozOrientation || screen.msOrientation);
-var html = $('html');
+thusPiAssign('data.pointer.x', -1);
+thusPiAssign('data.pointer.y', -1);
+thusPiAssign('data.pointer.btnDown.primary', null);
+thusPiAssign('data.pointer.btnDown.secondary', null);
+thusPiAssign('data.pointer.btnDown.middle', null);
+
 
 function toggleDragSelection(enable = true) {
 	if(!enable) {
@@ -87,13 +90,13 @@ function clamp(min, val, max) {
 $(document).on('mousedown touchstart', function(e) {
 	switch(e.which) {
 		case 1:
-			thusPiAssign('data.pointer.down.primary', true);
+			thusPiAssign('data.pointer.btnDown.primary', true);
 			break;
 		case 2:
-			thusPiAssign('data.pointer.down.middle', true);
+			thusPiAssign('data.pointer.btnDown.middle', true);
 			break;
 		case 3:
-			thusPiAssign('data.pointer.down.secondary', true);
+			thusPiAssign('data.pointer.btnDown.secondary', true);
 			break;
 	}
 })
@@ -101,13 +104,13 @@ $(document).on('mousedown touchstart', function(e) {
 $(document).on('mouseup touchend', function(e) {
 	switch(e.which) {
 		case 1:
-			thusPiAssign('data.pointer.down.primary', null);
+			thusPiAssign('data.pointer.btnDown.primary', false);
 			break;
 		case 2:
-			thusPiAssign('data.pointer.down.middle', null);
+			thusPiAssign('data.pointer.btnDown.middle', false);
 			break;
 		case 3:
-			thusPiAssign('data.pointer.down.secondary', null);
+			thusPiAssign('data.pointer.btnDown.secondary', false);
 			break;
 	}
 })

@@ -38,7 +38,6 @@
 
     $rows             = $recording->getHistory($_POST['max_rows'] ?? 750);
     $manifest         = $recording->getProperties();
-    $svg_data['size'] = $recording->getHistorySize();
 
     // $rows = [
     //     ['x' => 1, 'y' => [9, 10]],

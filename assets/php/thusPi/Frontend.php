@@ -80,21 +80,26 @@
     function load_category_css() {
         $categories = \thusPi\Categories\get_all();
 
+        echo("<style>");
         foreach ($categories as $namespace => $category) {
-            echo("<style>
-                [data-category=\"{$namespace}\"] .header-bg-category::before {
-                    background: linear-gradient(0deg, var(--secondary) 60%, var(--{$category['color']}) 40%) !important;
+            echo("
+                [data-category=\"{$namespace}\"] .text-category,
+                [data-category=\"{$namespace}\"].text-category {
+                    color: {$category['color']} !important;
                 }
 
-                [data-category=\"{$namespace}\"] .text-category {
-                    color: var(--{$category['color']}) !important;
+                [data-category=\"{$namespace}\"] .bg-category,
+                [data-category=\"{$namespace}\"].bg-category {
+                    background: {$category['color']} !important;
                 }
 
-                [data-category=\"{$namespace}\"] .bg-category {
-                    background: var(--{$category['color']}) !important;
+                [data-category=\"{$namespace}\"] .btn-category,
+                [data-category=\"{$namespace}\"].btn-category {
+                    --background-active: {$category['color']} !important;
                 }
-            </style>");
+            ");
         }
+        echo("</style>");
     }
     
     function load_themes() {

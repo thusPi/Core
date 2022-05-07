@@ -14,6 +14,6 @@
 			</a>
 		<?php } ?>
 </div>
-<div class="btn bg-secondary btn-info btn-floating transition-slide-right" onclick="loadPage('admin', 'devices>edit_device');">
-<?php echo(create_icon('far.plus', 'xl')); ?>
-</div>
+<a class="btn bg-secondary btn-blue btn-floating transition-slide-right" href="#/admin/devices/manage/">
+	<?php echo(create_icon('far.plus', 'xl')); ?>
+</a>

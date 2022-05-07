@@ -1,5 +1,5 @@
 thusPiAssign('api', {
-    call(url, data) {
+    call(url, data, returnReject = false) {
         url = `${thusPi.data.webroot}/api/${url}/`;
         let headers = {};
         let tokenId = localStorage.getItem('thusPi_tokenId');
@@ -40,6 +40,10 @@ thusPiAssign('api', {
                             thusPi.page.load(`login/main?redirect=home/main`, true);
                         }
                         reject(response.responseJSON);
+                    }
+
+                    if(returnReject) {
+                        reject(response);
                     }
 
                     return false;

@@ -795,7 +795,7 @@ final class MimeType
         'rgb' => 'image/x-rgb',
         'rif' => 'application/reginfo+xml',
         'rip' => 'audio/vnd.rip',
-        'ris' => 'application/x-research-info-systems',
+        'ris' => 'application/x-research-blue-systems',
         'rl' => 'application/resource-lists+xml',
         'rlc' => 'image/vnd.fujixerox.edmics-rlc',
         'rld' => 'application/resource-lists-diff+xml',
