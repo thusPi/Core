@@ -69,7 +69,6 @@ function hidePopup(elem) {
 }
 
 $.fn.showLoading = function(hideAfter = 0) {
-	console.log('Show loading!!');
 	if(this.find('> .loading-icon').length == 0) {
 		this.append('<span class="loading-icon pl-1"><i class="far fa-circle-notch fa-spin text-category icon d-inline-block icon-scale-xxs"></i></span>');
 		

@@ -12,17 +12,17 @@
 			return \thusPi\Streams\get($this->id);
 		}
 
-        public function getCards() {
+        public function listCards() {
             $properties = $this->getProperties();
 
-            $collections = [
+            $cards = [
                 'trigger'   => $properties['trigger'], 
                 'condition' => $properties['condition'], 
                 'do'        => $properties['do'], 
                 'else'      => $properties['else']
             ];
 
-            return $collections;
+            return $cards;
         }
 
         public function trigger($name = 'cron', $parameters = []) {

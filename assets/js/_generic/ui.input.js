@@ -3,7 +3,7 @@
 /* ================================ */
 thusPiAssign('ui.input.search', class {
 	constructor($input) {
-		this.$input   = $input;
+		this.$input = $input;
 
 		// Wrap input
 		this.$input.wrap('<div class="input-wrapper input-wrapper-search"></div>');
@@ -24,12 +24,12 @@ thusPiAssign('ui.input.search', class {
 				const $result = $(result);
 
 				const value = $result.attr('value');
-				const shownValue = $result.text();
+				const text = $result.text();
 
 				this.addResult({
 					value: value,
 					description: $result.attr('data-description'),
-					shownValue: shownValue, 
+					text: text, 
 					href: $result.attr('href'), 
 					onclick: $result.attr('onclick'),
 					match: $result.attr('data-match'),
@@ -37,7 +37,7 @@ thusPiAssign('ui.input.search', class {
 				});
 
 				if(isSet($result.attr('selected'))) {
-					this.$input.value(value, shownValue);
+					this.$input.value(value, text);
 				}
 			})
 
@@ -55,49 +55,63 @@ thusPiAssign('ui.input.search', class {
 		$(document).on('click', (e) => {this._focusOutEvent(e)});
 	}
 
-	addResult(result) {
-		if(!isSet(result.value)) {
-			return false;
-		}
-		result.shownValue = result.shownValue || result.value;
-		result.match      = result.match || result.shownValue;
+	addResults(results) {
+		let html = '';
+		$.each(results, function(i, result) {
+			if(!isSet(result.value)) {
+				return true;
+			}
 
-		const elType = isSet(result.href) ? 'a' : 'li';
-
-		let $result;
-		
-		if(isSet(result.description) || isSet(result.thumbnail) || isSet(result.iconHTML)) {
-			$result = $(`<${elType} class="input-search-result input-search-result-rich btn bg-tertiary btn-secondary flex-row" value="${result.value}" data-match="${result.match}" data-shown-value="${result.shownValue}"></${elType}>`);
+			result.text  = result.text || result.value;
+			result.match = result.match || result.text;
 			
-			$result.append(`<span class="input-search-result-title">${result.shownValue}</span>`);
+			let $result;
+			const elType = isSet(result.href) ? 'a' : 'li';
 
-			if(isSet(result.description)) {
-				$result.append(`<span class="input-search-result-description flex-row">${result.description}</span>`);
+			if(isSet(result.description) || isSet(result.thumbnail) || isSet(result.iconHTML)) {
+				$result = $(`<${elType} class="input-search-result input-search-result-rich btn bg-tertiary btn-secondary flex-row" value="${result.value}" data-match="${result.match}" data-shown-value="${result.text}"></${elType}>`);
+				
+				$result.append(`<span class="input-search-result-title">${result.text}</span>`);
+
+				if(isSet(result.description)) {
+					$result.append(`<span class="input-search-result-description flex-row">${result.description}</span>`);
+				}
+
+				if(isSet(result.thumbnail)) {
+					$result.append(`<span class="input-search-result-thumbnail"><img src="${result.thumbnail}"></span>`);
+				} else if(isSet(result.iconHTML)) {
+					$result.append(`<span class="input-search-result-thumbnail">${result.iconHTML}</span>`);
+				}
+
+			} else {
+				// A plain search result
+				$result = $(`<${elType} class="input-search-result btn bg-tertiary btn-secondary" value="${result.value}" data-match="${result.match}" data-shown-value="${result.text}">${result.text}</${elType}>`);
 			}
 
-			if(isSet(result.thumbnail)) {
-				$result.append(`<span class="input-search-result-thumbnail"><img src="${result.thumbnail}"></span>`);
-			} else if(isSet(result.iconHTML)) {
-				$result.append(`<span class="input-search-result-thumbnail">${result.iconHTML}</span>`);
-			}
-		} else {
-			// A plain search result
-			$result = $(`<${elType} class="input-search-result btn bg-tertiary btn-secondary" value="${result.value}" data-match="${result.match}" data-shown-value="${result.shownValue}">${result.shownValue}</${elType}>`);
-		}
+			// Set custom attributes if specified
+			if(isSet(result.href)) { $result.attr('href', result.href); }          // href
+			if(isSet(result.onclick)) { $result.attr('onclick', result.onclick); } // onclick
+			if(isSet(result.match)) { $result.attr('data-match', result.match); }  // data-match
 
-		// Set custom attributes if specified
-		if(isSet(result.href)) { $result.attr('href', result.href); }          // href
-		if(isSet(result.onclick)) { $result.attr('onclick', result.onclick); } // onclick
-		if(isSet(result.match)) { $result.attr('data-match', result.match); }  // data-match
+			html += $result.prop('outerHTML');
+		})
 
-		// Append the result
-		this.$results.append($result);
+		// Append the results
+		this.$results.append(html);
 
 		// Refresh results list
 		this._resultsFilter(this.$input.val());
 	}
 
+	addResult(result) {
+		return this.addResults([result]);
+	}
+
 	_focusEvent(e) {
+		// Close all wrappers and results
+		$('.input-wrapper').removeClass('active');
+		$('.input-search-results').removeClass('show');
+
 		this.$wrapper.addClass('active');
 		this._resultsToggleAll(true);
 		this._resultsToggle(true);
@@ -150,9 +164,9 @@ thusPiAssign('ui.input.search', class {
 	}
 
 	_resultClickEvent(e) {
-		const $result    = $(e.target).closest('.input-search-result');
-		const value      = $result.attr('value');
-		const shownValue = $result.attr('data-shown-value');
+		const $result = $(e.target).closest('.input-search-result');
+		const value   = $result.attr('value');
+		const text    = $result.attr('data-shown-value');
 
 		this.$results.find('.input-search-result.active').removeClass('active');
 		$result.addClass('active');
@@ -171,7 +185,7 @@ thusPiAssign('ui.input.search', class {
 			return false;
 		}
 		
-		this.$input.value(value, shownValue);
+		this.$input.value(value, text);
 		this.$input.trigger('thusPi.change');
 
 	}

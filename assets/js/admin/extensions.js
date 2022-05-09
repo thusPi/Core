@@ -68,7 +68,7 @@ $(document).on('thuspi.ready', function() {
         $.each(response.data, function(i, extension) {
             $input.data('input').addResult({
                 value: extension.id,
-                shownValue: extension.name,
+                text: extension.name,
                 description: `
                     <i class="far fa-user icon icon icon-scale-text text-blue"></i>
                     <span>${extension.repository.owner.name}</span>

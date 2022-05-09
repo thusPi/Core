@@ -125,7 +125,6 @@ thusPiAssign('page', {
     },
 
     reload() {
-        console.log(thusPi.page.current(true));
         thusPi.page.get(thusPi.page.current(true));
         return thusPi.page;
     }

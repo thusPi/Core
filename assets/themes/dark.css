@@ -11,5 +11,6 @@ html[data-theme="dark"] {
 	--text: #ffffff;
 	--text-muted: #ffffff80;
 	--selection: #ffffff19;
+	--translucent: rgba(0, 0, 0, 0.2);
 	color-scheme: dark;
 }

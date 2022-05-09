@@ -40,7 +40,6 @@ thusPiAssign('devices', {
 
 $(document).on('thuspi.ready', function() {
 	if(thusPi.page.current() != 'devices/main') {
-		console.log(updateValuesTimeout);
 		clearTimeout(updateValuesTimeout);
 	}
 

@@ -39,7 +39,7 @@
             return @json_decode(@file_get_contents("{$this->dir}/data/{$filename}.json", true), true) ?? null;
         }
 
-        public function translate($key, $replacements = null, $fallback = null, $locale = null) {
+        public function getTranslations() {
             // Use user locale if it's supported
             $locale = \thusPi\Users\CurrentUser::getSetting('locale');
 
@@ -55,10 +55,14 @@
                 $locale_file = "{$this->dir}/assets/locale/en_US.json";
             }
 
-            // Load translations
-            $translations = file_get_json($locale_file) ?? [];
+            // Load and return translations
+            return file_get_json($locale_file) ?? [];
+        }
 
-            return \thusPi\Locale\translate($key, $replacements, $fallback, $translations);
+        public function translate($key, $replacements = null, $fallback = null, $locale = null) {
+
+
+            return \thusPi\Locale\translate($key, $replacements, $fallback, $this->getTranslations());
         }
 
         public function uninstall() {      

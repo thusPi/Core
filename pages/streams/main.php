@@ -6,7 +6,7 @@
 		<?php $category = new \thusPi\Categories\Category($stream['category']);	?>
 		<a 
 			tabindex="0" 
-			href="/#/streams/view/?id=<?php echo($stream['id']); ?>"
+			href="/#/streams/manage/?id=<?php echo($stream['id']); ?>"
 			class="btn btn-tertiary tile transition-fade-order" 
 			data-category="<?php echo($stream['category']); ?>" 
 			data-page-search="<?php echo($stream['name']); ?>">

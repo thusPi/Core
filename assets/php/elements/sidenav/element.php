@@ -22,12 +22,11 @@
 			}
 				
 			$name_translated = \thusPi\Locale\translate("generic.page.{$name}.title");
-			$icon            = create_icon($info['icon'], 'lg', ['sidenav-icon']);
 
 			$html .= "
 				<li class='sidenav-item'>
 					<a class='btn btn-fw btn-lg btn-tertiary sidenav-link flex-row' data-target='{$info['target']}' href='#/{$info['target']}' style='color:{$info['color']};'>
-						{$icon}
+						<span class='sidenav-item-icon' data-icon='{$info['icon']}' data-icon-scale='lg'></span>
 						<span class='sidenav-item-name'>{$name_translated}</span>
 					</a>
 				</li>

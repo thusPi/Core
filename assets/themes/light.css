@@ -8,8 +8,9 @@ html { /* Fallback theme */
 	--green: #05c985;
 	--purple: #9649b7;
 	--orange: #f58b34;
-	--text: #212529;
-	--text-muted: #373737ee;
 	--selection: #21252914;
+	--text-muted: #373737ee;
+	--text: #212529;
+	--translucent: rgba(255, 255, 255, 0.15);
 	color-scheme: light;
 }

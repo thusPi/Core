@@ -49,7 +49,7 @@ main {
 	overflow: hidden scroll;
 	min-height: 100vh;
 	max-height: 100vh;
-	padding: var(--spacing-xl);
+	padding: var(--spacing-md);
 	transition: var(--animation-duration-short) opacity;
 }
 
@@ -74,6 +74,10 @@ span {
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     margin-bottom: var(--spacing-sm);
+}
+
+.template {
+	display: none !important;
 }
 
 /* Override Bootstrap variables */

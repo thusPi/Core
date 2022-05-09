@@ -14,7 +14,7 @@ $(document).on('thuspi.ready', function() {
             console.log(handler);
             $handlerInput.data('input').addResult({
                 value: handlerId,
-                shownValue: handler
+                text: handler
             });
         })
     })

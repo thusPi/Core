@@ -8,7 +8,7 @@
         'tile-icon    tile-content  tile-content';
     grid-template-columns: min-content 1fr auto;
     grid-template-rows: min-content 1fr auto;
-    border-radius: var(--border-radius);
+    border-radius: var(--rounded);
 }
 
 .tile-row {

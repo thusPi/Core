@@ -1,1 +1,1 @@
-html[data-theme="gray"]{--primary:#283039;--tertiary:#2e3842;--secondary:#323d48;--blue:#1e8cfa;--red:#ee443f;--yellow:#ffa94d;--green:#05c783;--purple:#9549b6;--orange:#f58b34;--text:#ffffff;--text-muted:#ffffff80;--selection:#ffffff19;color-scheme:dark;}
+html[data-theme="gray"]{--primary:#283039;--tertiary:#2e3842;--secondary:#323d48;--blue:#1e8cfa;--red:#ee443f;--yellow:#ffa94d;--green:#05c783;--purple:#9549b6;--orange:#f58b34;--text:#ffffff;--text-muted:#ffffff80;--selection:#ffffff19;--translucent:rgba(0,0,0,.2);color-scheme:dark;}

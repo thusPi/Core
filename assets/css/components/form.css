@@ -3,7 +3,7 @@ form.form {
     flex-direction: row;
     padding: var(--spacing-lg);
     background: var(--secondary);
-    border-radius: var(--border-radius);
+    border-radius: var(--rounded);
     flex-wrap: wrap;
     margin: calc(var(--spacing-sm) * -1)
 }

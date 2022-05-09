@@ -34,7 +34,7 @@
 }
 
 .message-inner {
-	border-radius: var(--u3);
+	border-radius: var(--rounded);
 	background: var(--tertiary);
 	padding: var(--u2);
 	margin: var(--u1);
