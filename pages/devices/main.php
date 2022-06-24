@@ -111,6 +111,9 @@
 					<?php endif; ?>
 				</div>
 				<div class="device-toolbar btn-row justify-content-end">
+					<button class="btn btn-scale-sm bg-secondary btn-tertiary" style="visibility: hidden;">
+						<?php echo(create_icon('mi.star_outline', 'sm', ['text-muted'])); ?>
+					</button>
 					<?php 
 						// Print shortcut to recordings if device is being recorded
 						$analytic = new \thusPi\Recordings\Recording($device['id'], false); 
@@ -120,9 +123,6 @@
 							<?php echo(create_icon('far.chart-bar', 'sm', ['text-muted'])); ?>
 						</a>
 					<?php endif; ?>
-					<button class="btn btn-scale-sm bg-secondary btn-tertiary">
-						<?php echo(create_icon('mi.star_outline', 'sm', ['text-muted'])); ?>
-					</button>
 				</div>
 			</div>
 		</div>

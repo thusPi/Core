@@ -56,8 +56,8 @@ main {
 	max-height: 100vh;
 	padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
 	transition: var(--animation-duration-short) opacity;
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-rows: max-content;
 }
 
 .page-title {

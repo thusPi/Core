@@ -37,7 +37,7 @@
 
 		public function setValue($args) {
 			$waypoints = new \thusPi\Debug\WaypointList('plain');
-			// $waypoints->disable();
+			$waypoints->disable();
 
 			// Get function arguments
 			if(!isset($args['value'])) {
@@ -148,7 +148,7 @@
 			]);
 
 			// Trigger flows if value was changed
-			\thusPi\Flows\trigger_all('device_value_change', ['id' => $this->id]);
+			// \thusPi\Flows\trigger_all('device_value_change', ['id' => $this->id]);
 
 			$waypoints->printWaypoint('Flows triggered, finished!');
 

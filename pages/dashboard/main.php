@@ -2,8 +2,6 @@
     <?php 
         $widgets = \thusPi\Extensions\list_all_features('dashboard/widgets');
 
-        var_dump($widgets);
-
         foreach ($widgets as $widget) {
             $widget            = new \thusPi\Widgets\Widget($widget['extension_id'], $widget['feature']['id']);
             $widget_html       = $widget->getHTML();
