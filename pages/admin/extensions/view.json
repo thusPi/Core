@@ -1,5 +1,6 @@
 {
 	"name": "admin/extensions/view",
 	"animation_duration": 150,
+	"admin_only": true,
 	"page_search": true
 }

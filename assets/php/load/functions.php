@@ -30,13 +30,13 @@
 	function include_configs() {
 		$configs = [];
 
-		$config_paths = glob(DIR_CONFIG.'/*.json');
+		$config_paths = glob(DIR_CONFIG.'/*/*.json');
 
 		foreach ($config_paths as $config_path) {
-			$config_id = pathinfo($config_path, PATHINFO_FILENAME);
-			$config    = file_get_json($config_path);
+			$config_name = basename(dirname($config_path)).'/'.pathinfo($config_path, PATHINFO_FILENAME);
+			$config      = file_get_json($config_path);
 
-			$configs[$config_id] = $config;
+			$configs[$config_name] = $config;
 		}
 
 		return $configs;
@@ -53,11 +53,11 @@
 	}
 
 	function encodeshellargarray(array $arg) {
-		return @base64_encode(@json_encode($arg));
+		return @base64_encode(@json_encode($arg)) ?? [];
 	}
 
 	function decodeshellargarray(string $arg) {
-		return @json_decode(@base64_decode($arg), true);
+		return @json_decode(@base64_decode($arg), true) ?? [];
 	}
 
 	function str_to_bool($var) {
@@ -232,14 +232,14 @@
 		return eval('return ' . $crontab . ';');
 	}
 
-	function script_name_to_shell_cmd($scriptname, $args = '') {
+	function script_name_to_shell_cmd($scriptname, $args = []) {
 		$programs = [
 			'py' => 'python3', 
 			'sh' => 'bash', 
 			'php' => 'php', 
 			'exec' => ''
 		];
-
+		
 		if(is_array($args)) {
 			$args = implode(' ', $args);
 		}
@@ -256,18 +256,6 @@
 		}
 
 		return null;
-	}
-
-	function get_tool_conf($tool_id = '') {
-		global $d;
-		if($tools = @json_decode(@file_get_contents("{$d['data']}/memory/tools.json"), true)) {
-			if(!isset($tool_id) || empty($tool_id)) {
-				return $tools;
-			} else if(isset($tools[$tool_id])) {
-				return $tools[$tool_id];
-			}
-		}
-		return false;
 	}
 
 	function array_select_by_string(string $str = '', array $arr = []) {
@@ -288,17 +276,7 @@
 		return $result;
 	}
 
-	function get_device_list() {
-		global $d;
-		
-		if($devices = @json_decode(@file_get_contents("{$d['data']}/memory/devices.json"), true)) {
-			return $devices;
-		}
-
-		return [];
-	}
-
-	function uuid() {
+	function generate_uuid() {
 		return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
 			mt_rand(0, 0xffff), mt_rand(0, 0xffff),
 			mt_rand(0, 0xffff),
@@ -437,87 +415,6 @@
 		return rmdir($dir);
 	}
 
-	function get_user_flag($flag) {
-		global $userdata;
-		if(isset($userdata['flags'][$flag])) {
-			if($userdata['flags'][$flag] == 'true') {
-				return true;
-			} else if($userdata['flags'][$flag] == 'false') {
-				return false;
-			} else {
-				return $userdata['flags'][$flag];
-			}
-		} else {
-			return false;
-		}
-	}
-
-	function get_user_info($key, $uid = null) {
-		global $userdata;
-		global $userdata_all;
-		
-		if(!isset($uid)) {
-			if(isset($userdata[$key])) {
-				return $userdata[$key];
-			}
-		}
-		if(isset($userdata_all[$uid][$key])) {
-			return $userdata_all[$uid][$key];
-		}
-		return '';
-	}
-
-	function user_flag_options($flag_base) {
-		global $docroot, $d;
-		if($flag_base == 'pages') {
-			$pages = glob("{$docroot}/pages/*/main.php");
-			foreach ($pages as $key => $page) {
-				$pages[$key] = strtolower(basename(dirname($page)));
-			}
-			return $pages;
-		} else if($flag_base == 'devices') {
-			if($devices = @json_decode(file_get_contents("{$d['data']}/memory/devices.json"), true)) {
-				return array_keys($devices);
-			}
-		} else if($flag_base == 'analytics') {
-			$recordings = glob("{$d['analytics']}/info/*.json");
-			foreach ($recordings as $key => $analytic) {
-				$recordings[$key] = strtolower(pathinfo($analytic, PATHINFO_FILENAME));
-			}
-			return $recordings;
-		} else if($flag_base == 'widgets') {
-			$widgets = glob("{$d['assets']}/widgets/*/widget.json");
-			foreach ($widgets as $key => $widget) {
-				$widgets[$key] = strtolower(basename(dirname($widget)));
-			}
-			return $widgets;
-		} else {
-			return ['true', 'false'];
-		}
-	}
-
-	function get_blacklist_whitelist($flag, $child, $userdata_inner) {
-		if(isset($userdata_inner['flags'])) {
-			$flags = $userdata_inner['flags'];
-			if(get_user_flag('is_admin') == 'true') {
-				return true;
-			} else {
-				if(!isset($flags["{$flag}_allow"])) { $flags["{$flag}_allow"] = []; }
-				if(!isset($flags["{$flag}_disallow"])) { $flags["{$flag}_disallow"] = []; }
-
-				if(in_array('*', $flags["{$flag}_disallow"])) {
-					return false;
-				} else if(in_array('*', $flags["{$flag}_allow"])) {
-					return true;
-				} else if(!in_array($child, $flags["{$flag}_disallow"]) && in_array($child, $flags["{$flag}_allow"])) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		}
-	}
-
 	function curl_wrapper($ch_url) {
 		// Init session
 		$ch = curl_init($ch_url);
@@ -533,199 +430,6 @@
 		curl_close($ch);
 
 		return $data;
-	}
-
-	function is_color(string $color) {
-		if(
-			strpos($color, '#') === 0 || 
-			strpos($color, 'hsl') === 0 || 
-			strpos($color, 'hsv') === 0 || 
-			strpos($color, 'rgb') === 0
-		) {
-			return true;
-		}
-
-		return false;
-	}
-
-	function color_to_rgb(string $color) {
-		$alpha = 255;
-
-		$color = str_replace([' ', '%', '°', '(', ')'], '', strtolower($color));
-
-		if(strpos($color, '#') === 0) {
-			// HEX
-
-			// Remove #
-			$color = substr($color, 1);
-
-			// Calculate HEX length
-			$length = strlen($color);
-			
-			// HEX to RGB(A)
-			switch($length) {
-				case 3:
-					// f00 to ff0000. Flowing into next case.
-					$color_split = str_split($color);
-					$color = '';
-
-					foreach ($color_split as $char) {
-						$color .= $char.$char;
-					}
-
-				case 6:
-					list($r, $g, $b) = sscanf($color, "%02x%02x%02x");
-					break;
-
-				case 8:
-					list($r, $g, $b, $a) = sscanf($color, "%02x%02x%02x%02x");
-					break;
-
-				default:
-					break;
-			}
-		} else if(strpos($color, 'hsl') === 0) {
-			// HSL
-
-			$color = substr($color, 3);
-			list($h, $s, $l) = explode(',', $color);
-
-			$h = clamp(0, floatval($h), 360) / 360;
-			$s = clamp(0, floatval($s), 100) / 100;
-			$l = clamp(0, floatval($l), 100) / 100;
-
-			$v = ($l <= 0.5) ? ($l * (1.0 + $s)) : ($l + $s - $l * $s);
-
-			if ($v > 0) {
-				$m = $l + $l - $v;
-				$sv = ($v - $m ) / $v;
-				$h *= 6.0;
-				$sextant = floor($h);
-				$fract = $h - $sextant;
-				$vsf = $v * $sv * $fract;
-				$mid1 = $m + $vsf;
-				$mid2 = $v - $vsf;
-
-				switch ($sextant) {
-					case 0:
-						$r = $v;
-						$g = $mid1;
-						$b = $m;
-						break;
-
-					case 1:
-						$r = $mid2;
-						$g = $v;
-						$b = $m;
-						break;
-						
-					case 2:
-						$r = $m;
-						$g = $v;
-						$b = $mid1;
-						break;
-						
-					case 3:
-						$r = $m;
-						$g = $mid2;
-						$b = $v;
-						break;
-						
-					case 4:
-						$r = $mid1;
-						$g = $m;
-						$b = $v;
-						break;
-						
-					case 5:
-						$r = $v;
-						$g = $m;
-						$b = $mid2;
-						break;
-				}
-
-				$r *= 255;
-				$g *= 255;
-				$b *= 255;
-			}
-		} else if(strpos($color, 'hsv') === 0) {
-			$color = substr($color, 3);
-			list($h, $s, $v) = explode(',', $color);
-
-			$h = clamp(0, floatval($h), 360) / 360;
-			$s = clamp(0, floatval($s), 100) / 100;
-			$v = clamp(0, floatval($v), 100) / 100;
-
-			$h *= 6;
-
-			$i = floor($h);
-			$f = $h - $i;
-
-			$m = $v * (1 - $s);
-			$n = $v * (1 - $s * $f);
-			$k = $v * (1 - $s * (1 - $f));
-
-			switch ($i) {
-				case 0:
-					$r = $v;
-					$g = $k;
-					$b = $m;
-					break;
-				case 1:
-					$r = $n;
-					$g = $v;
-					$b = $m;
-					break;
-				case 2:
-					$r = $m;
-					$g = $v;
-					$b = $k;
-					break;
-				case 3:
-					$r = $m;
-					$g = $n;
-					$b = $v;
-					break;
-				case 4:
-					$r = $k;
-					$g = $m;
-					$b = $v;
-					break;
-				case 5:
-				case 6:
-					$r = $v;
-					$g = $m;
-					$b = $n;
-					break;
-			}
-
-			$r *= 255;
-			$g *= 255;
-			$b *= 255;
-		} else {
-			// Other or invalid format
-
-			return 'rgb(0, 0, 0)';
-		}
-
-
-		if(!isset($r)) { $r = 0; }
-		if(!isset($g)) { $g = 0; }
-		if(!isset($b)) { $b = 0; }
-		if(!isset($a)) { $a = 255; }
-
-		$r = round($r, 0);
-		$g = round($g, 0);
-		$b = round($b, 0);
-
-		if($a == 255) {
-			$color_formatted = "rgb($r, $g, $b)";
-		} else {
-			$a /= 255;
-			$color_formatted = "rgba($r, $g, $b, $a)";
-		}
-
-		return $color_formatted;
 	}
 
 	function create_icon($icon = null, $scale = null, $classes = null, $styles = null, $element = null) {
@@ -799,32 +503,6 @@
 
 		return "<{$arguments['element']} class=\"{$classes_str}\" style=\"{$styles_str}\"{$attributes_str}>{$content_str}</{$arguments['element']}>";
 	}
-
-	function icon_html($icon = 'error_outline', $classes = '', $style = '', $elem = 'span') {
-		if(strpos($icon, '.') !== false) {
-			if(strlen($classes) > 0) {
-				$classes = " {$classes}";
-			}
-
-			if(strlen($style) > 0) {
-				$style = "style='{$style}'";
-			}
-
-			$service = explode('.', $icon)[0];
-			$icon = strtolower(explode('.', $icon)[1]);
-			if($service == 'mi') { // MATERIAL ICONS
-				$icon_html = "<{$elem} class='icon icon-library-mi material-icons-outlined{$classes}' {$style}>{$icon}</{$elem}>";
-			} else if($service == 'mdi') { // MATERIAL DESIGN ICONS
-				$icon_html = "<{$elem} class='icon icon-library-mdi mdi mdi-{$icon}{$classes}' {$style}></{$elem}>";
-			} else if($service == 'far') { // FONT AWESOME REGULAR
-				$icon_html = "<{$elem} class='icon icon-library-far far fa-{$icon}{$classes}' {$style}></{$elem}>";
-			}
-		}
-		if(isset($icon_html)) {
-			return $icon_html;
-		}
-		return "<{$elem} class='{$classes}'></{$elem}>";
-	}
 	
 	function is_boolish($var) {
 		if(!isset($var)) {
@@ -850,6 +528,37 @@
 			return preg_replace('/[^a-zA-Z0-9]+/', $replace, $filename);
 		} else {
 			return preg_replace('/[^a-zA-Z0-9\_\- ]+/', $replace, $filename);
+		}
+	}
+
+	function imagecropalign($image, $cropWidth, $cropHeight, $horizontalAlign = 'center', $verticalAlign = 'middle') {
+		$width = imagesx($image);
+		$height = imagesy($image);
+		$horizontalAlignPixels = imagecropaligncalcpixels($width, $cropWidth, $horizontalAlign);
+		$verticalAlignPixels = imagecropaligncalcpixels($height, $cropHeight, $verticalAlign);
+		return imagecrop($image, [
+			'x' => $horizontalAlignPixels[0],
+			'y' => $verticalAlignPixels[0],
+			'width' => $horizontalAlignPixels[1],
+			'height' => $verticalAlignPixels[1]
+		]);
+	}
+
+	function imagecropaligncalcpixels($imageSize, $cropSize, $align) {
+		switch ($align) {
+			case 'left':
+			case 'top':
+				return [0, min($cropSize, $imageSize)];
+			case 'right':
+			case 'bottom':
+				return [max(0, $imageSize - $cropSize), min($cropSize, $imageSize)];
+			case 'center':
+			case 'middle':
+				return [
+					max(0, floor(($imageSize / 2) - ($cropSize / 2))),
+					min($cropSize, $imageSize),
+				];
+			default: return [0, $imageSize];
 		}
 	}
 ?>

@@ -40,5 +40,8 @@
             return $this->setProperties([$property => $value]);
         }
 
+        public function exists() {
+            return !is_null($this->getProperties());
+        }
     }
 ?>

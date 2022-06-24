@@ -6,7 +6,7 @@
     set_time_limit(70);
 
 	if(count($argv) <= 1) {
-		\thusPi\Response\error('Insufficient amount of arguments given.');
+		\thusPi\Response\error('Insufficient number of arguments given.');
 	}
 
 	$id = $argv[1];

@@ -20,7 +20,7 @@
 			return \thusPi\Devices\get($this->id);
 		}
 
-		public function setProperties($new_properties, $doStreamsTrigger = true) {
+		public function setProperties($new_properties) {
             $db = \thusPi\Database\connect();
 
             if(isset($new_properties['options']) && is_array($new_properties['options'])) {
@@ -32,19 +32,12 @@
                 return false;
             }
 
-			// Trigger streams if value was changed
-			if(isset($new_properties['value']) && $doStreamsTrigger) {
-				\thusPi\Streams\trigger_all('device_value_change', ['id' => $this->id]);
-			}
-
             return true;
         }
 
 		public function setValue($args) {
-            $db = \thusPi\Database\connect();
-
 			$waypoints = new \thusPi\Debug\WaypointList('plain');
-			$waypoints->disable();
+			// $waypoints->disable();
 
 			// Get function arguments
 			if(!isset($args['value'])) {
@@ -61,19 +54,19 @@
 
 			// Don't try if device value is already set to this value and force_set is false
 			if($args['value'] == $properties['value'] && $args['force_set'] != true) {
-				return true;
+				return 'device_already_set';
 			}
 			
-			// Obtain device options
-			$options = $properties['options'];
-			$additional_options = [];
+			// // Obtain device options
+			// $options = $properties['options'];
+			// $additional_options = [];
 				
-			if($properties['control_type'] == 'search') {
-				// Merge search result value with options
-				if(($additional_options = $this->transformSearchResult($args['value'])) === false) {
-					return 'transforming_search_result_failed';
-				}
-			}
+			// if($properties['control_type'] == 'search') {
+			// 	// Merge search result value with options
+			// 	if(($additional_options = $this->transformSearchResult($args['value'])) === false) {
+			// 		return 'transforming_search_result_failed';
+			// 	}
+			// }
 
 			// Find handler location
 			if(!($handler_path = @glob(DIR_ASSETS."/device_handlers/*/{$properties['handler']}/_main.{py,sh,php,exec}", GLOB_BRACE)[0])) {
@@ -104,17 +97,10 @@
 					break;
 
 				default:
-					if(!$options = @array_merge($properties['options'], $additional_options)) {
-						return 'merging_options_failed';
-					}
-					$options_str = encodeshellargarray($options);
-
-					$tunnel_file = dirname($handler_path).'/_tunnels/'.pathinfo($handler_path, PATHINFO_FILENAME).'.json';
-					$cmd = script_name_to_shell_cmd($handler_path, "{$tunnel_file} {$args['value']} {$options_str}");
-					$cmd = escapeshellcmd($cmd);
+					$cmd = script_name_to_shell_cmd($handler_path, [$this->id, $args['value']]);
 					break;
 			}
-
+			
 			$waypoints->printWaypoint('Waiting for process to finish...');
 
 			$waypoints->printWaypoint('List of processes: ' . json_encode(\thusPi\Processes\get_all("handler_{$properties['handler']}")));
@@ -147,12 +133,12 @@
 				}
 			}
 			
-			if($response['success'] != true) {
-				return 'handler_handled_unsuccesful';
+			if(isset($response['success']) && $response['success'] != true) {
+				return $response['data'] ?? $response;
 			}
 
 			// Save new value
-			$this->setProperties(['value' => $args['value'], 'shown_value' => $args['shown_value']], false);
+			$this->setProperties(['value' => $args['value'], 'shown_value' => $args['shown_value']]);
 
 			$waypoints->printWaypoint('Properties set!');
 
@@ -161,10 +147,10 @@
 				$this->id, $this->getProperty('value'), $this->getProperty('shown_value')
 			]);
 
-			// // Trigger streams
-			// \thusPi\Streams\trigger_all('device_value_change', ['id' => $this->id]);
+			// Trigger flows if value was changed
+			\thusPi\Flows\trigger_all('device_value_change', ['id' => $this->id]);
 
-			// $waypoints->printWaypoint('Streams triggered, finished!');
+			$waypoints->printWaypoint('Flows triggered, finished!');
 
 			return true;
 		}
@@ -178,7 +164,7 @@
 				return false;
 			}
 				
-			if(!($cmd = script_name_to_shell_cmd($script, $value))) {
+			if(!($cmd = script_name_to_shell_cmd($script, [$value]))) {
 				return false;
 			}
 			
@@ -209,7 +195,7 @@
 			'options'           => []
 		];
 
-		$manifest_path = glob(DIR_ASSETS."/device_handlers/*/{$handler_name}/_manifest.json")[0];
+		$manifest_path = glob(DIR_ASSETS."/device_handlers/*/{$handler_name}/manifest.json")[0];
 		if(!$manifest = @json_decode(@file_get_contents($manifest_path), true)) {
 			$manifest = [];
 		}
@@ -219,7 +205,6 @@
 
     function get($id, $respect_permissions = false) {
 		if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
-            \thusPi\Response\error('no_permission');
             return null;
         }
 
@@ -263,11 +248,7 @@
         $ids = array_column($db->get('devices', null, 'id'), 'id');
 
         foreach ($ids as $id) {
-			if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
-				continue;
-			}
-
-            $device = \thusPi\Devices\get($id);
+            $device = \thusPi\Devices\get($id, $respect_permissions);
 
             if(!is_array($device)) {
                 continue;
@@ -278,4 +259,64 @@
 
         return $devices;
     }
+
+	function handler_handle($dir, $argv, $script_name) {
+		$manifest_src = rtrim($dir, '/').'/manifest.json';
+
+		if(!file_exists($manifest_src)) {
+			\thusPi\Response\error('manifest_not_found', 'Manifest not found.');
+		}
+
+		if(!$manifest = file_get_json($manifest_src)) {
+			\thusPi\Response\error('manifest_malformed', 'Manifest contains malformed JSON.');
+		}
+
+		$device_id = $argv[1] ?? null;
+		$value     = $argv[2] ?? null;
+
+		if(!isset($device_id) || !isset($value)) {
+			\thusPi\Response\error('insufficient_arguments', 'Insufficient amount of arguments.');
+		}
+
+		$device = new \thusPi\Devices\Device($device_id);
+
+		if(!$device->exists()) {
+			\thusPi\Response\error('device_not_found', "Device {$device_id} not found.");
+		}
+		
+		// Check if all options are specified
+		$options = $device->getProperty('options');
+		foreach ($manifest['options'] ?? [] as $key => $option) {
+			if(!isset($options[$key])) {
+				\thusPi\Response\error('option_undefined', "Option {$key} was undefined.");
+			}
+		}
+
+		// Sort options in the same order as specified in manifest
+		$options = array_combine(array_keys($manifest['options'] ?? []), $options);
+
+		// Prepend value to options array
+		array_unshift($options, $value);
+
+		// Generate shell command
+		$script_src = rtrim($dir, '/').'/'.$script_name;
+		$cmd = script_name_to_shell_cmd($script_src, $options);
+
+		// Execute shell command
+		if(!@execute($cmd, $output_json, 10)) {
+			\thusPi\Log\write('devices', "Failed to execute handler {$script_src} using command {$cmd}", 'debug');
+			\thusPi\Response\error('error_executing_handler', 'Error executing handler.');
+		}
+
+		if(($output = @json_decode($output_json, true)) === false) {
+			\thusPi\Log\write('devices', "Failed to decode output from handler {$script_src} using command {$cmd}", 'debug');
+			\thusPi\Response\error('handler_response_malformed', 'Handler responded with malformed JSON.');
+		}
+
+		if(isset($output['success']) && $output['success'] != true) {
+			\thusPi\Response\error('handler_error', $output);
+		}
+
+		\thusPi\Response\success('handler_success', $output);
+	}
 ?>

@@ -8,7 +8,7 @@
     $recordings = \thusPi\Recordings\get_all();
 
     foreach ($recordings as $properties) {
-        $analytic = new \thusPi\Recordings\Analytic($properties['id']);
+        $analytic = new \thusPi\Recordings\Recording($properties['id']);
 
         // Record if crontab pattern matches current time
         if(parse_crontab($properties['crontab'])) {

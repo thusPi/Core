@@ -113,7 +113,7 @@
 				<div class="device-toolbar btn-row justify-content-end">
 					<?php 
 						// Print shortcut to recordings if device is being recorded
-						$analytic = new \thusPi\Recordings\Analytic($device['id'], false); 
+						$analytic = new \thusPi\Recordings\Recording($device['id'], false); 
 						if(!is_null($analytic->getProperties())) :
 					?>
 						<a class="btn btn-scale-sm bg-secondary btn-tertiary" href="#/recordings/graph/?id=<?php echo($device['id']); ?>">
@@ -129,8 +129,8 @@
 	</div>
 	<?php endforeach; ?>
 </div>
-<?php if(get_user_flag('is_admin') === true) : ?>
-	<div class="btn btn-xl-square bg-secondary btn-blue btn-floating btn-floating-bottom btn-floating-right btn-lg-square transition-slide-right" onclick="loadPage('admin', 'devices>edit_device');">
-		<?php echo(create_icon('far.plus', 'xl')); ?>
-	</div>
+<?php if(\thusPi\Users\CurrentUser::getFlag('is_admin') === true) : ?>
+	<!-- <a class="btn btn-xl-square bg-secondary btn-blue btn-floating btn-floating-bottom btn-floating-right btn-lg-square transition-slide-right" href="#/admin/devices/manage/">
+		<?php echo(create_icon('far.plus', 'xl', ['icon-square'])); ?>
+	</a> -->
 <?php endif; ?>

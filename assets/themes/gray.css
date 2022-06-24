@@ -1,16 +1,16 @@
 html[data-theme="gray"] {
-	--primary: #283039;
-	--tertiary: #2e3842;
-	--secondary: #323d48;
-	--blue: #1e8cfa;
-	--red: #ee443f;
-	--yellow: #ffa94d;
-	--green: #05c783;
-	--purple: #9549b6;
-	--orange: #f58b34;
-	--text: #ffffff;
-	--text-muted: #ffffff80;
-	--selection: #ffffff19;
+	--primary: hsl(212, 18%, 19%);
+	--tertiary: hsl(210, 18%, 22%);
+	--secondary: hsl(210, 18%, 24%);
+	--blue: hsl(210, 96%, 55%);
+	--red: hsl(2, 84%, 59%);
+	--yellow: hsl(31, 100%, 65%);
+	--green: hsl(159, 95%, 40%);
+	--purple: hsl(282, 43%, 44%);
+	--orange: hsl(27, 91%, 58%);
+	--text: hsl(0, 0%, 100%);
+	--text-muted: hsla(0, 0%, 100%, 0.5);
+	--selection: hsla(0, 0%, 100%, 0.1);
 	--translucent: rgba(0, 0, 0, 0.2);
 	color-scheme: dark;
 }

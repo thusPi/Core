@@ -8,7 +8,7 @@ form.form {
     margin: calc(var(--spacing-sm) * -1)
 }
 
-form.form .form-group {
+form.form .form-group:not(:empty) {
     padding: var(--spacing-sm);
 }
 

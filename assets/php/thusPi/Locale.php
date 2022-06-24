@@ -1,12 +1,12 @@
 <?php 
     namespace thusPi\Locale;
 
-    if(!($locale = \thusPi\Users\CurrentUser::getSetting('locale') ?? \thusPi\Config\get('locale'))) {
-        $locale = \thusPi\Config\get('locale');
-    }
+    $available_locales = \thusPi\Config\get('locale', 'user/settings')['items'] ?? [];
+    $default_locale    = \thusPi\Config\get('locale', 'user/settings')['default'] ?? array_key_first($available_locales ?? []) ?? 'en_US';
+    $locale = \thusPi\Users\CurrentUser::getSetting('locale') ?? $default_locale;
     
     if(!file_exists(DIR_ASSETS."/locale/{$locale}.json")) {
-        $locale = \thusPi\Config\get('locale');
+        $locale = $default_locale;
     }
 
     if((define('TRANSLATIONS', file_get_json(DIR_ASSETS."/locale/{$locale}.json"))) === false) {
@@ -127,7 +127,7 @@
             $timezone = \thusPi\Users\CurrentUser::getSetting('timezone') ?? 'UTC';
         }
 
-        if(is_string($time)) {
+        if(is_string($time) && !is_numeric($time)) {
             $time = strtotime($time);
         }
 
@@ -136,7 +136,7 @@
         }
         
         // Convert the UTC unix to the user's timezone
-        $time = \thusPi\Locale\convert_utc_unix_timezone($time, $timezone);
+        $time = \thusPi\Locale\convert_unix_to_timezone($time, $timezone);
 
         list($date_format, $time_format) = explode(',', $format);
         if($time_format == 'best') {
@@ -144,14 +144,14 @@
         }
 
         $today_midnight = strtotime('today');
-        $time_midnight = strtotime(\date('Y-m-d', $time));
+        $time_midnight  = strtotime(\date('Y-m-d', $time));
 
         $days_ago = floor(($today_midnight - $time_midnight)/86400);
 
         switch($days_ago) {
             case 0:
                 if($date_format == 'best') {
-                    return \thusPi\Locale\date_format_diff($time);
+                    return \thusPi\Locale\date_format_diff($time, convert_unix_to_timezone(time(), $timezone), $timezone);
                 }
 
                 $day = \thusPi\Locale\translate('generic.day.today');
@@ -188,9 +188,11 @@
         ]);
     }
 
-    function convert_utc_unix_timezone($utc_unix, $timezone) {
+    function convert_unix_to_timezone($utc_unix, $timezone) {
         $dt = new \DateTime('@'.$utc_unix);
         $dt->setTimeZone(new \DateTimeZone($timezone));
-        return $dt->getTimestamp();
+
+        // Return unix with offset
+        return strtotime($dt->format('Y-m-d H:i:s'));
     }
 ?>

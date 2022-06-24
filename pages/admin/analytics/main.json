@@ -1,4 +1,5 @@
 {
 	"name": "admin/recordings/main",
-	"animation_duration": 150
+	"animation_duration": 150,
+	"admin_only": true
 }

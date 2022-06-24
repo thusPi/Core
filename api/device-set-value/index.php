@@ -38,10 +38,11 @@
 			'cause'       => $_POST['cause']
 		]);
 
-		if($result === true) {
-			\thusPi\Response\success();
+		if($result === true || $result == 'device_already_set') {
+			\thusPi\Response\success($result);
 		} else {
-			throw new Exception($result);
+			\thusPi\Log\write('devices', $result['data'] ?? $result['info'] ?? $result ?? null, 'error');
+			\thusPi\Response\error('handler_error', $result);
 		}
 	} catch(Exception $e) {
 		\thusPi\Response\error(null, $e->getMessage());

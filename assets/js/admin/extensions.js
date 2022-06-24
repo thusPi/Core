@@ -65,8 +65,9 @@ $(document).on('thuspi.ready', function() {
     // Load extension catalogue
     thusPi.api.call('extensions/catalogue').then(function(response) {
         // Append search results
+        let results = [];
         $.each(response.data, function(i, extension) {
-            $input.data('input').addResult({
+            results.push({
                 value: extension.id,
                 text: extension.name,
                 description: `
@@ -84,6 +85,7 @@ $(document).on('thuspi.ready', function() {
                 href: `#/admin/extensions/view/?id=${extension.id}`
             });
         })
+        $input.data('input').addResults(results);
     })
 
     // Load popular extensions

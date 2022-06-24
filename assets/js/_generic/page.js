@@ -9,13 +9,15 @@ thusPiAssign('page', {
     },
 
     get(url, reload = false) {
-        let currentPage = thusPi.page.current();
-        let old_animation_duration = parseFloat($('main').attr('data-animation-duration') || 0);
-        let reduced_motion = thusPi.users.currentUser.getSetting('reduced_motion') || false;
+        let currentPage          = thusPi.page.current();
+        let oldAnimationDuration = parseFloat($('main').attr('data-animation-duration') || 0);
+        let prefersReducedMotion = thusPi.users.currentUser.getSetting('reduced_motion') || false;
 
         url = trim(trim(trim(url, '/'), '#'), '/');
 
-        if(!reduced_motion) {
+        console.group(`Loading page ${url}`);
+
+        if(!prefersReducedMotion) {
             thusPi.page.animateOut();
         }
 
@@ -26,14 +28,18 @@ thusPiAssign('page', {
                     thusPi.page.setStatus('animating_loading');
                 }
             }
-        }, old_animation_duration);
+        }, oldAnimationDuration);
 
         // Make a request to load the page
+        console.time('Fetching page            ');
         thusPi.api.call('page', {'url': url}).then(function(response) {
-            let new_animation_duration = response.data.manifest.animation_duration || 0;
+            console.timeEnd('Fetching page            ');
+            const manifest             = response.data.manifest;
+            const page                 = manifest.name.trim('/');
+            const newAnimationDuration = manifest.animation_duration || 0;
 
-            $('body').attr('data-page', response.data.manifest.name.trim('/'));
-            $('main').attr('data-animation-duration', new_animation_duration);
+            $('body').attr('data-page', page);
+            $('main').attr('data-animation-duration', newAnimationDuration);
             
             // Wait for the old page to finish animating out
             setTimeout(function() { 
@@ -43,17 +49,28 @@ thusPiAssign('page', {
                     return true;
                 }
 
-                $('main').html(response.data.html);
-               
+                // Make page container fill screen depending on the manifest
+                const isFullSize = manifest.full_size || false;
+                $('main').toggleClass('container-fluid', isFullSize).toggleClass('container', !isFullSize);
+
+                const html = `<h1 class="page-title transition-fade">${response.data.title}</h1><div class="page-content">${response.data.html}</div>`;
+
+                // Set page content
+                console.time('Painting page content    ');
+                $('main').html(html);
+                console.timeEnd('Painting page content    ');
+                
                 // Make the new sidenav link active
                 $('.sidenav-link').removeClass('active');
                 $(`.sidenav-link[data-target^="${response.data.manifest.name.split('/')[0]}"]`).addClass('active');
-                
+
+                console.time('Page load event handlers ');
                 $(document).trigger('thuspi.load');
+                console.timeEnd('Page load event handlers ');
 
                 thusPi.page.setStatus('animating_in');
-                thusPi.page.animateIn(new_animation_duration);
-            }, Math.max(old_animation_duration - response.took, 0));
+                thusPi.page.animateIn(newAnimationDuration);
+            }, Math.max(oldAnimationDuration - response.took, 0));
         }).catch(function(err) {
             console.error(err);
             $('main').html('');
@@ -71,9 +88,10 @@ thusPiAssign('page', {
         
         thusPi.page.setStatus('animating_in');
         setTimeout(function() {
-            $(document).trigger('thuspi.ready');
-            console.log('PAGE READY!');
+            $(document).trigger('thuspi.ready', {page: thusPi.page.current()});
             thusPi.page.setStatus('ready');
+            console.log('Page was marked as ready');
+            console.groupEnd();
         }, animation_duration);
     },
 

@@ -56,7 +56,7 @@
 		'thusPi/Categories',
 		'thusPi/Devices', 
 		'thusPi/Users',
-		'thusPi/Streams',
+		'thusPi/Flows',
 		'thusPi/Recordings',
 		'thusPi/Dashboard',
 		'thusPi/Locale',

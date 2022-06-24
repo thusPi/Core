@@ -1,0 +1,5 @@
+{
+	"name": "admin/users/manage_flags",
+	"animation_duration": 150,
+	"admin_only": true
+}

@@ -25,7 +25,7 @@
         'lines' => []
     ];
 
-    $recording = new \thusPi\Recordings\Analytic($recording_id, true);
+    $recording = new \thusPi\Recordings\Recording($recording_id, true);
 
     $recording->setHistorySelection(
         $_POST['selection']['x0'] ?? null,

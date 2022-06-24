@@ -11,6 +11,10 @@
     border-radius: var(--rounded);
 }
 
+.tile.tile-small {
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
 .tile-row {
     display: flex;
     flex-direction: row;
@@ -20,6 +24,12 @@
     grid-area: tile-icon;
     margin-right: var(--spacing-md);
     min-height: 100%;
+}
+
+img.tile-icon {
+    object-fit: cover;
+    object-position: center center;
+    border-radius: var(--rounded);
 }
 
 .tile-title {
@@ -49,4 +59,20 @@
 
 .tile-content {
     grid-area: tile-content;
+    text-align: left;
+}
+
+.tile-item {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-md);
+}
+
+.tile-item-icon {
+    margin-right: auto;
+}
+
+.tile-item-content {
+    width: 100%;
+    flex: 1;
 }

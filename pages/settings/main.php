@@ -1,35 +1,30 @@
-<?php global $c, $user_config, $d, $f, $userdata; ?>
+<div class="flex-column">
 <?php 
-	$settings = file_get_json(DIR_CONFIG.'/user_main.json');
+	$settings = \ThusPi\Config\get(null, 'user/settings');
 
-	foreach($settings as $setting_namespace => $setting) : 
-?>
-	<div class="tile mb-2 setting transition-fade-order" data-setting="<?php echo($setting_namespace); ?>" data-needs-reload="<?php echo(bool_to_str($setting['info']['needs_reload'] ?? false)); ?>">
-		<h3 class="tile-title"><?php echo(\thusPi\Locale\Translate("settings.setting.{$setting_namespace}.title")); ?></h3>
+	foreach($settings as $name => $setting) { ?>
 		<?php 
-			$input = new \thusPi\Frontend\inputSearch();
-			$results = [];
-
-			$current_value = \thusPi\Users\CurrentUser::getSetting($setting_namespace) ?? reset($setting['options']);
-			$current_shown_value;
-
-			foreach ($setting['options'] as $translation_key => $value) {
-				$shown_value = \thusPi\Locale\Translate($translation_key);
-				$results[] = [
-					(is_bool($value) ? bool_to_str($value) : $value), 
-					(is_bool($shown_value) ? bool_to_str($shown_value) : $shown_value)
-				];
-
-				if($value == $current_value) {
-					$current_shown_value = $shown_value;
-				}
-			}
-
-			if(!isset($current_shown_value)) {
-				$current_shown_value = \thusPi\Locale\translate('generic.state.invalid');
-			}
-
-			$input->addResults($results)->setValue($current_value, $current_shown_value)->print();
+			$current_value = \thusPi\Users\CurrentUser::getSetting($name);
+			$current_translation = isset($setting['items'][$current_value]) 
+				? \thusPi\Locale\translate($setting['items'][$current_value]) 
+				: (
+					isset($setting['items'][$setting['default']])
+						? thusPi\Locale\translate($setting['items'][$setting['default']])
+						: thusPi\Locale\translate('generic.state.invalid')
+				);
 		?>
-	</div>
-<?php endforeach; ?>
+		<div class="setting tile transition-fade-order" data-setting="<?php echo($name); ?>" data-needs-reload="<?php echo(bool_to_str($setting['options']['needs_reload'] ?? false)); ?>">
+			<h3 class="tile-title">
+				<?php echo(\thusPi\Locale\translate("settings.setting.{$name}.title")); ?>
+			</h3>
+			<div class="tile-content">
+				<input type="text" data-type="search" name="<?php echo($name); ?>" value="<?php echo($current_translation); ?>" data-value="<?php echo($current_value); ?>">
+				<ul class="input-search-results" for="<?php echo($name); ?>">
+					<?php foreach($setting['items'] ?? [] as $value => $translate_key) { ?>
+						<li class="input-search-result" value="<?php echo($value); ?>"><?php echo(\thusPi\Locale\translate($translate_key)); ?></li>
+					<?php } ?>
+				</ul>
+			</div>
+		</div>
+	<?php  } ?>
+</div>

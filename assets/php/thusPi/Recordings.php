@@ -1,12 +1,10 @@
 <?php 
     namespace thusPi\Recordings;
 
-use DateTime;
-use \thusPi\Interfaces\defaultInterface;
+    use DateTime;
+    use \thusPi\Interfaces\defaultInterface;
 
-    class Analytic extends defaultInterface {
-        private $userHistorySelection;
-        
+    class Recording extends defaultInterface { 
         public function __construct($id, $respect_permissions = false) {
             if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
                 \thusPi\Response\error('no_permission', "You are not permitted to view device {$id}.");
@@ -25,6 +23,75 @@ use \thusPi\Interfaces\defaultInterface;
                 execute(script_name_to_shell_cmd($recorder, [$this->id]), $output, 30);
                 return $output;
             }
+        }
+
+        public function getDataSets($options) {
+            $options = array_replace([
+                'max_rows' => 750,
+                'interval' => null,
+                'x_start'  => null,
+                'x_end'    => null
+            ], $options);
+
+            $datasets = [];
+
+            // Recording properties (axes, name, etc.)
+            $properties = $this->getProperties();
+
+
+            // Get rows and compress the amount
+            $rows = $this->compressRows($this->getRows(), $options['max_rows']);
+
+            // Format rows into datasets
+            foreach ($rows as $i => &$row) {
+                // Seperate x and y values
+                $row = [
+                    'x' => $row[0],
+                    'y' => array_slice($row, 1)
+                ];
+
+                foreach ($row['y'] as $j => $y) {
+                    // Continue if this dataset is not specified in the properties
+                    if(!isset($properties['datasets'][$j])) {
+                        continue;
+                    }
+
+                    $datasets[$j][$i] = [
+                        'x'           => $row['x'],
+                        'y'           => $y
+                    ];
+                }
+            }
+
+            return $datasets;
+        } 
+
+        public function getRows() {
+            $rows = [];
+
+            // List of all files
+            $files = glob(DIR_DATA."/recordings/history/{$this->id}/*.csv");
+
+            foreach($files as $i => $file) {
+                if(($handle = fopen($file, 'r')) !== false) {
+                    while(($row = fgetcsv($handle, 512, ',')) !== false) {
+                        // Continue if row has less than 2 values
+                        if(!isset($row[0]) || !isset($row[1])) {
+                            continue;
+                        }
+
+                        // Force values to be float
+                        $row = array_map('floatval', $row);
+
+                        // Save x and y values
+                        $rows[] = $row;
+                    }
+
+                    fclose($handle);
+                }
+            }
+
+            return $rows;
         }
 
         public function getHistory($options) {
@@ -74,7 +141,7 @@ use \thusPi\Interfaces\defaultInterface;
                         // $row['y'] = $y_values;
 
                         // Save y values in row
-                        $row['y'] = array_values(array_slice($values, 1, count($properties['columns'])));
+                        $row['y'] = array_values(array_slice($values, 1, count($properties['datasets'])));
 
                         // Save row in output
                         $rows[] = $row;
@@ -86,91 +153,111 @@ use \thusPi\Interfaces\defaultInterface;
             return $this->compressRows($rows, $options);
         }
 
-        private function compressRows($rows, $options) {
+        // private function compressRows($rows, $options) {
+        //     if(!isset($rows[0])) {
+        //         return false;
+        //     }
+
+        //     // Calculate the total amount of rows that are given
+        //     $total_rows = count($rows);
+
+        //     // Variable for storing the result
+        //     $res = [];
+
+        //     // Calculate the Nth row that should pass
+        //     $keep_nth_row = ceil($total_rows/$options['max_rows']);
+
+        //     // New row index counter
+        //     $a = 0;
+
+        //     $last_row = null;
+        //     foreach ($rows as $i => $row) {
+        //         if(!isset($options['interval'])) {
+        //             // User has not selected an interval, save the row
+        //             // unless it leads to exceeding the max number of rows
+        //             if($i % $keep_nth_row == 0) {
+        //                 $res[$a] = $row;
+        //                 $a++;
+        //             }
+
+        //             continue;
+        //         }
+
+        //         // User has selected an interval, check if both rows
+        //         // have been recorded during the same interval
+        //         if(!isset($last_row['x']) || $this->recordedAtSameInterval($row['x'], $last_row['x'], $options['interval'])) {
+        //             // This row was recorded during the same interval as the last row,
+        //             // store the row if it was not yet stored and continue
+        //             if(!isset($res[$a])) {
+        //                 // Convert type to array so the values from other rows that were
+        //                 // recorded during the same period can be pushed
+        //                 $res[$a]['x'] = [$row['x']];
+
+        //                 foreach ($row['y'] as $column_index => $value_numeric) {
+        //                     // Convert value type to array so the values from other rows that were
+        //                     // recorded during the same period can be pushed
+        //                     $res[$a]['y'][$column_index] = [$value_numeric];
+        //                 }
+            
+        //                 continue;
+        //             }
+
+        //             $res[$a]['x'][] = $row['x'];
+
+        //             foreach ($res[$a]['y'] as $column_index => &$value) {
+        //                 // Continue if the column index doesn't exist in the current row or if the value is zero
+        //                 if(!isset($row['y'][$column_index]) || $row['y'][$column_index] == 0) {
+        //                     continue;
+        //                 }
+
+        //                 // Push the value of this row so the average can be calculated later
+        //                 array_push($value, $row['y'][$column_index]);
+        //             }
+        //         } else {
+        //             // The current row was not recorded during the same interval as the last row,
+        //             // increment the counter to create a new row
+        //             $a++;
+        //         }
+
+        //         $last_row = $row;
+        //     }
+
+        //     // If the user has selected an interval, loop all rows one last time to calculate the y averages
+        //     // and the interval of the x
+        //     if(isset($options['interval'])) {
+        //         foreach ($res as &$row) {
+        //             // Calculate the start and end x
+        //             $row['x_end'] = end($row['x']);
+        //             $row['x']     = reset($row['x']);
+
+        //             // Calculate the average y value per column
+        //             foreach ($row['y'] as $column_index => &$value) {
+        //                 $value = array_sum($value) / count($value);
+        //             }
+        //         }
+        //     }
+
+        //     return array_values($res);
+        // }
+
+        public function compressRows($rows, $max_rows = 750) {
             if(!isset($rows[0])) {
                 return false;
             }
 
-            // Calculate the total amount of rows that are given
-            $total_rows = count($rows);
-
-            // Variable for storing the result
-            $res = [];
-
-            // Calculate the Nth row that should pass
-            $keep_nth_row = ceil($total_rows/$options['max_rows']);
-
-            // New row index counter
-            $a = 0;
-
-            $last_row = null;
-            foreach ($rows as $i => $row) {
-                if(!isset($options['interval'])) {
-                    // User has not selected an interval, save the row
-                    // unless it leads to exceeding the max number of rows
-                    if($i % $keep_nth_row == 0) {
-                        $res[$a] = $row;
-                        $a++;
-                    }
-
-                    continue;
-                }
-
-                // User has selected an interval, check if both rows
-                // have been recorded during the same interval
-                if(!isset($last_row['x']) || $this->recordedAtSameInterval($row['x'], $last_row['x'], $options['interval'])) {
-                    // This row was recorded during the same interval as the last row,
-                    // store the row if it was not yet stored and continue
-                    if(!isset($res[$a])) {
-                        // Convert type to array so the values from other rows that were
-                        // recorded during the same period can be pushed
-                        $res[$a]['x'] = [$row['x']];
-
-                        foreach ($row['y'] as $column_index => $value_numeric) {
-                            // Convert value type to array so the values from other rows that were
-                            // recorded during the same period can be pushed
-                            $res[$a]['y'][$column_index] = [$value_numeric];
-                        }
-            
-                        continue;
-                    }
-
-                    $res[$a]['x'][] = $row['x'];
-
-                    foreach ($res[$a]['y'] as $column_index => &$value) {
-                        // Continue if the column index doesn't exist in the current row or if the value is zero
-                        if(!isset($row['y'][$column_index]) || $row['y'][$column_index] == 0) {
-                            continue;
-                        }
-
-                        // Push the value of this row so the average can be calculated later
-                        array_push($value, $row['y'][$column_index]);
-                    }
-                } else {
-                    // The current row was not recorded during the same interval as the last row,
-                    // increment the counter to create a new row
-                    $a++;
-                }
-
-                $last_row = $row;
+            if($max_rows <= 0 || $max_rows >= count($rows)) {
+                return $rows;
             }
 
-            // If the user has selected an interval, loop all rows one last time to calculate the y averages
-            // and the interval of the x
-            if(isset($options['interval'])) {
-                foreach ($res as &$row) {
-                    // Calculate the start and end x
-                    $row['x_end'] = end($row['x']);
-                    $row['x']     = reset($row['x']);
+            // Threshold depends on number of items in a row
+            $threshold = $max_rows / (count($rows[0]) - 1);
 
-                    // Calculate the average y value per column
-                    foreach ($row['y'] as $column_index => &$value) {
-                        $value = array_sum($value) / count($value);
-                    }
-                }
-            }
+            // Sample rows down
+            $sampler = new \Webit\DownSampling\DownSampler\LargestTriangleThreeBucketsDownSampler();
 
-            return array_values($res);
+            $rows_compressed = $sampler->sampleDown($rows, $threshold);
+
+            return $rows_compressed;
         }
 
         private function recordedAtSameInterval($unix1, $unix2, $interval) {
@@ -242,8 +329,8 @@ use \thusPi\Interfaces\defaultInterface;
             $analytic['axes'] = @json_decode($analytic['axes'], true);
         }
 
-        if(is_string($analytic['columns'])) {
-            $analytic['columns'] = @json_decode($analytic['columns'], true);
+        if(is_string($analytic['datasets'])) {
+            $analytic['datasets'] = @json_decode($analytic['datasets'], true);
         }
 
         $analytic = array_replace_recursive([
@@ -257,10 +344,10 @@ use \thusPi\Interfaces\defaultInterface;
                 'y' => [
                     'title' => '',
                     'unit'  => '',
-                    'decimals' => 0
+                    'decimals' => 3
                 ]
             ],
-            'columns' => []
+            'datasets' => []
         ], $analytic);
 
         return $analytic;
@@ -274,11 +361,7 @@ use \thusPi\Interfaces\defaultInterface;
         $ids = array_column($db->get('analytics', null, 'id'), 'id');
 
         foreach ($ids as $id) {
-            if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('devices', $id)) {
-				continue;
-			}
-
-            $analytic = \thusPi\Recordings\get($id);
+            $analytic = \thusPi\Recordings\get($id, $respect_permissions);
 
             if(!is_array($analytic)) {
                 continue;

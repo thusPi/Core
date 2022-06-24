@@ -4,7 +4,7 @@
 			'x' => ['title' =>\thusPi\Locale\translate('state.unknown'), 'unit' => ''],
 			'y' => ['title' =>\thusPi\Locale\translate('state.unknown'), 'unit' => ''],
 		],
-		'columns' => []
+		'datasets' => []
 	];
 
 	if($devices = get_device_list()) {
@@ -38,7 +38,7 @@
 				<div class="btn-list bg-tertiary dropdown-search-results" data-type="single" forinput="device_handler">
 					<?php 
 						$device_manifest = ['name' =>\thusPi\Locale\translate('state.unknown'), 'namespace' => 'none'];
-						if($manifest_files = glob("{$d['assets']}/device_handlers/*/_manifest.json")) {
+						if($manifest_files = glob("{$d['assets']}/device_handlers/*/manifest.json")) {
 							foreach ($manifest_files as $manifest_file) {
 								if($manifest = \thusPi\Devices\get_handler_manifest(basename(dirname($manifest_file)))) {
 									$manifest['icon'] = '';

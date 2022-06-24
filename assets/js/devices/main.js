@@ -142,23 +142,21 @@ function setDeviceValue($device, value, shownValue = undefined) {
 		'force_set':   $device.attr('data-force-set')
 	};
 	
-	thusPi.api.call('device-set-value', data).then(function() {
+	thusPi.api.call('device-set-value', data, true).then(function(response) {
 		$device.attr('data-value-updating-disabled', 'false');
 		$deviceName.hideLoading();
 
-		console.log('Device value changed!');
+		const successType = response.info == true ? 'success' : 'already';
 
 		if(controlType == 'toggle') {
-			thusPi.message.send(thusPi.locale.translate(`devices.message.toggled_${value}_success`, [deviceName]));
+			thusPi.message.send(thusPi.locale.translate(`devices.message.toggled_${value}_${successType}`, [deviceName]));
 		} else {
-			thusPi.message.send(thusPi.locale.translate(`devices.message.changed_success`, [deviceName, shownValue]));
+			thusPi.message.send(thusPi.locale.translate(`devices.message.changed_${successType}`, [deviceName, shownValue]));
 		}
 
 	}).catch(function() {
 		$device.attr('data-value-updating-disabled', 'false');
 		$deviceName.hideLoading();
-
-		console.error('Failed to change device value.');
 
 		if(controlType == 'toggle') {
 			thusPi.message.error(thusPi.locale.translate(`devices.error.toggled_${value}_error`, [deviceName]));

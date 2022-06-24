@@ -9,7 +9,7 @@
 
     $id = trim($argv[1]);
 
-    $analytic   = new \thusPi\Recordings\Analytic($id);
+    $analytic   = new \thusPi\Recordings\Recording($id);
     $device     = new \thusPi\Devices\Device($id);
     $properties = $device->getProperties();
 
@@ -23,12 +23,12 @@
     execute($handler_cmd, $output_json, 60);
 
     if($output_json == '') {
-        \thusPi\Log\write('Analytics', "Handler of device {$id} was found, but didn't return anything.", 'error');
+        \thusPi\Log\write('recordings', "Handler of device {$id} was found, but didn't return anything.", 'warning');
         \thusPi\Response\error('error_recording', "Handler of device {$id} was found, but didn't return anything.");
     }
 
     if(!$output = @json_decode($output_json, true)) {
-        \thusPi\Log\write('Analytics', "Failed to decode recording output of device {$id}.");
+        \thusPi\Log\write('recordings', "Failed to decode recording output of device {$id}.", 'warning');
         \thusPi\Response\error('error_decoding_output', "Failed to decode recording output of device {$id}.");
     }
 

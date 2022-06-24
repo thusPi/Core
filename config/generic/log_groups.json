@@ -1,0 +1,22 @@
+{
+    "success": {
+        "icon": "far.check-circle",
+        "color": "var(--green)"
+    },
+    "debug": {
+        "icon": "far.question-circle",
+        "color": "var(--purple)"
+    },
+    "error": {
+        "icon": "far.times-circle",
+        "color": "var(--red)"
+    },
+    "warning": {
+        "icon": "far.exclamation-circle",
+        "color": "var(--yellow)"
+    },
+    "info": {
+        "icon": "far.info-circle",
+        "color": "var(--blue)"
+    }
+}

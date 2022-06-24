@@ -30,11 +30,13 @@
 
 					$handler_selected = isset($device) && $handler['feature']['id'] === $device->getProperty('handler');
 
-					if(isset($manifest['name']) && isset($manifest['description'])) {
-						echo("<li ".($handler_selected ? 'selected ' : '')."value=\"{$handler['feature']['id']}\" data-description=\"{$manifest['description']}\">{$manifest['name']}</li>");
-					} else {
-						echo("<li ".($handler_selected ? 'selected ' : '')."value=\"{$handler['feature']['id']}\">{$handler['feature']['id']}</li>");
-					}				
+					echo(sprintf(
+						'<li class="input-search-result"%s value="%s"%s>%s</li>', 
+						$handler_selected ? 'selected' : '',
+						$handler['feature']['id'],
+						isset($manifest['description']) ? " data-description=\"{$manifest['description']}\"" : '',
+						$manifest['name'] ?? $handler['feature']['id']
+					));			
 				}
 			?>
 		</ul>
@@ -69,7 +71,7 @@
 						$result_title       = ucfirst(strtok($icon_tags, ','));
 						$result_selected    = isset($device) && $icon === $device->getProperty('icon');
 
-						echo("<li ".($result_selected ? 'selected ' : '')."value=\"{$icon}\" data-icon-html=\"{$result_icon_html}\" data-description=\"{$result_match}\" data-match=\"{$result_match}\">{$result_title}</li>");
+						echo("<li class=\"input-search-result\" ".($result_selected ? 'selected ' : '')."value=\"{$icon}\" data-icon-html=\"{$result_icon_html}\" data-description=\"{$result_match}\" data-match=\"{$result_match}\">{$result_title}</li>");
 					}
 				}
 			?>
@@ -171,5 +173,5 @@
 		</div> -->
 </form>
 <button class="btn bg-secondary btn-green btn-floating transition-slide-right">
-	<?php echo(create_icon('far.check', 'xl')); ?>
+	<?php echo(create_icon('far.check', 'xl', ['icon-square'])); ?>
 </button>

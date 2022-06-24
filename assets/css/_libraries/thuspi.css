@@ -8,7 +8,7 @@
 	--spacing-md: var(--u2);
 	--spacing-lg: var(--u3);
 	--spacing-xl: var(--u4);
-	--border-radius: var(--spacing-lg);
+	--rounded: var(--spacing-lg);
 	--text-small: 0.8rem;
 	--animation-duration-short: 150ms;
 	--animation-duration-medium: 250ms;
@@ -35,8 +35,7 @@ html, body {
 
 body {
     display: grid;
-    grid-template-areas: 
-        'nav main';
+    grid-template-areas: 'nav main';
     grid-template-columns: var(--nav-width) 1fr;
 	grid-template-rows: 1fr;
     overflow: hidden;
@@ -44,13 +43,29 @@ body {
 	background-color: var(--primary);
 }
 
+/* Login page doesn't have navbar, adapt grid structure */
+body[data-page="login/main"] {
+	grid-template-areas: 'main';
+	grid-template-columns: 1fr;
+}
+
 main {
 	grid-area: main;
 	overflow: hidden scroll;
 	min-height: 100vh;
 	max-height: 100vh;
-	padding: var(--spacing-md);
+	padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
 	transition: var(--animation-duration-short) opacity;
+	display: flex;
+	flex-direction: column;
+}
+
+.page-title {
+	margin-bottom: var(--spacing-md);
+}
+
+.page-content {
+	height: 100%;
 }
 
 body[data-status="animating_in"] main,
@@ -81,10 +96,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Override Bootstrap variables */
-.flex-row,
-.flex-column,
-.flex-row-reverse,
-.flex-column-reverse {
+[class*="flex-"][class*="-row"],
+[class*="flex-"][class*="-column"] {
 	gap: var(--spacing-md);
 }
 

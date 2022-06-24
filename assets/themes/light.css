@@ -2,15 +2,15 @@ html { /* Fallback theme */
 	--primary: hsl(0, 0%, 75%);
 	--tertiary: hsl(0, 0%, 83%);
 	--secondary: hsl(0, 0%, 90%);
-	--blue: #1f8efa;
-	--red: #ee423d;
-	--yellow: #ffab4f;
-	--green: #05c985;
-	--purple: #9649b7;
-	--orange: #f58b34;
-	--selection: #21252914;
-	--text-muted: #373737ee;
-	--text: #212529;
+	--blue: hsl(210, 96%, 55%);
+	--red: hsl(2, 84%, 59%);
+	--yellow: hsl(31, 100%, 65%);
+	--green: hsl(159, 95%, 40%);
+	--purple: hsl(282, 43%, 44%);
+	--orange: hsl(27, 91%, 58%);
+	--text: hsl(210, 11%, 15%);
+	--selection: hsla(210, 11%, 15%, 0.075);
+	--text-muted: hsla(0, 0%, 0%, 0.65);
 	--translucent: rgba(255, 255, 255, 0.15);
 	color-scheme: light;
 }

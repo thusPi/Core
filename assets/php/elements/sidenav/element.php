@@ -7,7 +7,7 @@
 	}
 	
 	// Load sidenav items
-	$items = \thusPi\Config\get('items', 'sidenav');
+	$items = \thusPi\Config\get(null, 'generic/sidenav');
 
 	/* Generate sidenav */
 	foreach ($items as $position => $pages) {
@@ -15,7 +15,20 @@
 			$html .= '<div class="mt-auto">';
 		}
 
-		foreach ($pages as $name => $info) {
+		foreach ($pages as $name => $page) {
+			$manifest_path = DIR_PAGES."/{$page['target']}.json";
+			$manifest = @file_get_json($manifest_path) ?? [];
+
+			// Skip if page is not enabled
+			if(isset($page['enabled']) && $page['enabled'] !== true) {
+				continue;
+			}
+			
+			// Skip page if page requires admin permissions and user is not admin
+			if(isset($manifest['admin_only']) && $manifest['admin_only'] == true && \thusPi\Users\CurrentUser::getFlag('is_admin') !== true) {
+				continue;
+			}
+
 			// Skip page if user doesn't have access to this page
 			if(!\thusPi\Users\CurrentUser::checkFlagItem('pages', $name)) {
 				continue;
@@ -25,8 +38,8 @@
 
 			$html .= "
 				<li class='sidenav-item'>
-					<a class='btn btn-fw btn-lg btn-tertiary sidenav-link flex-row' data-target='{$info['target']}' href='#/{$info['target']}' style='color:{$info['color']};'>
-						<span class='sidenav-item-icon' data-icon='{$info['icon']}' data-icon-scale='lg'></span>
+					<a class='btn btn-fw btn-lg btn-tertiary sidenav-link flex-row' data-target='{$page['target']}' href='#/{$page['target']}' style='color:{$page['color']};'>
+						<span class='sidenav-item-icon' data-icon='{$page['icon']}' data-icon-scale='lg'></span>
 						<span class='sidenav-item-name'>{$name_translated}</span>
 					</a>
 				</li>

@@ -35,21 +35,47 @@
 
         public function getCSS() {
             $extension = new \thusPi\Extensions\Extension($this->extension_id);
-            $css       = $extension->callFeatureComponent('dashboard/widgets', $this->id, 'widget.css');
+            $css       = trim($extension->callFeatureComponent('dashboard/widgets', $this->id, 'widget.css'));
+            
+            // $all_ats_excluded = false;
+            // while(strpos($css, '@') === 0) {
+            //     $css = preg_match()
+
+            //     // Check for "; on the first line
+            //     preg_match('/(?<![\s])";/', $css, $matches, PREG_OFFSET_CAPTURE);
+            //     $pos = (isset($matches[0][1]) ? $matches[0][1] + 2 : null);
+
+            //     // If it doesn't exist, check for the next anywhere in the code }
+            //     $pos = $pos ?? strpos($css, '}')+1;
+
+            //     var_dump($pos);
+
+            //     if($pos <= 1) {
+            //         return;
+            //     }
+
+            //     $css = trim(substr($css, $pos));
+            // }
+
+            // Something with @.*?(?<=:)\)
 
             // ================================= //
             //    Limit styles to this widget    //
             // ================================= //
 
-            // Remove all whitespaces that aren't between quotes
-            $css = preg_replace('/[^\S ]+/', '', $css);
+            // Remove all whitespace characters except spaces that aren't wrapped in double quotes
+            $css = preg_replace('/[^\S ]+(?=(?:[^"]*"[^"]*")*[^"]*$)/', '', $css);
+            
+            // Remove all whitespace characters except spaces that aren't wrapped in single quotes
+            $css = preg_replace('/[^\S ]+(?=(?:[^\']*"[^\']*\')*[^\']*$)/', '', $css);
 
-            // Split styles in to array (each item is a css rule)
-            $css = explode('}', $css);
-
+            // Split styles in to array of rules
+            $rules = explode('}', $css);
+            
             // Prepend widget selector to css rule
-            foreach ($css as &$rule) {
-                $rule = $rule . '}';
+            foreach ($rules as &$rule) {
+                // Re-add the delimiter
+                $rule .= '}';
 
                 if(!str_contains($rule, '{') || str_starts_with($rule, '@')) {
                     continue;
@@ -58,7 +84,7 @@
                 $rule = ".dashboard-widget[data-widget-id=\"{$this->extension_id}_{$this->id}\"] {$rule}";
             }
 
-            $css = implode('', $css);
+            $css = implode('', $rules);
 
             return $css;
         }

@@ -2,6 +2,38 @@ $.fn.hasAttr = function(name) {
    return this.attr(name) !== undefined;
 }
 
+function getCSSVariable(name) {
+	name = trim(trim(name, 'var('), ')');
+
+	if(name.indexOf('--') !== 0) {
+		return name;
+	}
+
+	const style = getComputedStyle(document.body);
+	const value = trim(style.getPropertyValue(name));
+
+	// Convert to RGB if value is a color
+	if(value.indexOf('rgb') === 0 || value.indexOf('hsl') === 0 || value.indexOf('hsv') === 0 || value.indexOf('#') === 0) {
+		return $('<div></div>').css('background-color', value).css('background-color');
+	}
+
+	return value;
+}
+
+function rgbaToArray(str) {
+	return str.replace(/[^\d,]/g, '').split(',');
+}
+
+function arrayToRgba(arr) {
+	if(arr.length == 3) {
+		return 'rgb(' + arr.join(',') + ')';
+	} else if(arr.length == 4) {
+		return 'rgba(' + arr.join(',') + ')';
+	} else {
+		return;
+	}
+}
+
 function round(num, decimals = 2) {
 	let multiplier = Math.pow(10, decimals);
 	return Math.round(num * multiplier) / multiplier;
@@ -69,14 +101,16 @@ function hidePopup(elem) {
 }
 
 $.fn.showLoading = function(hideAfter = 0) {
-	if(this.find('> .loading-icon').length == 0) {
-		this.append('<span class="loading-icon pl-1"><i class="far fa-circle-notch fa-spin text-category icon d-inline-block icon-scale-xxs"></i></span>');
-		
-		if(hideAfter > 0) {
-			setTimeout(function() {
-				this.hideLoading();
-			}, hideAfter);
-		}
+	if(this.find('> .loading-icon').length > 0) {
+		return;
+	}
+
+	this.append('<span class="loading-icon pl-1"><i class="far fa-circle-notch fa-spin text-category icon d-inline-block icon-scale-xxs"></i></span>');
+	
+	if(hideAfter > 0) {
+		setTimeout(function() {
+			this.hideLoading();
+		}, hideAfter);
 	}
 }
 
@@ -161,6 +195,12 @@ function arrayColumn(array, columnKey, indexKey = undefined) {
 
         return output;
     }
+}
+
+function padLeft(num, size = 2) {
+    num = num.toString();
+    while (num.length < size) num = '0' + num;
+    return num;
 }
 
 function sendMessage(translation_key, replace = [], isError = false , duration = 4000) {

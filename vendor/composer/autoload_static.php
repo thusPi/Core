@@ -14,6 +14,10 @@ class ComposerStaticInit842f03c6b15faa29e1b28203f20c7d8e
     );
 
     public static $prefixLengthsPsr4 = array (
+        'W' => 
+        array (
+            'Webit\\DownSampling\\' => 19,
+        ),
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
@@ -28,10 +32,14 @@ class ComposerStaticInit842f03c6b15faa29e1b28203f20c7d8e
     );
 
     public static $prefixDirsPsr4 = array (
+        'Webit\\DownSampling\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webit/downsampling/src',
+        ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (

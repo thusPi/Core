@@ -1,35 +1,35 @@
-<div class="log-items-category-filter btn-row mb-2">
+<div class="log-group-buttons transition-slide-top position-relative btn-row mb-2">
 	<?php 
-		$log_groups = [
-			'success' => 'success', 
-			'info'    => 'info', 
-			'warning' => 'warning', 
-			'error'   => 'danger', 
-			'debug'   => 'debug'
-		];
+		// Get list of all log groups
+		$log_groups = \thusPi\Config\get(null, 'generic/log_groups');
 
-		$log_inactive_groups = \thusPi\Users\CurrentUser::getSaved('log_inactive_groups') ?? [];
+		// Get list of inactive groups for current user
+		$log_inactive_groups = \thusPi\Users\CurrentUser::getSetting('log_inactive_groups') ?? [];
 
-		foreach ($log_groups as $namespace => $color) { 
+		foreach ($log_groups as $name => $log_group) { 
+			if(!isset($log_group['icon']) || !isset($log_group['color'])) continue;
+			$color = ($log_group['color'] ?? '#000000');
 		?>
 			<div 
 				tabindex="0" 
-				class="btn bg-tertiary btn-<?php echo($color); ?> btn-no-hover mx-1<?php echo(!in_array($namespace, $log_inactive_groups) ? ' active' : ''); ?>" 
-				data-category="<?php echo($namespace); ?>"
-				onclick="toggleLogCategory('<?php echo($namespace); ?>');">
-				<?php echo(\thusPi\Locale\translate("admin.log.message_type.{$namespace}")); ?>
+				class="btn bg-tertiary btn-no-hover flex-row<?php echo(!in_array($name, $log_inactive_groups) ? ' active' : ''); ?>"
+				style="--background-active: <?php echo($color); ?>"
+				data-group="<?php echo($name); ?>"
+				data-color="<?php echo($color); ?>"
+				onclick="toggleLogCategory('<?php echo($name); ?>');">
+				<?php echo(create_icon(['icon' => $log_group['icon'], 'scale' => 'md'])); ?>
+				<?php echo(\thusPi\Locale\translate("admin.log.message_type.{$name}")); ?>
 			</div>
 		<?php 
 		} ?>
 </div>
-<div class="log-items scrollbar-visible">
-	<div class="log-item" id="log-item-template" data-category="debug" data-at="0" data-index="0">
-		<div class="log-item-border"></div>
-		<div class="log-item-time text-overflow-ellipsis"></div>
-		<div class="log-item-content-wrapper">
+<div class="log-items flex-column scrollbar-visible">
+	<div class="template log-item" data-category="success" data-at="0" data-index="0">
+		<span class="log-item-time"></span>
+		<span class="log-item-content-wrapper">
 			<span class="log-item-title"></span>
 			<span class="log-item-content"></span>
-		</div>
+		</span>
 	</div>
 	<div class="intersection-observer-trigger" onchange="requestMoreLogs();"></div>
 </div>

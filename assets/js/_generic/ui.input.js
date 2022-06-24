@@ -5,6 +5,11 @@ thusPiAssign('ui.input.search', class {
 	constructor($input) {
 		this.$input = $input;
 
+		// Make input contenteditable if it is not an actual input
+		if($input.prop('nodeName').toLowerCase != 'input') {
+			$input.attr('contenteditable', true);
+		}
+
 		// Wrap input
 		this.$input.wrap('<div class="input-wrapper input-wrapper-search"></div>');
 
@@ -18,15 +23,16 @@ thusPiAssign('ui.input.search', class {
 		this.$results = this.$wrapper.find('.input-search-results').first();
 	
 		// Find existing results list
-		const $existingResults = $(`ul.input-search-results[for="${this.$input.attr('name')}"]`);
+		const $existingResults = $(`ul.input-search-results[for="${this.$input.attr('name')}"]`).find('.input-search-result[value]');
 		if($existingResults.length > 0) {
-			$existingResults.find('li').each((i, result) => {
+			let results = [];
+			$existingResults.each((i, result) => {
 				const $result = $(result);
 
 				const value = $result.attr('value');
-				const text = $result.text();
+				const text = $result.text().trim();
 
-				this.addResult({
+				results.push({
 					value: value,
 					description: $result.attr('data-description'),
 					text: text, 
@@ -41,18 +47,19 @@ thusPiAssign('ui.input.search', class {
 				}
 			})
 
+			this.addResults(results);
 			$existingResults.remove();
 		}
 
 		this.$wrapper.on('click', function(e) {e.stopPropagation()});
 		
-		this.$input.on('click', (e) => {this._focusEvent(e)});
+		this.$input.on('click', (e) => {this._clickEvent(e)});
 		this.$input.on('input', (e) => {this._inputEvent(e)});
 		this.$input.on('change', (e) => {this._changeEvent(e)});
 
 		this.$results.on('click', '.input-search-result', (e) => {this._resultClickEvent(e)});
 
-		$(document).on('click', (e) => {this._focusOutEvent(e)});
+		$(document).on('click', (e) => {this._clickOutEvent(e)});
 	}
 
 	addResults(results) {
@@ -107,17 +114,18 @@ thusPiAssign('ui.input.search', class {
 		return this.addResults([result]);
 	}
 
-	_focusEvent(e) {
+	_clickEvent(e) {
 		// Close all wrappers and results
 		$('.input-wrapper').removeClass('active');
 		$('.input-search-results').removeClass('show');
 
+		this.$input.focus();
 		this.$wrapper.addClass('active');
 		this._resultsToggleAll(true);
 		this._resultsToggle(true);
 	}
 
-	_focusOutEvent(e) {
+	_clickOutEvent(e) {
 		this.$wrapper.removeClass('active');
 		this._resultsToggle(false);
 	}
@@ -125,14 +133,14 @@ thusPiAssign('ui.input.search', class {
 	_inputEvent(e) {
 		e.preventDefault();
 		if(this.$input.attr('filter-on') != 'change') {
-			this._resultsFilter(this.$input.val());
+			this._resultsFilter(this.$input.val() || this.$input.text());
 		}
 	}
 
 	_changeEvent(e) {
 		e.preventDefault();
 		if(this.$input.attr('filter-on') == 'change') {
-			this._resultsFilter(this.$input.val());
+			this._resultsFilter(this.$input.val() || this.$input.text());
 		}
 	}
 
@@ -212,7 +220,13 @@ $.fn.value = function(value = undefined, shownValue = undefined) {
 	} else {
 		if($input.attr('data-type') == 'search') {
 			$input.attr('data-value', value);
-			$input.attr('value', shownValue).val(shownValue);
+
+			if($input.prop('nodeName').toLowerCase() == 'input') {
+				$input.attr('value', shownValue).val(shownValue);
+			} else {
+				$input.attr('value', shownValue).text(shownValue);
+			}
+			
 			$input.siblings('.input-search-results').find('.input-search-result').removeClass('active');
 			$input.siblings('.input-search-results').find(`.input-search-result[value="${value}"]`).addClass('active');
 		} else if(typeof input.value != 'undefined') {
@@ -284,6 +298,10 @@ $(document).on('thuspi.load', function() {
 			$wrapper.trigger('change');
 		}
 	})
+})
+
+$(document).on('click', '[contenteditable="true"]', function(e) {
+	$(e.target).focus();
 })
 
 document.addEventListener('mousewheel', function(e) {

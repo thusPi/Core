@@ -8,7 +8,7 @@ import time
 import os
 
 if(len(sys.argv) <= 3):
-	print(json.dumps({'success': False, 'data': 'Invalid amount of arguments given.'}))
+	print(json.dumps({'success': False, 'data': 'Insufficient number of arguments given.'}))
 	exit()
 
 tunnel_file = sys.argv[1]

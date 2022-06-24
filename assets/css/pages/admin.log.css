@@ -1,0 +1,29 @@
+.log-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+@media(min-width: 767.98px) {
+    .log-item {
+        flex-direction: row;
+        gap: var(--spacing-md)
+    }
+}
+
+.log-item * {
+    overflow: visible;
+    white-space: normal;
+    align-items: start;
+    justify-content: start;
+}
+
+.log-item .log-item-time {
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.log-item .log-item-title {
+    font-weight: 625;
+    color: var(--color);
+}

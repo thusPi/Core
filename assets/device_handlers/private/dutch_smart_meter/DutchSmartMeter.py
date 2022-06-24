@@ -71,21 +71,21 @@ class DutchSmartMeter(object):
 
         if(not self.request_data()):
             return False
-        data = {'success': True, 'electricity': {'consumed': {}, 'sent_back': {}}, 'gas': {}}
+        data = {'success': True, 'electricity': {'consumed': {}, 'delivered': {}}, 'gas': {}}
         
         for line in self.msg:
             if line[0:9] == '1-0:1.8.1':
-                # Electricity delivered to client (normal tariff) in kWh
+                # Electricity consumed by client (normal tariff) in kWh
                 data['electricity']['consumed']['normal_tariff'] = float(self.metering_from_line(line))
             elif line[0:9] == '1-0:1.8.2':
-                # Electricity delivered to client (normal tariff) in kWh
+                # Electricity consumed by client (normal tariff) in kWh
                 data['electricity']['consumed']['low_tariff'] = float(self.metering_from_line(line))
             elif line[0:9] == '1-0:2.8.1':
                 # Electricity delivered by client (normal tariff) in kWh
-                data['electricity']['sent_back']['normal_tariff'] = float(self.metering_from_line(line))
+                data['electricity']['delivered']['normal_tariff'] = float(self.metering_from_line(line))
             elif line[0:9] == '1-0:2.8.2':
                 # Electricity delivered by client (normal tariff) in kWh
-                data['electricity']['sent_back']['low_tariff'] = float(self.metering_from_line(line))
+                data['electricity']['delivered']['low_tariff'] = float(self.metering_from_line(line))
             elif line[0:11] == '0-0:96.14.0':
                 # Tariff used at moment of metering
                 tariff_currently = int(float(self.metering_from_line(line, end=')')))
@@ -98,7 +98,7 @@ class DutchSmartMeter(object):
                 data['electricity']['consumed']['actual'] = float(self.metering_from_line(line))
             elif line[0:9] == '1-0:2.7.0':
                 # Actual electricity power in 1 Watt resolution
-                data['electricity']['sent_back']['actual'] = float(self.metering_from_line(line))
+                data['electricity']['delivered']['actual'] = float(self.metering_from_line(line))
             elif line[0:10] == '0-1:24.3.0':
                 # Time of latest gas metering. 22013011 for 01/30/2022 at 11AM
                 measured_at = str(self.metering_from_line(line, end=')'))[0:8]

@@ -4,15 +4,12 @@
 	use \thusPi\Interfaces\defaultInterface;
 
     class Category extends defaultInterface {
-        private $file_path;
-
         public function __construct($id) {
             $this->id = $id;
-            $this->file_path = DIR_CONFIG.'/categories.json';
         }
 
         public function getProperties() {
-            if(!$categories = \file_get_json(DIR_CONFIG.'/categories.json')) {
+            if(!$categories = \thusPi\Categories\get_all()) {
                 return null;
             }
 
@@ -25,6 +22,6 @@
     }
  
     function get_all() {
-        return \file_get_json(DIR_CONFIG.'/categories.json');
+        return \thusPi\Config\get(null, 'generic/categories');
     }
 ?>

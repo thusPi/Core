@@ -13,24 +13,29 @@
             $db->where('uuid', $uuid);
             $user = $db->getOne('users');
 
-            if(is_null($user)) {
-                $db->where('uuid', 'default');
-                $user = $db->getOne('users');
+            $user['flags'] = @json_decode($user['flags'], true) ?? [];
+            $user['settings'] = @json_decode($user['settings'], true) ?? [];
 
-                $user['flags']['is_admin'] = false; // Default user is not allowed to have administrator permissions
+            // // Load default settings from config
+            // $default_settings = \thusPi\Config\get(null, 'user/settings');
 
-                if(is_null($user)) {
-                    return false;
-                }
-            }
+            // // Apply default settings if a setting is not set
+            // foreach ($default_settings as $name => $setting) {
+            //     if(isset($user['settings'][$name])) {
+            //         continue;
+            //     }
 
-            if(is_string($user['flags'])) {
-                $user['flags'] = @json_decode($user['flags'], true);
-            }
+            //     // Select default item if it is specified
+            //     if(isset($setting['default']) && isset($setting['items'][$setting['default']])) {
+            //         $user['settings'][$name] = $setting['default'];
+            //         continue;
+            //     }
 
-            if(is_string($user['settings'])) {
-                $user['settings'] = @json_decode($user['settings'], true);
-            }
+            //     // Select first item if default is not specified
+            //     if(isset($setting['default']) && isset($setting['items'][$setting['default']])) {
+            //         $user['settings'][$name] = array_key_first($setting['items']);
+            //     }
+            // }
 
             $this->uuid = $uuid;
             $this->user = $user;
@@ -80,7 +85,7 @@
         }
 
         public function getSettings() {
-            return $this->user['settings'];
+            return $this->user['settings'] ?? [];
         }
 
         public function setSetting($key, $value) {
@@ -99,8 +104,18 @@
             return true;
         }
 
-        public function signOut() {
-            return \thusPi\Authorization\delete_token($_COOKIE['thusPi_token'] ?? null);
+        public function getProfilePicture() {
+            $src = DIR_DATA."/users/pictures/{$this->user['uuid']}.jpg";
+
+            if(!file_exists($src)) {
+                return null;
+            }
+
+            if(!$binary = file_get_contents($src)) {
+                return null;
+            }
+
+            return 'data:image/jpeg;base64,'.base64_encode($binary);
         }
     }
 
@@ -145,8 +160,64 @@
         }
 
         static public function signOut() {
-            $user = @new \thusPi\Users\User($_SESSION['thusPi_uuid']);
-            return $user->signOut();
+            return \thusPi\Authorization\delete_token($_COOKIE['thusPi_token'] ?? null);
         }
+
+        static public function getProfilePicture() {
+            $user = @new \thusPi\Users\User($_SESSION['thusPi_uuid']);
+            return $user->getProfilePicture();
+        }
+    }
+
+    function get($uuid, $respect_permissions = false) {
+		if($respect_permissions && !\thusPi\Users\CurrentUser::checkFlagItem('users', $uuid)) {
+            return null;
+        }
+
+        $db = \thusPi\Database\connect();
+
+        $db->where('uuid', $uuid);
+        $user = $db->getOne('users');
+
+		if(!isset($user)) {
+			return null;
+		}
+        
+        $user = array_replace([
+            'uuid' => $uuid,
+            'name' => '',
+            'flags' => [],
+            'setttings' => []
+        ], $user);
+
+        if(is_string($user['flags'])) {
+            $user['flags'] = @json_decode($user['flags'], true);
+        }
+
+        if(is_string($user['settings'])) {
+            $user['settings'] = @json_decode($user['settings'], true);
+        }
+
+        return $user;
+    }
+
+    function get_all($respect_permissions = false) {
+        $db = \thusPi\Database\connect();
+
+        $users = [];
+
+        $uuids = array_column($db->get('users', null, 'uuid'), 'uuid');
+
+        foreach ($uuids as $uuid) {
+            $user = \thusPi\Users\get($uuid);
+
+            if(!is_array($user)) {
+                continue;
+            } 
+
+            $users[] = $user;
+        }
+
+        return $users;
     }
 ?>

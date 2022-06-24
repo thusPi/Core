@@ -10,6 +10,7 @@
 		"unit": {"type": "integer", "default": 3, "min": 0, "max": 31},
 		"address": {"type": "integer", "default": 14195370, "min": 0, "length": 8},
 		"port": {"type": "port", "default": "ttyUSB0", "note": "Serial port your Arduino is connected to."},
-		"baud": {"type": "integer", "default": 115200, "min": 0, "note": "The data rate for serial data transmission."}
+		"baud": {"type": "integer", "default": 115200, "min": 0, "note": "The data rate for serial data transmission."},
+		"pulse_length": {"type": "integer", "default": 265, "min": 0, "note": "KaKu Pulselength"}
 	}
 }

@@ -167,7 +167,7 @@
         $res = [];
 
         // Fetch catalogue
-        $response = $client->request('GET', \thusPi\Config\get('extensions_catalogue', 'servers'));
+        $response = $client->request('GET', \thusPi\Config\get('extensions_catalogue', 'system/servers'));
         $catalogue = json_decode($response->getBody(), true);
 
         foreach ($catalogue['items'] as $extension) {

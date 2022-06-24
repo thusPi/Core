@@ -1,0 +1,42 @@
+{
+    "devices": {
+        "icon": "far.computer-speaker",
+        "color": "var(--orange)",
+        "target": "devices/main"
+    },
+    "recordings": {
+        "icon": "far.chart-bar",
+        "color": "var(--red)",
+        "target": "recordings/main"
+    }, 
+    "flows": {
+        "icon": "far.stream",
+        "color": "var(--green)",
+        "target": "flows/main"
+    }, 
+    "rooms": {
+        "icon": "far.door-closed",
+        "color": "var(--purple)",
+        "target": "rooms/main"
+    },
+    "users": {
+        "icon": "far.users",
+        "color": "var(--yellow)",
+        "target": "users/main"
+    },
+    "config": {
+        "icon": "far.sliders-h",
+        "color": "var(--blue)",
+        "target": "config/main"
+    },
+    "log": {
+        "icon": "far.list",
+        "color": "var(--orange)",
+        "target": "log/main"
+    },
+    "extensions": {
+        "icon": "far.puzzle-piece",
+        "color": "var(--green)",
+        "target": "extensions/main"
+    }
+}
